@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    // es模块交互，推荐开启，否则命名空间导入或默认导入又问题，详细差官网配置
+    "esModuleInterop": true,
+    // 导入文件采用大小写一致
+    "forceConsistentCasingInFileNames": true,
+    // 严格模式
+    "strict": true,
+    // 跳过第三方库检查
+    "skipLibCheck": true,
+    // 包含的ts库
+    "lib": [
+      "ES2018"
+    ],
+    // typing跟路径, 默认情况node_modules/@types都是可见的，除特例
+    // "typeRoots": ["./"]
+  }
+}
