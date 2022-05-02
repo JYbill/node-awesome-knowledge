@@ -18,5 +18,7 @@
     ],
     // typing跟路径, 默认情况node_modules/@types都是可见的，除特例
     // "typeRoots": ["./"]
+    // 是否允许导入json模块，默认：false
+    "resolveJsonModule": true,
   }
 }
