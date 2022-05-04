@@ -61,3 +61,39 @@
 
 // 运行到结束时间
 // console.log(process.uptime());
+
+// process hook
+/* process.on('beforeExit', (code) => {
+  console.log(`before ${code}`);
+  // setTimeout(() => {
+  //   console.log('before setTimeout');
+  // }, 0);
+});
+
+process.on('exit', (code) => {
+  console.log(`exit ${code}`);
+});
+
+process.exit();
+console.log('end.'); */
+
+// process.stdout
+/* import fs from 'fs';
+import path from 'path';
+fs.createReadStream(path.join(__dirname, '../assets/test.txt'), 'utf-8')
+  .pipe(process.stdout); */
+
+// process.stdin
+// process.stdin.pipe(process.stdout);
+// console.log(process.stdout.writable); // 可写流
+// console.log(process.stdin.readable); // 可读流
+
+// 流操作 事件订阅 事件回调
+/* process.stdin.setDefaultEncoding('utf-8');
+process.stdin.on('readable', () => {
+  const chunk = process.stdin.read();
+  if (chunk) {
+    process.stdout.write('readable: ' + chunk);
+    return;
+  }
+}) */
