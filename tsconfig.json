@@ -9,7 +9,7 @@
     // 导入文件采用大小写一致
     "forceConsistentCasingInFileNames": true,
     // 严格模式
-    "strict": true,
+    "strict": false,
     // 跳过第三方库检查
     "skipLibCheck": true,
     // 包含的ts库
@@ -20,5 +20,7 @@
     // "typeRoots": ["./"]
     // 是否允许导入json模块，默认：false
     "resolveJsonModule": true,
+    // 不允许type类型为any
+    "noImplicitAny": false,
   }
 }

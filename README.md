@@ -12,3 +12,13 @@ node中数据驱动的体验，`EventEmitter`.
 node v8执行的主线程为单线程，体验单线程在cpu堵塞情况下的场景，合理使用libuv库进行异步并发操作！
 
 <br/>
+
+## 03-ts-node-http-server
+node + ts + express 快速建立http服务
+
+<br/>
+
+## 04-node-global
+node全局对象/属性
+
+<br/>
