@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "es2017",
     "module": "commonjs",
     "rootDir": "./src",
     "outDir": "./dist",
@@ -14,7 +14,7 @@
     "skipLibCheck": true,
     // 包含的ts库
     "lib": [
-      "ES2018"
+      "ESNext",
     ],
     // typing跟路径, 默认情况node_modules/@types都是可见的，除特例
     // "typeRoots": ["./"]
