@@ -1,2 +1,12 @@
+# idea
+.vscode
+.idea
+
+# packages
 node_modules
-package-lock.json
+
+# system
+.DS_store
+
+# custom
+dist
