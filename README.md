@@ -71,4 +71,4 @@ fs.open()、fs.write()...方法细节和用途
 ## 第二章 模块机制
 - 2.1.1 Node与浏览器以及W3C组织、CommonJS组织、ECMAScript之间的关系
 ![](./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/Node%E4%B8%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A5%E5%8F%8AW3C%E7%BB%84%E7%BB%87%E3%80%81CommonJS%E7%BB%84%E7%BB%87%E3%80%81ECMAScript%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB.png)
-> 2022-05-19，目前EcmaScript提出的ESModule规范被Nodejs采纳，ES规范肯定要更加标准！TypeScript在用ESModule，Node v1x以`.mjs`为文件后缀执行ESModule，普通js或`.cjs`执行CommonJs规范，但是不能混用！活着`package.json`文件修改`module`属性,更多详细查看node官方文档！
+> 2022-05-19，目前EcmaScript提出的ESModule规范被Nodejs采纳，ES规范肯定要更加标准！TypeScript在用ESModule，Node v1x以`.mjs`为文件后缀执行ESModule，普通js或`.cjs`执行CommonJs规范，但是不能混用！或`package.json`文件修改`module`属性,更多详细查看node官方文档！
