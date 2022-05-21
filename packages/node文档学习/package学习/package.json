@@ -1,0 +1,16 @@
+{
+  "name": "packages",
+  "version": "1.0.0",
+  "description": "此包用于导入pkg包",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./02-export.mjs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
