@@ -75,7 +75,7 @@ fs.open()、fs.write()...方法细节和用途
 
 <br>
 
-## 2.2🥕CommonJS模块加载机制
+### 2.2🥕CommonJS模块加载机制
 
 + node中引入模块经历3个步骤：
   1. 路径分析
