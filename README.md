@@ -3,57 +3,57 @@
 
 <br/>
 
-## 01-async-event
+- 01-async-event
 node中数据驱动的体验，`EventEmitter`.
 
 <br/>
 
-## 02-single-thread
+- 02-single-thread
 node v8执行的主线程为单线程，体验单线程在cpu堵塞情况下的场景，合理使用libuv库进行异步并发操作！
 
 <br/>
 
-## 03-ts-node-http-server
+- 03-ts-node-http-server
 node + ts + express 快速建立http服务
 
 <br/>
 
-## 04-node-global
+- 04-node-global
 node全局对象/属性
 
 <br/>
 
-## 05-process
+- 05-process
 node process对象/属性
 
 <br/>
 
-## 06-path
+- 06-path
 path模块
 
 <br/>
 
-## 🚀07-buffer
+- 🚀07-buffer
 buffer对象
 
 <br/>
 
-## 08-buffer
+- 08-buffer
 fs模块
 
 <br/>
 
-## 09-md2html
+- 09-md2html
 md 转 html利用path、fs模块并实现监听写入另一个文件（demo）
 
 <br/>
 
-## 10-open-file
+- 10-open-file
 fs.open()、fs.write()...方法细节和用途
 
 <br/>
 
-## 11-copy-file
+- 11-copy-file
 大文件拷贝例子，利用fs、buffer等实现，对于大文件可以用流操作会更好，后面会学习...
 
 <br/>
