@@ -1,5 +1,5 @@
 // require和import区别
-console.log(1);
+/* console.log(1);
 import export1 from './2.2.3.export.mjs'; // 存在import提升
 import export2 from './2.2.3.export.mjs';
 console.log(2);
@@ -13,4 +13,7 @@ import('./2.2.3.export.mjs').then((res) => {
 // 测试其他文件加载是否保持一致
 import('./2.2.3.import-other.mjs').then((res) => {
   console.log(res);
-})
+}) */
+
+// ESM中不存在module模块
+import export1 from './2.2.3.export.mjs';
