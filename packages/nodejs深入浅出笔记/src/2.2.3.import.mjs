@@ -10,3 +10,7 @@ console.log(export1, export2);
 import('./2.2.3.export.mjs').then((res) => {
   console.log(res.default);
 })
+// 测试其他文件加载是否保持一致
+import('./2.2.3.import-other.mjs').then((res) => {
+  console.log(res);
+})
