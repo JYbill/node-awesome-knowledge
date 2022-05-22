@@ -3,7 +3,7 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    // 是否允许导入json模块，默认：false
-    "resolveJsonModule": true,
+    "target": "ES2017",
+    "module": "NodeNext",
   }
 }
