@@ -235,3 +235,19 @@ fs.open()、fs.write()...方法细节和用途
 
 ### cjs和esm的区别
 ![加载顺序图解](./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/cjs%E5%92%8Cesm%E7%9A%84%E6%A8%A1%E5%9D%97%E5%8C%96%E5%8C%BA%E5%88%AB.png)
+
+## 第三章 异步IO
+- 在Node中，无论是*nix还是Windows平台，内部通过libuv完成I/O任务的另有线程池
+![异步IO](./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/node%E5%BC%82%E6%AD%A5io%E9%80%9A%E8%BF%87%E7%BA%BF%E7%A8%8B%E6%B1%A0.png)
+
+- event loop事件轮训流程图
+![event loop事件轮训流程图](./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/%E4%BA%8B%E4%BB%B6%E8%BD%AE%E8%AE%AD%E6%9C%BA%E5%88%B6%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
+
+- 在Node中，事件主要来源于网络请求、文件I/O等，这些事件对应的
+观察者有`文件I/O观察者`、`网络I/O观察者`...,对不同事件进行分类
+
+- 事件循环是一个典型的`生产者/消费者模型`;
+  - 生产者：异步I/O、网络请求事件等
+  - 消费者：事件完成后被传递到对应的观察者那里，事件循环则从观察者那里取出事件并执行回调函数
+
+
