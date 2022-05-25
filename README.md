@@ -250,4 +250,29 @@ fs.open()、fs.write()...方法细节和用途
   - 生产者：异步I/O、网络请求事件等
   - 消费者：事件完成后被传递到对应的观察者那里，事件循环则从观察者那里取出事件并执行回调函数
 
+- `process.nextTick()`存入一个数组，每次事件循环执行数组内所有，而`setImmediate`存放在链表中，每次事件循环只执行其中一个(按先后顺序)
+
+```js
+// 加入两个nextTick()的回调函数
+process.nextTick(() => console.log('nextTick延迟执行1'));
+process.nextTick(() => console.log('nextTick延迟执行2'));
+// 加入两个setImmediate()的回调函数
+setImmediate(function () {
+ console.log('setImmediate延迟执行1');
+ // 进入下次循环
+ process.nextTick(process.nextTick(() => console.log('强势插入')););
+});
+setImmediate(function () {
+ console.log('setImmediate延迟执行2');
+});
+
+// 结果
+nextTick延迟执行1
+nextTick延迟执行2
+setImmediate延迟执行1
+强势插入
+setImmediate延迟执行2
+```
+> 之所以这样设计，是为了保证每轮循环能够较快地执行结束，防止CPU占用过多而阻塞后续I/O
+调用的情况
 
