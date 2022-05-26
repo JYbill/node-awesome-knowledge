@@ -277,3 +277,60 @@ setImmediate延迟执行2
 
 + 异步i/o，事件循环总结图
 ![异步i/o，事件循环总结图](./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/node%E5%BC%82%E6%AD%A5%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
+
+<br>
+
+## 第四章 异步编程
+> 浏览器提出了`Web Workers`，它通过将`JavaScript执行`与`UI`渲染分离，可以很好地利用多核CPU为大量计算服务。同时前端`WebWorkers`也是一个利用消息机制合理使用多核CPU的理想模型。
+
+- 中间件
+![中间件](./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/%E4%B8%AD%E9%97%B4%E4%BB%B6.png)
+> `next()`流程控制
+
+<br>
+
+## 第五章 内存控制
+### 内存限制
+
++ 内存限制：64位系统下约为1.4GB，32位系统下约为0.7GB
+
+  ```js
+  const memory = process.memoryUsage();
+  console.log(memory);
+  console.log('v8目前已申请到的内存大小', memory.heapTotal / 1024 / 1024, 'M');
+  console.log('v8目前已使用到的内存大小', memory.heapUsed / 1024 / 1024, 'M');
+  
+  // 结果
+  {
+    rss: 26427392,
+    heapTotal: 5529600, // 已申请到的堆内存
+    heapUsed: 2695064, // 已申请到的堆内存的使用量
+    external: 912267,
+    arrayBuffers: 10803
+  }
+  v8目前已申请到的内存大小 5.2734375 M
+  v8目前已使用到的内存大小 2.5702133178710938 M
+  ```
+
+  > ⚠️如果已申请的堆空闲 内存不够分配新的对象，将继续申请堆内存，直到堆的大小超过V8的限制为止!
+
+  官方的说法，以1.5GB的垃圾回收堆内存为例，V8做一次小的垃圾回收需要50毫秒以上，做一次非增量式的垃圾回收甚至要1秒以上。这是**垃圾回收引起JavaScript线程暂停执行**的时间，在这样的时间花销下，应用的性能和响应能力都会直线下降。这样的情况不仅仅后端服务无法接受，前端浏览器也无法接受。因此，在当时的考虑下直接限制堆内存是一个好的选择。
+
+  > `总结`：v8单线程原因，垃圾回收时js无法执行，**大量垃圾回收占用时间导致js代码长期无法继续执行**，v8限制内存可谓是一个好的选择！
+
+
+
+### 开启自定义内存
+
+```js
+node --max-old-space-size=1700 test.js // 设置老生代内存空间的最大值，单位为MB
+// 或者
+node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大值，单位为KB
+```
+
+> 一旦生效就不能再动态改变
+
+
+### 垃圾回收机制
+
+![image-20220526171938382](./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/v8%E5%86%85%E5%AD%98%E5%88%86%E4%BB%A3%E6%A8%A1%E5%9E%8B.png)
