@@ -384,3 +384,32 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
   > V8后续还引入了延迟清理（lazy sweeping）与增量式整理（incremental compaction），让清理与整理动作也变成增量式的“步进”交替方式。
   > 同时还计划引入并行标记与并行清理，进一步利用多核性能降低每次停顿的时间。
 
+
+### 常驻内存
+- 进程内存 = rss(包括arrayBuffers) + 交换区(swap) + 文件系统(file system)
+- ⚠️ Buffer不在v8管理的内存中，在常驻内存中，但是受V8垃圾回收管制
+- `Buffer.alloc()`从内存中创建，`Buffer.unsafe()`从`arrayBuffers`中创建，超出`arrayBuffer / 2`时会从内存中创建
+- 详细查看：http://nodejs.cn/api-v14/buffer.html#static-method-bufferallocunsafesize
+- node内存图
+![node内存图](./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/node%E5%86%85%E5%AD%98%E5%9B%BE.png)
+
+### 避免内存缓存
++ 缓存
+
+  1. 不要让对象做缓存，不要让对象无限增加
+
+  2. 模块化导入模块不要对其进行添加值的操作，或者值记得清空，不要让他无限增长，因为它会在V8老生代中常留
+
+  3. 进程间通信缓存是无法共享的，两个进程之间都有缓存很可能缓存的内容一致，这是一种对内存的浪费
+
+
+
++ 队列
+  1. 生产者-消费者模型中，如果生产者速度 > 消费者速度，会造成产物堆积。
+     解决方案：设定生产边界值，提升消费者速度技术，生产、消费超时拒绝异常等
+
+
+
++ 缓存方案：
+  1. redis ✅
+  2. Memcached
