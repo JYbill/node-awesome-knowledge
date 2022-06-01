@@ -413,3 +413,39 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
 + 缓存方案：
   1. redis ✅
   2. Memcached
+
+## Buffer
+## 🥕Buffer分配
+
++ ⚠️ Buffer以8KB划分大内存对象和小内存对象，称之为slab分配机制，以它作为单位单元分配。
+
+  ```js
+  console.log('buffer 池大小', Buffer.poolSize / 1024 + 'KB');
+  // buffer 池大小 8KB
+  Buffer.poolSize // 初始化Buffer池的大小单位字节，可以修改
+  ```
+
++ 分配小对象(<= 8KB)
+
+  构造小Buffer对象时，会去检查pool对象，如果pool没有被创建，将会创建一个新的slab单元指向它，并记录分配了多大。
+
+  <img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/buffer1.png" style="zoom:50%;" />
+
+  <img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/buffer2.png" style="zoom:50%;" />
+
+  ⚠️注意：如果在有1KB小对象的情况下，再次插入7.5KB的对象，因为没有足够的空间所以需要再开辟一个slab(8KB内存)
+  ♻️回收：只要有一个slab内的小对象存活，那么这块slab就无法回收！
+
+
+
++ 分配大对象(>= 8KB)
+
+  如果需要超过8KB的Buffer对象，将会直接分配一个SlowBuffer对象作为slab单元，该调用属于node调用c++层面
+  (⚠️不推荐直接使用SlowBuffer，直接调用C++层面的Buffer不会被V8标记，无法有效的进行垃圾回收)
+
+> ⚠️ 以上Buffer创建都会被V8垃圾回收标记的，所以V8垃圾回收也会处理Buffer垃圾
+
+## 网络编程
++ TCP三次握手
+
+  <img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/tcp.png" style="zoom:50%;" />
