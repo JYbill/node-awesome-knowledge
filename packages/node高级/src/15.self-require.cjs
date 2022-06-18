@@ -25,7 +25,7 @@ class MyModule {
       const content = fs.readFileSync(module.path, 'utf-8');
       const funcStr = MyModule.wrapStr(content);
       const func = vm.runInThisContext(funcStr);
-      func.call(module.exports, module.exports, path.dirname(module.path), module.path);
+      func.call(module.exports, module.exports, path.dirname(module.path), module.path, myRequire);
     },
     '.cjs'(module) {
       MyModule.extensionResolve[".js"](module);
@@ -41,7 +41,7 @@ class MyModule {
    * @param {*} context 
    */
   static wrapStr(context) {
-    return `((myExports, myDirName, myFileName) => {
+    return `((myExports, myDirName, myFileName, myRequire) => {
       ${context}
     })`
   }
@@ -125,6 +125,9 @@ function myRequire(fileFlag) {
     return cacheModule;
   }
 
+  // 测试缓存
+  console.log('加载啦... 🚀', fileFlag);
+
   // 没有缓存，创建空的加载目标对象
   const module = new MyModule(absolutePath);
 
@@ -135,6 +138,6 @@ function myRequire(fileFlag) {
   MyModule.load(module);
   return module.exports;
 }
-// const res = myRequire('./15.test');
+const json = myRequire('./15.test');
 const res = myRequire('./b');
-console.log('导出', res);
+console.log('导出', res, json);
