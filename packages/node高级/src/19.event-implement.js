@@ -13,7 +13,7 @@ class EventEmitter {
 
     if (!event) {
       this.events[type] = callback;
-    } else if (typeof event === 'function') {
+    } else if (typeof event === "function") {
       this.events[type] = [event, callback];
     } else {
       event.push(callback);
@@ -24,10 +24,13 @@ class EventEmitter {
   off(type, callback) {
     const events = this.events[type];
 
-    if (!events) { return; }
+    if (!events) {
+      return;
+    }
 
     // 一个回调情况
-    if (typeof events === 'function' &&
+    if (
+      typeof events === "function" &&
       (events === callback || events.link === callback)
     ) {
       this.events[type] = null;
@@ -47,8 +50,8 @@ class EventEmitter {
   emit(type, ...args) {
     const event = this.events[type];
     if (!event) {
-      return
-    } else if (typeof event === 'function') {
+      return;
+    } else if (typeof event === "function") {
       event.call(this, ...args);
     } else {
       for (const callback of event) {
@@ -59,12 +62,11 @@ class EventEmitter {
 
   // 触发一次即取消
   once(type, callback) {
-
     // aop静态代理 调用一次后利用闭包直接off删除
     const offBack = (...args) => {
       callback.call(this, ...args);
       this.off(type, offBack);
-    }
+    };
     offBack.link = callback;
     this.on(type, offBack);
   }
@@ -103,11 +105,12 @@ e.emit('test', 1, 2, 4); */
 
 // 测试once + off 发布订阅
 const func = (...args) => {
-  console.log('1', args);
+  console.log("1", args);
 };
-e.once('test', func);
-e.on('test', () => {
-  console.log('yo.');
-})
-e.off('test', func);
-e.emit('test', 1, 2, 3);
+e.once("test", func);
+e.on("test", () => {
+  console.log("yo.");
+});
+const a = 1;
+e.off("test", func);
+e.emit("test", 1, 2, 3);
