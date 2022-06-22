@@ -22,7 +22,7 @@ console.log(Object.prototype.toString.call(new Person()));
 console.log(test == 'value');
 console.log(test + ''); */
 
-// 
+//
 /* const mongoose = require('mongoose');
 const id = mongoose.Types.ObjectId;
 const testId = new id();
