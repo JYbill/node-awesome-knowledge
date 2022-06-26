@@ -8,3 +8,4 @@ const fs = require('fs');
 const rs = fs.createReadStream('../assets/copy.txt');
 const ws = fs.createWriteStream('../assets/copy1.txt');
 rs.pipe(ws);
+rs.pipe(process.stdout);
