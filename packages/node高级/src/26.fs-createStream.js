@@ -6,6 +6,7 @@
  */
 
 const { createReadStream } = require('fs');
+const { StringDecoder } = require('string_decoder');
 
 const rs = createReadStream('../assets/copy.txt', {
   highWaterMark: 8, // 一次读取8字节的buffer，
@@ -55,7 +56,7 @@ setTimeout(() => {
   console.log('--------------------------');
 }, 1000); */
 
-rs.on('readable', () => {
+/* rs.on('readable', () => {
   console.log(' ---- read ----');
   let data;
   while ((data = rs.read()) !== null) {
@@ -74,4 +75,9 @@ rs.on('end', () => {
 // 可读流关闭触发
 rs.on('close', () => {
   console.log('stream had been closed');
+}); */
+const stringDecoder = new StringDecoder('utf8');
+rs.on('data', (chunk) => {
+  const strBuffer = stringDecoder.write(chunk);
+  console.log(strBuffer.toString());
 });

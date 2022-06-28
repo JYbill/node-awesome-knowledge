@@ -8,6 +8,8 @@ import {
   Param,
   Post,
   Query,
+  RequestIP,
+  RequestPath,
 } from '@midwayjs/decorator';
 
 @Controller('/user')
@@ -60,5 +62,37 @@ export class UserController {
   @Get('/cookie2')
   async cookie2() {
     console.log(this.ctx.cookies.get('foo'));
+  }
+
+  @Get('/session')
+  async session() {
+    const session = this.ctx.session;
+    session.count = session.count ? session.count + 1 : 1;
+    return session;
+  }
+
+  @Get('/other')
+  async other(@RequestIP() ip, @RequestPath() path) {
+    return {
+      ip,
+      path,
+    };
+  }
+
+  @Get('/transform')
+  async transform(
+    @Query('bool') bool: boolean,
+    @Query('number') number: number
+  ) {
+    const bool1 = this.ctx.query['bool'];
+    console.log(bool1);
+    console.log(bool1.length);
+    console.log(Boolean(bool1));
+    console.log(typeof bool1);
+    console.log(typeof bool, typeof number);
+    return {
+      bool,
+      number,
+    };
   }
 }

@@ -33,13 +33,13 @@ const readStream = new MyReadable({
 });
 readStream.on('readable', () => {
   console.log(' ---- read ---- ');
-  let data;
+  /* let data;
   while ((data = readStream.read()) !== null) {
     // console.log('链表头部', readStream._readableState.buffer.head);
     // console.log('buffer长度', readStream._readableState.length);
     // console.log(data);
     console.log(data.toString());
-  }
+  } */
   console.log(' ---- end ----');
 });
 /* readStream.on('data', (chunk) => {
