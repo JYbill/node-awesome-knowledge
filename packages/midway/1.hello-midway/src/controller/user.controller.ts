@@ -1,17 +1,27 @@
+import { ReportMiddleware } from './../middleware/report.middleware';
+import { createReadStream } from 'fs';
 import { Context } from '@midwayjs/koa';
 import {
   Body,
+  ContentType,
   Controller,
   Get,
   Headers,
+  HttpCode,
   Inject,
   Param,
   Post,
   Query,
+  // Redirect,
   RequestIP,
   RequestPath,
+  // SetHeader,
 } from '@midwayjs/decorator';
+import UserDTO from '../dto/user.dto';
+import { User } from '../interface';
+import { join } from 'path';
 
+// @Controller('/user', { middleware: [ReportMiddleware] })
 @Controller('/user')
 export class UserController {
   @Inject()
@@ -94,5 +104,52 @@ export class UserController {
       bool,
       number,
     };
+  }
+
+  @Post('/complex')
+  async complex(@Body() user: UserDTO) {
+    console.log(user);
+    console.log(user instanceof UserDTO);
+    return user;
+  }
+
+  @Post('/interface')
+  async interface(@Body() user: User) {
+    console.log(user);
+    return user;
+  }
+
+  @Get('/res')
+  // @SetHeader('content-type', 'image/png')
+  @ContentType('image/png')
+  async res() {
+    // content-type	text/plain; charset=utf-8
+    // return 'text';
+
+    // content-type	application/json; charset=utf-8
+    // return { a: 1, b: '2', c: true };
+
+    // content-type	text/html; charset=utf-8
+    // return `<h1 style="color: orange">一级标题</h1>`;
+
+    // content-type	application/octet-stream
+    const path = join(__dirname, '../assets/deno.png');
+    // const path = join(__dirname, '../assets/index.html');
+    return createReadStream(path);
+  }
+
+  @Get('/status')
+  @HttpCode(201)
+  async status() {
+    return 'ok.';
+  }
+
+  @Get('/redirect')
+  // @Get('/redirect', { ignoreGlobalPrefix: true })
+  // @Redirect('/user/status', 302)
+  // @Redirect('status', 302)
+  async redirect() {
+    console.log('redirect');
+    return 'ok.';
   }
 }
