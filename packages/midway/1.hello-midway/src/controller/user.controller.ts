@@ -152,4 +152,14 @@ export class UserController {
     console.log('redirect');
     return 'ok.';
   }
+
+  @Get('/log')
+  async log() {
+    const logger = this.ctx.logger;
+    logger.info('ok.');
+    logger.info(this.ctx.startTime);
+    const getLogger = this.ctx.getLogger('custom');
+    logger.info(getLogger);
+    return 'ok.';
+  }
 }
