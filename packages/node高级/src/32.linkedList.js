@@ -4,6 +4,9 @@
  * @desc：实现链表
  * @date: 2022-07-03 17:28:31
  */
+
+const { threadId } = require('worker_threads');
+
 // 节点
 class Node {
   content;
@@ -47,12 +50,15 @@ class LinkList {
    * @returns
    */
   get(index) {
-    if (index > this.length) {
+    if (index >= this.length) {
       throw new Error('数量越界');
     }
 
     let resultNode = this.head;
-    while (--index) {
+    // console.log(index);
+    while (--index >= 1) {
+      // console.log(index);
+      // console.log(resultNode);
       resultNode = resultNode.next;
     }
     return resultNode;
@@ -75,6 +81,10 @@ class LinkList {
    * @returns
    */
   forEach() {
+    if (!this.head) {
+      console.log('null');
+      return;
+    }
     let node = this.head;
     while (node.next) {
       console.log(node);
@@ -83,20 +93,50 @@ class LinkList {
     console.log(node);
     return node;
   }
+
+  /**
+   * 移除指定下表带节点，起始0
+   * @param {*} index
+   */
+  remove(index) {
+    if (index >= this.length) {
+      throw new Error('index more than size.');
+    }
+    const before = this.get(index - 1);
+    const next = before.next.next;
+    // console.log(before, next);
+    before.next = next;
+  }
 }
 
-const linkedList = new LinkList('im first node.');
-console.log('初始化', linkedList);
+class Queue {
+  linkedList;
+  constructor(content) {
+    this.linkedList = new LinkList(content);
+  }
 
-linkedList.add('im second node.');
-console.log('插入头部', linkedList);
+  add(content) {
+    this.linkedList.add(content);
+  }
 
-const secondNode = linkedList.get(2);
-console.log('获取第二个节点', secondNode);
+  debug() {
+    this.linkedList.forEach();
+  }
 
-linkedList.add('im third node.', secondNode);
-console.log('插入指定节点', linkedList);
-console.log('----- for -----');
-const lastNode = linkedList.forEach();
-linkedList.setNode('now! im last node', lastNode);
-linkedList.forEach();
+  remove(index) {
+    // 头部删除
+    if (index === 0) {
+      this.linkedList.head = this.linkedList.head.next;
+      this.linkedList.length--;
+      return;
+    }
+    this.linkedList.remove(index);
+  }
+}
+
+const queue = new Queue('im first.');
+queue.add('second.');
+// queue.debug();
+// console.log(' ===== remove ===== ');
+queue.remove(1);
+queue.debug();
