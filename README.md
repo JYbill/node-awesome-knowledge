@@ -453,3 +453,12 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
   - http请求流程
   http执行流程：在请求产生的过程中，http模块拿到连接中传来的数据，调用二进制模块http_parser进行解析，在解析完请求报文的报头后，触发request事件，调用用户的业务逻辑
   <img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/node http流程.png" />
+
+- websocket握手流程
+<img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/websocket握手流程.png" />
+
+- websocket数据帧
+<img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/websocket数据帧.png" />
+
+- TLS/SSL
+<img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/TLS:SSL.png" />
