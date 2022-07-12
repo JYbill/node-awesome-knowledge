@@ -23,6 +23,11 @@ class LinkList {
   head;
   length;
   constructor(content) {
+    if (!content) {
+      this.head = null;
+      this.length = 0;
+      return;
+    }
     this.head = new Node(content);
     this.length = 1;
   }
@@ -72,8 +77,13 @@ class LinkList {
    */
   setNode(content, beforeNode, afterNode = null) {
     const node = new Node(content, afterNode);
-    beforeNode.next = node;
     this.length++;
+    if (!afterNode) {
+      this.head = node;
+      node.next = beforeNode;
+      return;
+    }
+    beforeNode.next = node;
   }
 
   /**
@@ -102,16 +112,23 @@ class LinkList {
     if (index >= this.length) {
       throw new Error('index more than size.');
     }
-    const before = this.get(index - 1);
-    const next = before.next.next;
-    // console.log(before, next);
+    const before = this.get(index);
+    const current = before.next;
+    const next = current.next;
+    // console.log(before, current, next);
+    // console.log(index, current);
     before.next = next;
+    return current;
   }
 }
 
 class Queue {
   linkedList;
   constructor(content) {
+    if (!content) {
+      this.linkedList = new LinkList();
+      return;
+    }
     this.linkedList = new LinkList(content);
   }
 
@@ -126,17 +143,33 @@ class Queue {
   remove(index) {
     // 头部删除
     if (index === 0) {
+      const removeNode = this.linkedList.head;
       this.linkedList.head = this.linkedList.head.next;
       this.linkedList.length--;
-      return;
+      return removeNode;
     }
-    this.linkedList.remove(index);
+
+    const removeNode = this.linkedList.remove(index);
+    // console.log(removeNode);
+    this.linkedList.length--;
+    return removeNode;
+  }
+
+  removeLastNodeAndReturn() {
+    return this.remove(this.linkedList.length - 1);
   }
 }
 
-const queue = new Queue('im first.');
-queue.add('second.');
+module.exports = Queue;
+
+// const queue = new Queue('im first.');
+// queue.add('second.');
+// queue.add('third.');
 // queue.debug();
 // console.log(' ===== remove ===== ');
-queue.remove(1);
-queue.debug();
+// queue.remove(1);
+// queue.debug();
+// let node = queue.removeLastNodeAndReturn();
+// node = queue.removeLastNodeAndReturn();
+// console.log(node);
+// console.log(queue);
