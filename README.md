@@ -462,3 +462,17 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
 
 - TLS/SSL
 <img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/TLS:SSL.png" />
+
+## web应用构建
+- 浏览器缓存
+<img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/浏览器缓存.png" />
+
+## 多进程
+<img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/多进程.png" />
+
+  - 多进程通信原理
+  <img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/进程间通信原理.png" />
+
+  - 多子进程占用一个端口
+  <img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/多子进程占用一个端口.png" />
+  
