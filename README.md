@@ -478,3 +478,6 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
   
   - 父子进程通信，平滑重启、自杀信号
   <img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/进程间通信平滑重启.png" />
+
+  - cluster集群只能管理一组进程
+  <img src="./packages/nodejs%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E7%AC%94%E8%AE%B0/images/cluster集群管理一组进程.png" />
