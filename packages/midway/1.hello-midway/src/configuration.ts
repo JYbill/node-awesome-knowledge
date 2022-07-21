@@ -6,6 +6,7 @@ import { join } from 'path';
 import { DefaultErrorFilter } from './filter/default.filter';
 import { NotFoundFilter } from './filter/notfound.filter';
 import { ReportMiddleware } from './middleware/report.middleware';
+import { IMidwayContainer } from '@midwayjs/core';
 
 @Configuration({
   imports: [
@@ -22,7 +23,7 @@ export class ContainerLifeCycle {
   @App()
   app: koa.Application;
 
-  async onReady() {
+  async onReady(applicationContext: IMidwayContainer) {
     // add middleware
     this.app.useMiddleware([ReportMiddleware]);
     // add filter

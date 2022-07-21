@@ -1,18 +1,30 @@
 import { Context } from '@midwayjs/koa';
-import { Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import {
+  Destroy,
+  Init,
+  Inject,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/decorator';
 import { IUserOptions } from '../interface';
 
 @Provide()
-@Scope(ScopeEnum.Singleton)
+@Scope(ScopeEnum.Request)
 export class UserService {
   count: number = 0;
 
-  constructor() {
-    console.log('init.');
+  constructor(private readonly studentName) {
+    // console.log('init.');
   }
 
   @Inject()
   ctx: Context;
+
+  @Init()
+  async init() {
+    console.log('im init.');
+  }
 
   async getUser(options: IUserOptions) {
     return {
@@ -26,5 +38,10 @@ export class UserService {
   async getCount() {
     console.log(this.ctx);
     return this.count++;
+  }
+
+  @Destroy()
+  async stop() {
+    console.log('before die.');
   }
 }

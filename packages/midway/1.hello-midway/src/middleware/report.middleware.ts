@@ -1,3 +1,4 @@
+import { UserService } from './../service/user.service';
 import { IMiddleware } from '@midwayjs/core';
 import { Middleware } from '@midwayjs/decorator';
 import { NextFunction, Context } from '@midwayjs/koa';
