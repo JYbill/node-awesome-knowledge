@@ -8,6 +8,8 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
   resolve() {
     return async (ctx: Context, next: NextFunction) => {
       console.log(' ====== 开始执行 ====== ');
+      console.log(ctx['username']);
+
       // 控制器前执行的逻辑
       const startTime = Date.now();
 

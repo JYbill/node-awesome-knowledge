@@ -29,7 +29,7 @@ export class LifeService {
 
   @Destroy()
   async stop() {
-    return new Promise(resolve => {
+    return await new Promise(resolve => {
       setTimeout(() => {
         console.log('die.');
         resolve('die.');
