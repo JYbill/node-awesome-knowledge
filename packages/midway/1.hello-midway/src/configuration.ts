@@ -7,6 +7,9 @@ import { DefaultErrorFilter } from './filter/default.filter';
 import { NotFoundFilter } from './filter/notfound.filter';
 import { ReportMiddleware } from './middleware/report.middleware';
 import { IMidwayContainer } from '@midwayjs/core';
+import * as defaultConfig from './config/config.default';
+import * as unittestConfig from './config/config.unittest';
+import * as localConfig from './config/config.local';
 
 @Configuration({
   imports: [
@@ -17,7 +20,14 @@ import { IMidwayContainer } from '@midwayjs/core';
       enabledEnvironment: ['local'],
     },
   ],
-  importConfigs: [join(__dirname, './config')],
+  // importConfigs: [join(__dirname, './config')],
+  importConfigs: [
+    {
+      default: defaultConfig,
+      local: localConfig,
+      unittest: unittestConfig,
+    },
+  ],
 })
 export class ContainerLifeCycle {
   @App()

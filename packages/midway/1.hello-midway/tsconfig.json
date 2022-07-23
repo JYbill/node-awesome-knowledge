@@ -16,19 +16,13 @@
     "forceConsistentCasingInFileNames": true,
     "typeRoots": [
       "./typings",
-      "./node_modules/@types",
+      "./node_modules/@types"
     ],
-    "outDir": "dist",
+    "outDir": "dist"
   },
-  // 开发环境、生产环境
-  // "exclude": [
-  //   "dist",
-  //   "node_modules",
-  //   "test"
-  // ],
-  // 测试环境
   "exclude": [
     "dist",
     "node_modules",
-  ],
+    "test"
+  ]
 }

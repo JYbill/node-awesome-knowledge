@@ -1,2 +1,8 @@
 const { Bootstrap } = require('@midwayjs/bootstrap');
-Bootstrap.run();
+Bootstrap.configure({
+  globalConfig: {
+    default: {
+      keys: 'abcde',
+    },
+  },
+}).run();

@@ -1,5 +1,5 @@
 import { MidwayEnvironmentService } from '@midwayjs/core';
-import { App, Controller, Get, Inject } from '@midwayjs/decorator';
+import { ALL, App, Config, Controller, Get, Inject } from '@midwayjs/decorator';
 import { Application, Context } from '@midwayjs/koa';
 
 /**
@@ -19,10 +19,21 @@ export class EnvController {
   @Inject()
   envService: MidwayEnvironmentService;
 
+  @Config()
+  keys;
+
+  @Config(ALL)
+  all;
+
+  @Config('target')
+  target;
+
   @Get()
   async index() {
-    console.log(this.app.getEnv());
-    console.log(this.envService.getCurrentEnvironment());
+    // console.log(this.app.getEnv());
+    // console.log(this.envService.getCurrentEnvironment());
+    // console.log(this.keys);
+    console.log(this.all);
     return 'ok.';
   }
 }
