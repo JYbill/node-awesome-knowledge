@@ -1,12 +1,19 @@
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App, Controller } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import * as validate from '@midwayjs/validate';
 import * as info from '@midwayjs/info';
-import { join } from 'path';
 import { DefaultErrorFilter } from './filter/default.filter';
 import { NotFoundFilter } from './filter/notfound.filter';
 import { ReportMiddleware } from './middleware/report.middleware';
-import { IMidwayContainer } from '@midwayjs/core';
+import {
+  ILifeCycle,
+  IMidwayContainer,
+  IObjectLifeCycle,
+  ObjectBeforeCreatedOptions,
+  ObjectBeforeDestroyOptions,
+  ObjectCreatedOptions,
+  ObjectInitOptions,
+} from '@midwayjs/core';
 import * as defaultConfig from './config/config.default';
 import * as unittestConfig from './config/config.unittest';
 import * as localConfig from './config/config.local';
@@ -29,7 +36,7 @@ import * as localConfig from './config/config.local';
     },
   ],
 })
-export class ContainerLifeCycle {
+export class ContainerLifeCycle implements ILifeCycle {
   @App()
   app: koa.Application;
 

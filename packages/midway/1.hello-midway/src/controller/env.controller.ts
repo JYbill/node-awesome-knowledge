@@ -28,12 +28,14 @@ export class EnvController {
   @Config('target')
   target;
 
+  test;
+
   @Get()
   async index() {
     // console.log(this.app.getEnv());
     // console.log(this.envService.getCurrentEnvironment());
     // console.log(this.keys);
-    console.log(this.all);
+    // console.log(this.all);
     return 'ok.';
   }
 }
