@@ -1,6 +1,11 @@
 import { MidwayHttpError, HttpStatus } from '@midwayjs/core';
 import { Controller, Get, Inject, Logger } from '@midwayjs/decorator';
-import { ILogger } from '@midwayjs/logger';
+import {
+  ILogger,
+  IMidwayLogger,
+  MidwayBaseLogger,
+  MidwayContextLogger,
+} from '@midwayjs/logger';
 
 /**
  * @file: log.controller.ts
@@ -45,8 +50,27 @@ export class LogController {
     const map = new Map();
     map.set('k', 'v');
     const set = new Set([1, 2, 1]);
-    this.logger.info(map);
-    this.logger.info(set);
+    // this.logger.info(map);
+    // this.logger.info(set);
+
+    // 错误
+    // this.logger.info('test error', new Error('e'));
+
+    // 格式化
+    // this.logger.info('im %s have %d years old.', 'xiaoqinvar', 5);
+    const obj = {
+      name: 'xiaoqinvar.',
+    };
+    // this.logger.info('obj: %j', obj);
+    // this.logger.info(obj);
+    // this.logger.info(Symbol('xiaoqinvar.'));
+
+    // app logger 类型
+    // this.logger.info(this.appLogger);
+    // this.logger.info((this.appLogger as IMidwayLogger).write);
+
+    // 只输出内容，不输出timestamp、label、ip...
+    (this.appLogger as IMidwayLogger).write('out.');
     return 'format.';
   }
 }
