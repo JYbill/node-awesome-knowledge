@@ -1,3 +1,4 @@
+import { Context } from '@midwayjs/koa';
 import { MidwayHttpError, HttpStatus } from '@midwayjs/core';
 import { Controller, Get, Inject, Logger } from '@midwayjs/decorator';
 import {
@@ -6,6 +7,8 @@ import {
   MidwayBaseLogger,
   MidwayContextLogger,
 } from '@midwayjs/logger';
+import { timeStamp } from 'console';
+import UserDTO from '../dto/user.dto';
 
 /**
  * @file: log.controller.ts
@@ -19,7 +22,10 @@ export class LogController {
   logger: ILogger;
 
   @Logger()
-  appLogger: ILogger;
+  appLogger: IMidwayLogger;
+
+  @Inject()
+  ctx: Context;
 
   @Get()
   async index() {
@@ -72,5 +78,48 @@ export class LogController {
     // 只输出内容，不输出timestamp、label、ip...
     (this.appLogger as IMidwayLogger).write('out.');
     return 'format.';
+  }
+
+  /**
+   * 日志普通配置
+   * @param params
+   */
+  @Get('/normal')
+  async normal() {
+    this.appLogger.disableConsole();
+    this.appLogger.warn('console is disabled.');
+    this.appLogger.enableConsole();
+    this.appLogger.debug('console is enabled.');
+    return 'normal.';
+  }
+
+  @Logger('xiaoqinvarLogger')
+  xqvLogger: IMidwayLogger;
+
+  @Get('/config')
+  async config() {
+    // console.log(this.xqvLogger);
+    // this.xqvLogger.warn('xqv warn');
+    // this.xqvLogger.debug('xqv debug');
+    return 'config.';
+  }
+
+  @Get('/context')
+  async getContext() {
+    // this.xqvLogger.debug('ok.');
+    // const contextLogger = this.ctx.getLogger('xiaoqinvarLogger');
+    // contextLogger.debug('its context logger');
+    const json = JSON.stringify({
+      name: 'xiaoqinvar',
+      age: 23,
+    });
+    this.ctx.getLogger('xiaoqinvarLogger').info(json);
+    this.ctx.getLogger('xiaoqinvarLogger').info({
+      name: '123',
+      age: {
+        age: 1,
+      },
+    });
+    return 'context.';
   }
 }
