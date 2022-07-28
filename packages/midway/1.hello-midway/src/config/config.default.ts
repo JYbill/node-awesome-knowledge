@@ -30,4 +30,10 @@ export default {
       },
     },
   },
+  session: {
+    maxAge: 24 * 3600 * 1000, // 1天
+    key: 'XQV_SESS',
+    httpOnly: true,
+    renew: true,
+  },
 } as MidwayConfig;
