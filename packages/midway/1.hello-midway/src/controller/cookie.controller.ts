@@ -64,4 +64,10 @@ export default class CookieController {
     ctx.session.visited = ctx.session.visited ? ctx.session.visited + 1 : 1;
     return ctx.session;
   }
+
+  @Get('/mock')
+  async mock() {
+    this.logger.info(this.ctx['uname']);
+    return 'mock.';
+  }
 }

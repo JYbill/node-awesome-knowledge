@@ -11,6 +11,7 @@ import {
   IMidwayLogger,
   IObjectLifeCycle,
   MidwayLoggerService,
+  MidwayMockService,
   ObjectBeforeCreatedOptions,
   ObjectBeforeDestroyOptions,
   ObjectCreatedOptions,
@@ -49,6 +50,9 @@ export class ContainerLifeCycle implements ILifeCycle {
   @Inject()
   customTransport: CustomTransport;
 
+  @Inject()
+  mockService: MidwayMockService;
+
   async onReady(applicationContext: IMidwayContainer) {
     // add middleware
     this.app.useMiddleware([ReportMiddleware]);
@@ -58,5 +62,10 @@ export class ContainerLifeCycle implements ILifeCycle {
       'xiaoqinvarLogger'
     ) as IMidwayLogger;
     appLogger.add(this.customTransport);
+
+    // mock service
+    this.mockService.mockContext(this.app, (ctx) => {
+      ctx['uname'] = 'xqv.';
+    });
   }
 }
