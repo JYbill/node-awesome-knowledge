@@ -21,3 +21,11 @@ export interface IFactoryService {
   name: string;
   getData(): any;
 }
+
+// 扩展上下文
+import '@midwayjs/core';
+declare module '@midwayjs/core' {
+  interface Context {
+    abc: string;
+  }
+}

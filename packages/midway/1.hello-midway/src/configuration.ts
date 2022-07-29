@@ -65,7 +65,7 @@ export class ContainerLifeCycle implements ILifeCycle {
 
     // mock service
     this.mockService.mockContext(this.app, (ctx) => {
-      ctx['uname'] = 'xqv.';
+      ctx.abc = 'xqv.';
     });
   }
 }

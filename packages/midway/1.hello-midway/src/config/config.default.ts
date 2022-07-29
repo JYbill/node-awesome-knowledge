@@ -6,10 +6,10 @@ export default {
   keys: '1655889130481_8972',
   koa: {
     port: 3001,
-    contextLoggerFormat: (info) => {
-      const ctx = info.ctx;
-      return `${ctx.method} ${info.message}`;
-    },
+    // contextLoggerFormat: (info) => {
+    //   const ctx = info.ctx;
+    //   return `${ctx.method} ${info.message}`;
+    // },
   },
   midwayLogger: {
     clients: {

@@ -12,7 +12,7 @@ export class AopAspect implements IMethodAspect {
    * @param joinPoint 切点对象，包含该AopController的信息
    */
   async before(joinPoint: JoinPoint) {
-    this.logger.info(joinPoint);
+    // this.logger.info(joinPoint);
   }
 
   /**
@@ -22,8 +22,8 @@ export class AopAspect implements IMethodAspect {
    * @param error 无错误为undefined，有错为错误
    */
   after(joinPoint: JoinPoint, result: any, error: Error) {
-    this.logger.info(joinPoint);
-    this.logger.info(result);
-    this.logger.info(error);
+    // this.logger.info(joinPoint);
+    // this.logger.info(result);
+    // this.logger.info(error);
   }
 }
