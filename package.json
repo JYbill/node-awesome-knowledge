@@ -4,7 +4,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "clean": "rm -rf node_modules **/*/node_modules",
+    "generate": "prisma generate"
+  },
   "author": "xiaoqinvar",
   "license": "ISC",
   "devDependencies": {

@@ -1,0 +1,14 @@
+datasource db {
+  provider = "mongodb"
+  url      = "mongodb://xiaoqinvar:xh9535123+@101.35.13.180:27017/test?authSource=admin"
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongoDB"]
+}
+
+model User {
+  id   String  @id @map("_id") @db.ObjectId
+  name String?
+}

@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    // 源码映射
+    "sourceMap": true,
     // es模块交互，推荐开启，否则命名空间导入或默认导入又问题，详细差官网配置
     "esModuleInterop": true,
     // 导入文件采用大小写一致

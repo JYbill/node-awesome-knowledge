@@ -1,0 +1,18 @@
+{
+  "name": "prisma",
+  "version": "1.0.0",
+  "description": "prisma learning",
+  "main": "index.js",
+  "scripts": {
+    "prisma-version": "prisma --version",
+    "generator": "prisma generate"
+  },
+  "author": "xiaoqinvar",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^4.1.1"
+  },
+  "devDependencies": {
+    "prisma": "^4.1.1"
+  }
+}
