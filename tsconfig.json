@@ -18,5 +18,9 @@
     // "typeRoots": ["./"]
     // 不允许type类型为any
     "noImplicitAny": false,
-  }
+  },
+  "exclude": [
+    "dist",
+    "node_modules",
+  ]
 }

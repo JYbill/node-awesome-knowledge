@@ -4,15 +4,14 @@
   "description": "prisma learning",
   "main": "index.js",
   "scripts": {
-    "prisma-version": "prisma --version",
-    "generator": "prisma generate"
+    "generate": "prisma generate"
   },
   "author": "xiaoqinvar",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^4.1.1"
+    "@prisma/client": "4.0.0"
   },
   "devDependencies": {
-    "prisma": "^4.1.1"
+    "prisma": "4.0.0"
   }
 }
