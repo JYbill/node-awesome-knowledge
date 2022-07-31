@@ -1,53 +1,15 @@
 datasource db {
   provider = "mongodb"
   // provider = "mysql"
-  url      = "mongodb://xiaoqinvar:990415@www.jybill.top:27017,www.jybill.top:27018,www.jybill.top:27019/test?replicaSet=rs0&authSource=admin&slaveOk=true&connectTimeoutMS=5000"
-  // url      = "mongodb+srv://xiaoqinvar:xh9535123+@cluster0.auyaf.mongodb.net/?retryWrites=false&w=majority&connectTimeoutMS=2000"
+  url      = "mongodb://xiaoqinvar:990415@www.jybill.top:27017,www.jybill.top:27018,www.jybill.top:27019/test?replicaSet=rs0&authSource=admin&connectTimeoutMS=5000"
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
-model Post {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  String  @db.ObjectId
-}
-
 model User {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  email String  @unique
-  name  String?
-  posts Post[]
+  id   String  @id @default(auto()) @map("_id") @db.ObjectId
+  age  Int?
+  name String?
 }
-
-// mysql
-// model Post {
-//   id        Int      @id @default(autoincrement())
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   title     String   @db.VarChar(255)
-//   content   String?
-//   published Boolean  @default(false)
-//   author    User     @relation(fields: [authorId], references: [id])
-//   authorId  Int
-// }
-
-// model Profile {
-//   id     Int     @id @default(autoincrement())
-//   bio    String?
-//   user   User    @relation(fields: [userId], references: [id])
-//   userId Int     @unique
-// }
-
-// model User {
-//   id      Int      @id @default(autoincrement())
-//   email   String   @unique
-//   name    String?
-//   posts   Post[]
-//   profile Profile?
-// }

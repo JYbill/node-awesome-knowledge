@@ -14,10 +14,7 @@ async function main() {
   const createRet = await prisma.user.create({
     data: {
       name: 'xiaoqinvar',
-      email: 'xiaoqinvar@google.com',
-      posts: {
-        create: { title: 'Join us for Prisma Day 2020' },
-      },
+      age: 23,
     },
   });
   console.log('新增结果', createRet);
