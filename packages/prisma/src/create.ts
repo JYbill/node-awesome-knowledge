@@ -8,13 +8,18 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient({
   log: ['query', 'info'],
 });
-
 async function main() {
   await prisma.$connect();
   const createRet = await prisma.user.create({
     data: {
-      name: 'xiaoqinvar',
-      age: 23,
+      name: '小青蛙',
+      age: 18,
+      emails: {
+        create: {
+          qqMail: '123456@qq.com',
+          googleMail: '12345@gmail.com',
+        },
+      },
     },
   });
   console.log('新增结果', createRet);

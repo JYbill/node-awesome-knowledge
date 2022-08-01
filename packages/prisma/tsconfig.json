@@ -5,9 +5,5 @@
     "outDir": "dist",
     "target": "ES2018",
     "module": "NodeNext",
-  },
-  "exclude": [
-    "dist",
-    // "node_modules",
-  ]
+  }
 }

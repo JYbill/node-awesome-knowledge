@@ -9,8 +9,25 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.$connect();
-  const allUsers = await prisma.user.findMany();
-  console.log(allUsers);
+  const findByFilter = {
+    where: {
+      OR: [
+        {
+          name: {
+            contains: '🐸',
+          },
+        },
+      ],
+    },
+  };
+  const findAll = {};
+  const findOne2More = {
+    include: { emails: true },
+  };
+  const allUsers = await prisma.user.findMany(findOne2More);
+  for (const user of allUsers) {
+    console.log(user);
+  }
 }
 
 main()

@@ -1,15 +1,26 @@
 datasource db {
   provider = "mongodb"
-  // provider = "mysql"
-  url      = "mongodb://xiaoqinvar:990415@www.jybill.top:27017,www.jybill.top:27018,www.jybill.top:27019/test?replicaSet=rs0&authSource=admin&connectTimeoutMS=5000"
+  url      = "mongodb://xiaoqinvar:990415@www.jybill.top:27017,www.jybill.top:27018,www.jybill.top:27019/test?replicaSet=rs0&authSource=admin"
 }
 
 generator client {
   provider = "prisma-client-js"
+  // 指定prisma文件编译之后的文件目录
+  // output   = "./generated/prisma-client-js"
 }
 
 model User {
-  id   String  @id @default(auto()) @map("_id") @db.ObjectId
-  age  Int?
-  name String?
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  age    Int?
+  name   String?
+  emails Email[]
+}
+
+model Email {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  qqMail     String?
+  googleMail String?
+  sinaMail   String?
+  user       User?   @relation(fields: [userId], references: [id])
+  userId     String  @db.ObjectId
 }
