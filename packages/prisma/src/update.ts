@@ -9,8 +9,13 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.$connect();
-  const allUsers = await prisma.user.findMany();
-  console.log(allUsers);
+  const updateRet = await prisma.user.update({
+    where: {
+      id: '62e79174229f743f8f1d0a85',
+    },
+    data: { age: 10, name: 'gua.' },
+  });
+  console.log(updateRet);
 }
 
 main()

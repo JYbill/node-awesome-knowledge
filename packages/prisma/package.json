@@ -4,14 +4,16 @@
   "description": "prisma learning",
   "main": "index.js",
   "scripts": {
-    "generate": "prisma generate"
+    "generate": "prisma generate",
+    "push": "prisma db push",
+    "migrate-dev": "prisma migrate dev"
   },
   "author": "xiaoqinvar",
   "license": "ISC",
-  "dependencies": {
-    "@prisma/client": "4.0.0"
-  },
   "devDependencies": {
-    "prisma": "4.0.0"
+    "prisma": "^4.1.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.1.1"
   }
 }
