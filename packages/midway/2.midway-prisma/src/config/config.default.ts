@@ -2,13 +2,33 @@ import { MidwayConfig, MidwayAppInfo } from '@midwayjs/core';
 
 export default (appInfo: MidwayAppInfo) => {
   return {
-    // use for cookie sign key, should change to your own and keep security
     keys: appInfo.name + '_1659422886988_3248',
+
+    // egg
     egg: {
-      port: 7001,
+      port: 7003,
     },
-    // security: {
-    //   csrf: false,
-    // },
+
+    // prisma
+    prismaConfig: {
+      default: {
+        log: ['query', 'info'],
+      },
+      client: {},
+    },
+
+    // 日志
+    midwayLogger: {
+      clients: {
+        coreLogger: {
+          level: 'info',
+          consoleLevel: 'debug',
+        },
+        appLogger: {
+          level: 'info',
+          consoleLevel: 'debug',
+        },
+      },
+    },
   } as MidwayConfig;
 };

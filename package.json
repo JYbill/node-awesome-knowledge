@@ -11,8 +11,8 @@
   "author": "xiaoqinvar",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^17.0.34",
-    "nodemon": "^2.0.16",
-    "typescript": "^4.6.4"
+    "@types/node": "^17.0.45",
+    "nodemon": "^2.0.19",
+    "typescript": "^4.7.4"
   }
 }
