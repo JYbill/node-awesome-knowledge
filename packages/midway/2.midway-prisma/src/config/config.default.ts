@@ -22,11 +22,11 @@ export default (appInfo: MidwayAppInfo) => {
       clients: {
         coreLogger: {
           level: 'info',
-          consoleLevel: 'debug',
+          consoleLevel: 'info',
         },
         appLogger: {
           level: 'info',
-          consoleLevel: 'debug',
+          consoleLevel: 'info',
         },
       },
     },

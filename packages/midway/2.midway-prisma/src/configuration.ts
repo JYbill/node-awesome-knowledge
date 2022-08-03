@@ -1,3 +1,4 @@
+import { NotFoundFilter } from './filters/notFound.filter';
 import { DefaultErrorFilter } from './filters/default.filter';
 import { PrismaClientServiceFactory } from './service/prismaServiceFactory';
 import { App, Configuration, Inject, Logger } from '@midwayjs/decorator';
@@ -11,6 +12,7 @@ import {
 import { Application } from 'egg';
 import { join } from 'path';
 import * as egg from '@midwayjs/web';
+import { MidwayHttpErrorFilter } from './filters/midway.filter';
 
 @Configuration({
   imports: [egg],
@@ -27,7 +29,11 @@ export class ContainerLifeCycle implements ILifeCycle {
   logger: ILogger;
 
   async onReady() {
-    this.app.useFilter(DefaultErrorFilter);
+    this.app.useFilter([
+      DefaultErrorFilter,
+      MidwayHttpErrorFilter,
+      NotFoundFilter,
+    ]);
   }
 
   async onStop(): Promise<void> {

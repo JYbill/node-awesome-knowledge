@@ -8,6 +8,7 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/decorator';
+import { MidwayHttpError, HttpStatus } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -28,6 +29,7 @@ export class UserService {
    */
   async findAll() {
     const all = await this.prismaClient.user.findMany();
+    throw new MidwayHttpError('bad', HttpStatus.BAD_REQUEST);
     return all;
   }
 }
