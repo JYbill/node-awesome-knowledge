@@ -37,7 +37,9 @@
     "lint:fix": "mwts fix",
     "ci": "npm run cov",
     "build": "midway-bin build -c",
-    "generate": "prisma generate --schema=src/prisma/schema.prisma"
+    "generate": "prisma generate --schema=src/prisma/schema.prisma",
+    "studio": "prisma studio --schema=src/prisma/schema.prisma",
+    "migrate": "prisma migrate dev --name init --schema=src/prisma/schema.prisma"
   },
   "midway-bin-clean": [
     ".vscode/.tsbuildinfo",

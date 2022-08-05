@@ -1,3 +1,4 @@
+import { UserWithPosts } from './../interface';
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientServiceFactory } from './prismaServiceFactory';
 import {
@@ -29,7 +30,18 @@ export class UserService {
    */
   async findAll() {
     const all = await this.prismaClient.user.findMany();
-    throw new MidwayHttpError('bad', HttpStatus.BAD_REQUEST);
     return all;
+  }
+
+  async createUserAndEmail(userWithEmail: UserWithPosts) {
+    return this.prismaClient.user.create({
+      data: {
+        age: userWithEmail.age,
+        name: userWithEmail.name,
+        emails: {
+          create: userWithEmail.emails,
+        },
+      },
+    });
   }
 }
