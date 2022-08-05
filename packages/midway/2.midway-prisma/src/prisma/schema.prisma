@@ -10,11 +10,29 @@ generator client {
 }
 
 model User {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  age    Int?
-  name   String?
-  emails Email[]
-  role   Role    @default(ADMIN)
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  age     Int?
+  name    String?
+  emails  Email[]
+  roleIds String[] @db.ObjectId
+  roles   Role[]   @relation(fields: [roleIds], references: [id])
+  Profile Profile?
+}
+
+model Role {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  userIds String[] @db.ObjectId
+  name    String   @unique // 默认带索引
+  users   User[]   @relation(fields: [userIds], references: [id])
+}
+
+model Profile {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  address String?
+  sex     Bytes?
+  phone   Int?
+  user    User?   @relation(fields: [userId], references: [id])
+  userId  String  @unique @db.ObjectId
 }
 
 model Email {
@@ -22,12 +40,6 @@ model Email {
   qqMail     String?
   googleMail String?
   sinaMail   String?
-  user       User?   @relation(fields: [userId], references: [id])
+  user       User    @relation(fields: [userId], references: [id])
   userId     String  @db.ObjectId
-}
-
-enum Role {
-  ADMIN
-  MANAGER
-  USER
 }

@@ -1,2 +1,2 @@
-import { UserWithPosts } from './../interface';
+import { UserWithPosts } from './../type';
 export default class UserVo {}

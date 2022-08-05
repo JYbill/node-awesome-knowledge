@@ -1,4 +1,4 @@
-import { UserWithPosts } from './../interface';
+import { UserWithPosts } from './../type';
 import { PrismaClient } from '@prisma/client';
 import { PrismaClientServiceFactory } from './prismaServiceFactory';
 import {
@@ -33,11 +33,36 @@ export class UserService {
     return all;
   }
 
+  /**
+   * 获取所有用户数据包括1:n邮箱表
+   * @returns
+   */
+  async findAllWithEmail() {
+    return this.prismaClient.user.findMany({
+      include: {
+        emails: {
+          // select: { id: false },
+        },
+        roles: {
+          select: { name: true },
+        },
+      },
+    });
+  }
+
+  /**
+   * 创建用户且携带邮箱
+   * @param userWithEmail
+   * @returns
+   */
   async createUserAndEmail(userWithEmail: UserWithPosts) {
     return this.prismaClient.user.create({
       data: {
         age: userWithEmail.age,
         name: userWithEmail.name,
+        roles: {
+          connect: userWithEmail.roles,
+        },
         emails: {
           create: userWithEmail.emails,
         },

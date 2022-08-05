@@ -1,5 +1,5 @@
 import { ILogger } from '@midwayjs/core';
-import { UserWithPosts } from './../interface';
+import { UserWithPosts } from './../type';
 import {
   Body,
   Controller,
@@ -10,7 +10,7 @@ import {
 } from '@midwayjs/decorator';
 import { UserService } from '../service/prisma.service';
 
-@Controller('v1/users/')
+@Controller('v1/users')
 export default class UserController {
   @Inject()
   userService: UserService;
@@ -21,6 +21,11 @@ export default class UserController {
   @Get()
   async findAll() {
     return this.userService.findAll();
+  }
+
+  @Get('/withEmail')
+  async findAllWithEmail() {
+    return this.userService.findAllWithEmail();
   }
 
   @Post()

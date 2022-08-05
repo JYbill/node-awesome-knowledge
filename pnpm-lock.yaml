@@ -58,7 +58,7 @@ importers:
   packages/midway/2.midway-prisma:
     specifiers:
       '@midwayjs/bootstrap': ^3.4.7
-      '@midwayjs/cli': ^1.3.9
+      '@midwayjs/cli': ^1.3.11
       '@midwayjs/core': ^3.4.7
       '@midwayjs/decorator': ^3.4.4
       '@midwayjs/egg-ts-helper': ^1.2.1
@@ -83,7 +83,7 @@ importers:
       '@prisma/client': 4.1.1_prisma@4.1.1
       egg: 2.36.0
     devDependencies:
-      '@midwayjs/cli': 1.3.9_a25fca9f196f49e307fafb4d24f33ab2
+      '@midwayjs/cli': 1.3.11_a25fca9f196f49e307fafb4d24f33ab2
       '@midwayjs/egg-ts-helper': 1.2.1
       '@midwayjs/mock': 3.4.7
       '@types/jest': 26.0.24
@@ -892,6 +892,19 @@ packages:
       globby: 10.0.2
     dev: true
 
+  /@midwayjs/cli-plugin-check/1.3.11:
+    resolution: {integrity: sha512-oblIBVYFl8BOtK+mgit+TRru5m3WEdZG8yDvAhsmgsQcFvDoGOG38JQSaHy4jVTJoD3+AKhJ5E1QTIJegyqctQ==}
+    engines: {node: '>= 10'}
+    dependencies:
+      '@midwayjs/command-core': 1.3.5
+      '@midwayjs/locate': 1.8.1
+      '@midwayjs/luckyeye': 1.1.0
+      chalk: 4.1.2
+      fs-extra: 8.1.0
+      globby: 10.0.2
+      js-yaml: 4.1.0
+    dev: true
+
   /@midwayjs/cli-plugin-check/1.3.8:
     resolution: {integrity: sha512-RDu5pUmsZQE3hEW8R6t1HOz6IKZrS0a3MSdMSo4P8UCRanZnwm8hZ4RIhYOj/FGNHZH3hpu+sc6o4gC79gtJxQ==}
     engines: {node: '>= 10'}
@@ -905,6 +918,15 @@ packages:
       js-yaml: 4.1.0
     dev: true
 
+  /@midwayjs/cli-plugin-clean/1.3.11:
+    resolution: {integrity: sha512-vUfGvvuIfM0W6enVlQPxMW1tOy08ItZTpqCb+HsKiLftgyv4XiDik37pq1lhOmHoVyPz8pRVzTTh3k5Xn4bOuw==}
+    engines: {node: '>= 10'}
+    dependencies:
+      '@midwayjs/command-core': 1.3.5
+      '@midwayjs/serverless-spec-builder': 1.3.11
+      fs-extra: 8.1.0
+    dev: true
+
   /@midwayjs/cli-plugin-clean/1.3.9:
     resolution: {integrity: sha512-3lPhjl3qrYguZWGeyobDfEg/10szZKC/38o19bNqe99PHmHf5sNZ8oCguc1vAhjUf80vaE/Go0N+BeBA3y9IKQ==}
     engines: {node: '>= 10'}
@@ -914,8 +936,8 @@ packages:
       fs-extra: 8.1.0
     dev: true
 
-  /@midwayjs/cli-plugin-dev/1.3.7_@midwayjs+mock@3.4.4:
-    resolution: {integrity: sha512-KLHbtgLl1d1HYQtjNRRLgiyLzmjCcV/mri0g4xAip2o1RFD7MmLAP6/B8Bs8RGNJ06E+tQcvAeP5njaxQL2JyA==}
+  /@midwayjs/cli-plugin-dev/1.3.11_@midwayjs+mock@3.4.7:
+    resolution: {integrity: sha512-c5TTi/i8ScsGTRPtMnteiK2bvNkTSCBaiSVpYLFfYs1JSTI2qzAwMTnR1xqkj2jb7gfuNc4JvVJTvOXrQPwN9w==}
     engines: {node: '>= 10'}
     peerDependencies:
       '@midwayjs/mock': '*'
@@ -923,7 +945,7 @@ packages:
       '@koa/router': 10.1.1
       '@midwayjs/command-core': 1.3.5
       '@midwayjs/debugger': 1.0.9
-      '@midwayjs/mock': 3.4.4
+      '@midwayjs/mock': 3.4.7
       chalk: 4.1.2
       chokidar: 3.5.3
       detect-port: 1.3.0
@@ -941,7 +963,7 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@midwayjs/cli-plugin-dev/1.3.7_@midwayjs+mock@3.4.7:
+  /@midwayjs/cli-plugin-dev/1.3.7_@midwayjs+mock@3.4.4:
     resolution: {integrity: sha512-KLHbtgLl1d1HYQtjNRRLgiyLzmjCcV/mri0g4xAip2o1RFD7MmLAP6/B8Bs8RGNJ06E+tQcvAeP5njaxQL2JyA==}
     engines: {node: '>= 10'}
     peerDependencies:
@@ -950,7 +972,7 @@ packages:
       '@koa/router': 10.1.1
       '@midwayjs/command-core': 1.3.5
       '@midwayjs/debugger': 1.0.9
-      '@midwayjs/mock': 3.4.7
+      '@midwayjs/mock': 3.4.4
       chalk: 4.1.2
       chokidar: 3.5.3
       detect-port: 1.3.0
@@ -1008,6 +1030,37 @@ packages:
       - utf-8-validate
     dev: true
 
+  /@midwayjs/cli/1.3.11_a25fca9f196f49e307fafb4d24f33ab2:
+    resolution: {integrity: sha512-ZHu1UTcqycQFImV08p15G8ysPHL/pPV2imvHQaMyDbh3ojI/IbJE6rMr6It3L8h3CEbZ+irNum9pO+rDCeAyHA==}
+    engines: {node: '>= 10.0.0'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@midwayjs/cli-plugin-build': 1.3.8
+      '@midwayjs/cli-plugin-check': 1.3.11
+      '@midwayjs/cli-plugin-clean': 1.3.11
+      '@midwayjs/cli-plugin-dev': 1.3.11_@midwayjs+mock@3.4.7
+      '@midwayjs/cli-plugin-test': 1.3.7_@types+node@14.18.23
+      '@midwayjs/command-core': 1.3.5
+      enquirer: 2.3.6
+      jest-environment-node: 26.6.2
+      minimist: 1.2.6
+      mod-info: 1.0.2
+      source-map-support: 0.5.21
+      ts-node: 10.9.1_489368b6671c45e2eace2cec8666055d
+    transitivePeerDependencies:
+      - '@midwayjs/mock'
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - bufferutil
+      - canvas
+      - encoding
+      - supports-color
+      - typescript
+      - utf-8-validate
+    dev: true
+
   /@midwayjs/cli/1.3.9_9286c118ee27c2efba3682726f8e9170:
     resolution: {integrity: sha512-9nXpUS+GnoyRI/6rBRUJ9d1UVwr0OPpXVvx2wrOp83d6wqLY+ZuOoGU13Ly4sAbyKJLlsa53EHKTApfNnSTRvw==}
     engines: {node: '>= 10.0.0'}
@@ -1026,37 +1079,6 @@ packages:
       mod-info: 1.0.2
       source-map-support: 0.5.21
       ts-node: 10.9.1_bb732dba3c902b7855f5c7cdcad4f49f
-    transitivePeerDependencies:
-      - '@midwayjs/mock'
-      - '@swc/core'
-      - '@swc/wasm'
-      - '@types/node'
-      - bufferutil
-      - canvas
-      - encoding
-      - supports-color
-      - typescript
-      - utf-8-validate
-    dev: true
-
-  /@midwayjs/cli/1.3.9_a25fca9f196f49e307fafb4d24f33ab2:
-    resolution: {integrity: sha512-9nXpUS+GnoyRI/6rBRUJ9d1UVwr0OPpXVvx2wrOp83d6wqLY+ZuOoGU13Ly4sAbyKJLlsa53EHKTApfNnSTRvw==}
-    engines: {node: '>= 10.0.0'}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      '@midwayjs/cli-plugin-build': 1.3.8
-      '@midwayjs/cli-plugin-check': 1.3.8
-      '@midwayjs/cli-plugin-clean': 1.3.9
-      '@midwayjs/cli-plugin-dev': 1.3.7_@midwayjs+mock@3.4.7
-      '@midwayjs/cli-plugin-test': 1.3.7_@types+node@14.18.23
-      '@midwayjs/command-core': 1.3.5
-      enquirer: 2.3.6
-      jest-environment-node: 26.6.2
-      minimist: 1.2.6
-      mod-info: 1.0.2
-      source-map-support: 0.5.21
-      ts-node: 10.9.1_489368b6671c45e2eace2cec8666055d
     transitivePeerDependencies:
       - '@midwayjs/mock'
       - '@swc/core'
@@ -1248,6 +1270,15 @@ packages:
       source-map: 0.7.4
       source-map-support: 0.5.21
       typescript: 4.6.4
+    dev: true
+
+  /@midwayjs/serverless-spec-builder/1.3.11:
+    resolution: {integrity: sha512-dacxVWU8Ik4qyzYI/pgPsYE2K9fVyx7CF0SlR+n0aB6z/WnAEetQUyB7pFFDIktLfy5e3Muj0/aQ9LsGVmGzkw==}
+    engines: {node: '>= 10'}
+    dependencies:
+      ejs: 3.1.8
+      js-yaml: 4.1.0
+      mkdirp: 0.5.6
     dev: true
 
   /@midwayjs/serverless-spec-builder/1.3.9:
