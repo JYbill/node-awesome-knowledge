@@ -12,7 +12,8 @@ export default (appInfo: MidwayAppInfo) => {
     // prisma
     prismaConfig: {
       default: {
-        log: ['query', 'info'],
+        log: ['query', 'info', 'warn', 'error'],
+        errorFormat: 'pretty',
       },
       client: {},
     },
