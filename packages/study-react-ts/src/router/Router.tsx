@@ -1,27 +1,11 @@
-import React, {
-  DetailedHTMLProps,
-  FormEvent,
-  FormEventHandler,
-  InputHTMLAttributes,
-  SyntheticEvent,
-} from "react";
 import Son1 from "./Son1";
 import Son2 from "./Son2";
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  Link,
-  HashRouter,
-  NavLink,
-  Navigate,
-  useRoutes,
-  Outlet,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes, Link, NavLink } from "react-router-dom";
 import "./Router.scss";
 import Son from "./Son";
 import data from "../mock/data";
 import Son3 from "./Son3";
+import React from "react";
 
 export default class RouterPage extends React.Component {
   isActive = ({ isActive }: { isActive: boolean }) => {
@@ -46,15 +30,22 @@ export default class RouterPage extends React.Component {
     return (
       <BrowserRouter>
         {/* nav 高亮 link */}
+        <NavLink
+          to="/son3"
+          style={{ marginRight: "20px" }}
+          className={this.isActive}
+        >
+          发票连接
+        </NavLink>
         {this.data.map((item) => {
           return (
-            <Link
+            <NavLink
               style={{ display: "inline-block", marginRight: "20px" }}
-              to={`/son3/${item.number}`}
+              to={`/son3/${item.number}?name=${item.name}`}
               key={item.number}
             >
               {item.name}
-            </Link>
+            </NavLink>
           );
         })}
         <NavLink
@@ -86,6 +77,15 @@ export default class RouterPage extends React.Component {
             <Route path="son1" element={<Son1 />} />
             <Route path="son2" element={<Son2 />} />
             <Route path="son3">
+              {/* 索引路由 */}
+              <Route
+                index
+                element={
+                  <main>
+                    <p>im index router.</p>
+                  </main>
+                }
+              />
               <Route path=":numberId" element={<Son3 />} />
             </Route>
           </Route>
