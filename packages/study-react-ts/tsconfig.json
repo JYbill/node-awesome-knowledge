@@ -24,6 +24,9 @@
     "types": [
       "vite/client"
     ],
+    // "typeRoots": [
+    //   "node_modules/@types"
+    // ],
     "paths": {
       "@/*": [
         "./src/*"

@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import type { UserConfig } from "vite"; 
+import type { UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import legacy from "@vitejs/plugin-legacy";
 import tsconfigPaths from "vite-tsconfig-paths";
