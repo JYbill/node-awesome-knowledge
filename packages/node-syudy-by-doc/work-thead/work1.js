@@ -33,5 +33,4 @@ for (let i = 0; i < 2_000_000_000; i++) {
   counter++;
 }
 console.log('result: ', counter); // result:  16000000000
-console.log('spending time: ', Date.now() - startTimeStamp); // spending time:  15217ms 15s
- */
+console.log('spending time: ', Date.now() - startTimeStamp); // spending time:  15217ms 15s */

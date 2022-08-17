@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLog } from "./log.hook";
 
 export default function HookFunc1() {
   const [count, setCount] = useState<number>(0);
@@ -6,6 +7,14 @@ export default function HookFunc1() {
   const btnClickFunc = () => {
     setCount(count + 1);
   };
+
+  console.log("init.");
+  useEffect(() => {
+    console.log("mounted/updated.");
+    return () => {
+      console.log("clear.");
+    };
+  }, []);
 
   return (
     <>
