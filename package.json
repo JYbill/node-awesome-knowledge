@@ -1,18 +1,17 @@
 {
-  "name": "test-pnpm-monrepo",
+  "name": "test-pnpm-monorepo",
   "private": "true",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf node_modules **/*/node_modules",
-    "generate": "prisma generate"
+    "clean": "rm -rf node_modules **/*/node_modules"
   },
   "author": "xiaoqinvar",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^17.0.45",
-    "nodemon": "^2.0.19",
-    "typescript": "^4.7.4"
+    "nodemon": "^2.0.20",
+    "typescript": "^4.8.3"
   }
 }
