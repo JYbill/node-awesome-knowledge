@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const source = new EventSource('http://localhost:7003/polling/see');
+    source.addEventListener('message', function (e) {
+      console.log(e.data);
+    }, false);
+    source.onopen = function () {
+      console.log('connected');
+    }
+    source.onerror = function (err) {
+      console.error('err', err);
+    }
+  </script>
+</body>
+
+</html>
