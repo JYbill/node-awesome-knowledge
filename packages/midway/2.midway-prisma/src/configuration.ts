@@ -42,6 +42,5 @@ export class ContainerLifeCycle implements ILifeCycle {
     // 关闭prisma 连接
     const prismaClient = this.prismaClientServiceFactory.get();
     await prismaClient.$disconnect();
-    // test verify1
   }
 }
