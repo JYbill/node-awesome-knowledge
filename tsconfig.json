@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "ES2020",
     // 源码映射
     "sourceMap": true,
     // es模块交互，推荐开启，否则命名空间导入或默认导入又问题，详细差官网配置
