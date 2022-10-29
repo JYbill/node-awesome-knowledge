@@ -4,7 +4,8 @@
   "description": "webpack编译ts成js案例",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack server"
+    "dev": "webpack server",
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
