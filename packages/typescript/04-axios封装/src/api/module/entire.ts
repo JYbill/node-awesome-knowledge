@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 /**
  * @file: entire.ts
  * @author: xiaoqinvar
@@ -22,7 +23,7 @@ export async function list(listParam: IList) {
     return await Request.get<IHomeData>("/entire/list", {
       params: listParam,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("entries.ts#list", error);
     return null;
   }
@@ -33,7 +34,7 @@ export async function listTest(listParam: IList) {
     return await BaiduRequest.get<IHomeData>("/entire/list", {
       params: listParam,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("entries.ts#listTest", error);
     return null;
   }
@@ -42,7 +43,7 @@ export async function listTest(listParam: IList) {
 export async function listTestMethodAOP(listParam: IList) {
   try {
     return await Request.request<IHomeData>({
-      url: "/entire/list1",
+      url: "/entire/list",
       params: listParam,
       interceptor: {
         reqSuccessHandler(config) {
@@ -59,7 +60,7 @@ export async function listTestMethodAOP(listParam: IList) {
         },
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("entries.ts#listTest", error);
     return null;
   }

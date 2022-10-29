@@ -12,7 +12,7 @@ export interface IAxiosError {
   stack: string;
 }
 
-export interface AxiosConfig<C = any, T = any> extends AxiosRequestConfig<C> {
+export interface AxiosConfig<T = AxiosResponse, C = any> extends AxiosRequestConfig<C> {
   interceptor?: {
     reqSuccessHandler?(config: AxiosRequestConfig): AxiosRequestConfig;
     reqFailHandler?(error: IAxiosError): any;

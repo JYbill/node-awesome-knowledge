@@ -9,5 +9,5 @@ import { list, listTest, listTestMethodAOP } from "./api/module/entire";
 // console.log("listTest", test?.errcode, test?.totalCount);
 
 // 测试request方法级别的拦截器
-// const test = await listTestMethodAOP({ offset: 0, size: 20 });
-// console.log("listTestMethodAOP", test?.list, test?.errcode, test?.totalCount);
+const test = await listTestMethodAOP({ offset: 0, size: 20 });
+console.log("listTestMethodAOP", test?.list, test?.errcode, test?.totalCount);

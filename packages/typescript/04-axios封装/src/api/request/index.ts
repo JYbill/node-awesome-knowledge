@@ -55,7 +55,7 @@ export default class AxiosRequest {
    * @param config 请求配置
    * @returns
    */
-  async request<T = any, C = any>(config: AxiosConfig<C, T>) {
+  async request<T = any, C = any>(config: AxiosConfig<T, C>) {
     const interceptor = config.interceptor;
 
     // 请求成功通知 AOP
@@ -73,29 +73,47 @@ export default class AxiosRequest {
         result = interceptor.resSuccessHandler(result);
       }
       return result;
-    } catch (err: any) {
+    } catch (err: unknown) {
       // 响应失败通知 AOP
       if (interceptor?.resFailHandler) {
-        const errorRes = interceptor.resFailHandler(err);
+        const errorRes = interceptor.resFailHandler(<IAxiosError>err);
         throw errorRes;
       }
       throw err;
     }
   }
 
-  get<T = any>(url: string, config?: AxiosRequestConfig<any>) {
+  get<T = any>(url: string, config?: AxiosConfig<T>) {
     return this.instance.get<any, T>(url, config);
   }
 
-  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig<any>) {
+  post<T = any>(url: string, data?: any, config?: AxiosConfig<T>) {
     return this.instance.post<any, T>(url, data, config);
   }
 
-  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig<any>) {
+  /**
+   * 完整的更新一个资源
+   * @param url
+   * @param data
+   * @param config
+   * @returns
+   */
+  put<T = any>(url: string, data?: any, config?: AxiosConfig<T>) {
     return this.instance.post<any, T>(url, data, config);
   }
 
-  del<T = any>(url: string, config?: AxiosRequestConfig<any>) {
+  /**
+   * 更新资源的一部分
+   * @param url
+   * @param data
+   * @param config
+   * @returns
+   */
+  patch<T = any>(url: string, data?: any, config?: AxiosConfig<T>) {
+    return this.instance.patch<any, T>(url, data, config);
+  }
+
+  del<T = any>(url: string, config?: AxiosConfig<T>) {
     return this.instance.delete<any, T>(url, config);
   }
 }
