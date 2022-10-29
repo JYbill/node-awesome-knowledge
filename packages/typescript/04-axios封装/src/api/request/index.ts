@@ -55,6 +55,7 @@ export default class AxiosRequest {
    * @param config 请求配置
    * @returns
    */
+
   async request<T = any, C = any>(config: AxiosConfig<T, C>) {
     const interceptor = config.interceptor;
 
@@ -77,7 +78,7 @@ export default class AxiosRequest {
       // 响应失败通知 AOP
       if (interceptor?.resFailHandler) {
         const errorRes = interceptor.resFailHandler(<IAxiosError>err);
-        throw errorRes;
+        err = errorRes;
       }
       throw err;
     }
