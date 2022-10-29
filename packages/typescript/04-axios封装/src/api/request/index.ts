@@ -50,8 +50,36 @@ export default class AxiosRequest {
     );
   }
 
-  request(config: AxiosRequestConfig<any>) {
-    return this.instance.request(config);
+  /**
+   * 该方法AOP仅，请求成功通知、响应成功通知、响应失败通知有效
+   * @param config 请求配置
+   * @returns
+   */
+  async request<T = any, D = any>(config: AxiosConfig<D>) {
+    const interceptor = config.interceptor;
+
+    // 请求成功通知 AOP
+    if (interceptor?.reqSuccessHandler) {
+      config = interceptor.reqSuccessHandler(config);
+    }
+
+    // 网络请求
+    let result: AxiosResponse<T, D>;
+    try {
+      result = await this.instance.request(config);
+
+      // 响应成功通知 AOP
+      if (interceptor?.resSuccessHandler) {
+        result = interceptor.resSuccessHandler(result);
+      }
+      return result;
+    } catch (err: any) {
+      // 响应失败通知 AOP
+      if (interceptor?.resFailHandler) {
+        const errorRes = interceptor.resFailHandler(err);
+        throw errorRes;
+      }
+    }
   }
 
   get(url: string, config?: AxiosRequestConfig<any>) {

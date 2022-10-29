@@ -31,3 +31,29 @@ export async function listTest(listParam: IList) {
     return null;
   }
 }
+
+export async function listTestMethodAOP(listParam: IList) {
+  try {
+    return await Request.request({
+      url: "/entire/list",
+      params: listParam,
+      interceptor: {
+        reqSuccessHandler(config) {
+          console.log("方法级别请求成功拦截器");
+          return config;
+        },
+        resSuccessHandler(res) {
+          console.log("方法级别响应成功拦截器");
+          return res;
+        },
+        resFailHandler(error) {
+          console.log("方法级别响应失败拦截器");
+          return error;
+        },
+      },
+    });
+  } catch (error: any) {
+    console.error("entries.ts#listTest", error);
+    return null;
+  }
+}

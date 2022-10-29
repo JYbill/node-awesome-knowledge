@@ -20,7 +20,7 @@ if (debug) {
   });
 }
 
-// 其他接口
+// 模拟百度接口
 const BaiduRequest = new AxiosRequest({
   baseURL: BASE_UEL,
   timeout: TIME_OUT,
