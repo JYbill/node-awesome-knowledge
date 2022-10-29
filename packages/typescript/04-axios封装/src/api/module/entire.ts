@@ -10,9 +10,16 @@ interface IList {
   offset: number;
   size: number;
 }
+
+interface IHomeData {
+  errcode: number;
+  list: any[];
+  totalCount: number;
+}
+
 export async function list(listParam: IList) {
   try {
-    return await Request.get("/entire/list", {
+    return await Request.get<IHomeData>("/entire/list", {
       params: listParam,
     });
   } catch (error: any) {
@@ -23,7 +30,7 @@ export async function list(listParam: IList) {
 
 export async function listTest(listParam: IList) {
   try {
-    return await BaiduRequest.get("/entire/list", {
+    return await BaiduRequest.get<IHomeData>("/entire/list", {
       params: listParam,
     });
   } catch (error: any) {
@@ -34,8 +41,8 @@ export async function listTest(listParam: IList) {
 
 export async function listTestMethodAOP(listParam: IList) {
   try {
-    return await Request.request({
-      url: "/entire/list",
+    return await Request.request<IHomeData>({
+      url: "/entire/list1",
       params: listParam,
       interceptor: {
         reqSuccessHandler(config) {

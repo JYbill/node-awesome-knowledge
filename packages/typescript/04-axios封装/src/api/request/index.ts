@@ -55,7 +55,7 @@ export default class AxiosRequest {
    * @param config 请求配置
    * @returns
    */
-  async request<T = any, D = any>(config: AxiosConfig<D>) {
+  async request<T = any, C = any>(config: AxiosConfig<C, T>) {
     const interceptor = config.interceptor;
 
     // 请求成功通知 AOP
@@ -64,9 +64,9 @@ export default class AxiosRequest {
     }
 
     // 网络请求
-    let result: AxiosResponse<T, D>;
+    let result: T;
     try {
-      result = await this.instance.request(config);
+      result = await this.instance.request<any, T>(config);
 
       // 响应成功通知 AOP
       if (interceptor?.resSuccessHandler) {
@@ -79,22 +79,23 @@ export default class AxiosRequest {
         const errorRes = interceptor.resFailHandler(err);
         throw errorRes;
       }
+      throw err;
     }
   }
 
-  get(url: string, config?: AxiosRequestConfig<any>) {
-    return this.instance.get(url, config);
+  get<T = any>(url: string, config?: AxiosRequestConfig<any>) {
+    return this.instance.get<any, T>(url, config);
   }
 
-  post(url: string, data?: any, config?: AxiosRequestConfig<any>) {
-    return this.instance.post(url, data, config);
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig<any>) {
+    return this.instance.post<any, T>(url, data, config);
   }
 
-  put(url: string, data?: any, config?: AxiosRequestConfig<any>) {
-    return this.instance.post(url, data, config);
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig<any>) {
+    return this.instance.post<any, T>(url, data, config);
   }
 
-  del(url: string, config?: AxiosRequestConfig<any>) {
-    return this.instance.delete(url, config);
+  del<T = any>(url: string, config?: AxiosRequestConfig<any>) {
+    return this.instance.delete<any, T>(url, config);
   }
 }
