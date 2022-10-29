@@ -7,20 +7,21 @@
 import { BASE_UEL, DEV_URL, TIME_OUT } from "./config";
 import AxiosRequest from "./request/index";
 
-const prodRequest = new AxiosRequest({
+// 判断环境
+let request = new AxiosRequest({
   baseURL: BASE_UEL,
   timeout: TIME_OUT,
 });
-
-const devRequest = new AxiosRequest({
-  baseURL: DEV_URL,
-  timeout: TIME_OUT,
-});
-
-// 判断环境
-let request = prodRequest;
 const debug = false;
 if (debug) {
-  request = devRequest;
+  request = new AxiosRequest({
+    baseURL: DEV_URL,
+    timeout: TIME_OUT,
+  });
 }
+
+// 其他接口
+const baiduRequest = new AxiosRequest({});
+
 export default request;
+export { baiduRequest };
