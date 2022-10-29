@@ -21,7 +21,7 @@
     // typing跟路径, 默认情况node_modules/@types都是可见的，除特例
     // "typeRoots": ["./"]
     // 不允许type类型为any
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "moduleResolution": "Node"
   }
 }
