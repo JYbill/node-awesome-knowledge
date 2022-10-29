@@ -19,7 +19,7 @@ const devRequest = new AxiosRequest({
 
 // 判断环境
 let request = prodRequest;
-const debug = true;
+const debug = false;
 if (debug) {
   request = devRequest;
 }

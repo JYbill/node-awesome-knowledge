@@ -6,8 +6,11 @@
  */
 import Request from "../index";
 
-export function userInfo() {
-  return Request.get("/user/info").then((res) => {
-    return res.data;
-  });
+export async function userInfo() {
+  try {
+    return await Request.get("/user/info");
+  } catch (error: any) {
+    console.error("user.ts#userInfo", error);
+    return null;
+  }
 }
