@@ -11,12 +11,11 @@ export interface IAxiosError {
   request: XMLHttpRequest;
   stack: string;
 }
-
 export interface AxiosConfig<D = any> extends CreateAxiosDefaults<D> {
   interceptor?: {
-    reqSuccessHandler(config: AxiosRequestConfig): AxiosRequestConfig;
-    reqFailHandler(error: IAxiosError): any;
-    resSuccessHandler(res: AxiosResponse): any;
-    resFailHandler(error: IAxiosError): any;
+    reqSuccessHandler?(config: AxiosRequestConfig): AxiosRequestConfig;
+    reqFailHandler?(error: IAxiosError): any;
+    resSuccessHandler?(res: AxiosResponse): any;
+    resFailHandler?(error: IAxiosError): any;
   };
 }

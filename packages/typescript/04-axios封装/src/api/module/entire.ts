@@ -4,7 +4,7 @@
  * @desc：entire 接口例子🌰
  * @date: 2022-10-29 13:04:43
  */
-import Request from "../index";
+import Request, { BaiduRequest } from "../index";
 
 interface IList {
   offset: number;
@@ -17,6 +17,17 @@ export async function list(listParam: IList) {
     });
   } catch (error: any) {
     console.error("entries.ts#list", error);
+    return null;
+  }
+}
+
+export async function listTest(listParam: IList) {
+  try {
+    return await BaiduRequest.get("/entire/list", {
+      params: listParam,
+    });
+  } catch (error: any) {
+    console.error("entries.ts#listTest", error);
     return null;
   }
 }
