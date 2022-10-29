@@ -5,6 +5,7 @@
     "sourceMap": true,
     // es模块交互，推荐开启，否则命名空间导入或默认导入又问题，详细差官网配置
     "esModuleInterop": true,
+    "module": "ES2022",
     // 导入文件采用大小写一致
     "forceConsistentCasingInFileNames": true,
     // 严格模式
@@ -16,13 +17,11 @@
     // 不允许模糊的this
     "noImplicitThis": true,
     // 包含的ts库
-    "lib": [
-      "ESNext",
-      "DOM"
-    ],
+    "lib": ["ESNext", "DOM"],
     // typing跟路径, 默认情况node_modules/@types都是可见的，除特例
     // "typeRoots": ["./"]
     // 不允许type类型为any
     "noImplicitAny": true,
+    "moduleResolution": "Node"
   }
 }

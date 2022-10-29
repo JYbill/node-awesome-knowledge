@@ -1,0 +1,19 @@
+{
+  "name": "axios-encapsulation",
+  "version": "0.0.0",
+  "description": "axios封装模块",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack server",
+    "build": "webpack"
+  },
+  "author": "xiaoqinvar",
+  "license": "ISC",
+  "devDependencies": {
+    "html-webpack-plugin": "^5.5.0",
+    "ts-loader": "^9.4.1",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.11.1"
+  }
+}
