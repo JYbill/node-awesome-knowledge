@@ -1,3 +1,4 @@
+import { IAxiosError } from "./../request/type";
 import { AxiosResponse } from "axios";
 /**
  * @file: entire.ts
@@ -60,7 +61,7 @@ export async function listTestMethodAOP(listParam: IList) {
         },
       },
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error("entries.ts#listTest", error);
     return null;
   }
