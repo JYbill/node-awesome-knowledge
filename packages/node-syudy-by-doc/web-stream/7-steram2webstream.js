@@ -4,12 +4,6 @@ const { buffer: arrayBuffer } = require("node:stream/consumers");
 const { resolve } = require("node:path");
 const { TransformStream, ReadableStream } = require("node:stream/web");
 
-/**
- * @file: 7-steram2webstream.js
- * @author: xiaoqinvar
- * @desc: 流与web流之间的转换
- * @date: 2022-11-05 09:55:24
- */
 const tfs = new TransformStream(
   {
     transform(chunk, controller) {
