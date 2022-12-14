@@ -40,8 +40,13 @@ const tfs = new TransformStream(
   console.log("readable", streamReadable instanceof Readable); // readable true
   const dataAsync = arrayBuffer(streamReadable);
   console.log("check", dataAsync);
-  const data = await dataAsync; // BAD
-  console.log("from readable: ", data);
+  try {
+    const data = await dataAsync; // BAD
+    console.log("from readable: ", data);
+    console.log(1);
+  } catch (error) {
+    console.log(error);
+  }
 
   // Stream.readable ✅
   // const fileReadable = createReadStream(resolve(__dirname, "assets/test.txt"));
