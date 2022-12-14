@@ -68,7 +68,7 @@
 ## 第二章 模块机制
 
 - 2.1.1 Node 与浏览器以及 W3C 组织、CommonJS 组织、ECMAScript 之间的关系
-  ![](./packages/nodejs-deep-book/images/Node%E4%B8%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A5%E5%8F%8AW3C%E7%BB%84%E7%BB%87%E3%80%81CommonJS%E7%BB%84%E7%BB%87%E3%80%81ECMAScript%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB.png)
+  ![](./packages/nodejs深入浅出/images/Node%E4%B8%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A5%E5%8F%8AW3C%E7%BB%84%E7%BB%87%E3%80%81CommonJS%E7%BB%84%E7%BB%87%E3%80%81ECMAScript%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB.png)
   > 2022-05-19，目前 EcmaScript 提出的 ESModule 规范被 Nodejs 采纳，ES 规范肯定要更加标准
   > ！TypeScript 在用 ESModule，Node v1x 以`.mjs`为文件后缀执行 ESModule，普通 js 或`.cjs`执行
   > CommonJs 规范，但是不能混用！或`package.json`文件修改`module`属性,更多详细查看 node 官方文档！
@@ -221,23 +221,23 @@
 
 ### 加载过程图解
 
-![node加载模块过程](./packages/nodejs-deep-book/images/node%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9D%97%E8%BF%87%E7%A8%8B.png)
+![node加载模块过程](./packages/nodejs深入浅出/images/node%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9D%97%E8%BF%87%E7%A8%8B.png)
 
 ### 加载顺序图解
 
-![加载顺序图解](./packages/nodejs-deep-book/images/node%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E3%80%81%E6%96%87%E4%BB%B6%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD%E9%A1%BA%E5%BA%8F.png)
+![加载顺序图解](./packages/nodejs深入浅出/images/node%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E3%80%81%E6%96%87%E4%BB%B6%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD%E9%A1%BA%E5%BA%8F.png)
 
 ### cjs 和 esm 的区别
 
-![加载顺序图解](./packages/nodejs-deep-book/images/cjs%E5%92%8Cesm%E7%9A%84%E6%A8%A1%E5%9D%97%E5%8C%96%E5%8C%BA%E5%88%AB.png)
+![加载顺序图解](./packages/nodejs深入浅出/images/cjs%E5%92%8Cesm%E7%9A%84%E6%A8%A1%E5%9D%97%E5%8C%96%E5%8C%BA%E5%88%AB.png)
 
 ## 第三章 异步 IO
 
 - 在 Node 中，无论是\*nix 还是 Windows 平台，内部通过 libuv 完成 I/O 任务的另有线程池
-  ![异步IO](./packages/nodejs-deep-book/images/node%E5%BC%82%E6%AD%A5io%E9%80%9A%E8%BF%87%E7%BA%BF%E7%A8%8B%E6%B1%A0.png)
+  ![异步IO](./packages/nodejs深入浅出/images/node%E5%BC%82%E6%AD%A5io%E9%80%9A%E8%BF%87%E7%BA%BF%E7%A8%8B%E6%B1%A0.png)
 
 - event loop 事件轮训流程图
-  ![event loop事件轮训流程图](./packages/nodejs-deep-book/images/%E4%BA%8B%E4%BB%B6%E8%BD%AE%E8%AE%AD%E6%9C%BA%E5%88%B6%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
+  ![event loop事件轮训流程图](./packages/nodejs深入浅出/images/%E4%BA%8B%E4%BB%B6%E8%BD%AE%E8%AE%AD%E6%9C%BA%E5%88%B6%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
 
 - 在 Node 中，事件主要来源于网络请求、文件 I/O 等，这些事件对应的观察者
   有`文件I/O观察者`、`网络I/O观察者`...,对不同事件进行分类
@@ -275,7 +275,7 @@ setImmediate延迟执行2
 > 之所以这样设计，是为了保证每轮循环能够较快地执行结束，防止 CPU 占用过多而阻塞后续 I/O 调用的情况
 
 - 异步 i/o，事件循环总结图
-  ![异步i/o，事件循环总结图](./packages/nodejs-deep-book/images/node%E5%BC%82%E6%AD%A5%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
+  ![异步i/o，事件循环总结图](./packages/nodejs深入浅出/images/node%E5%BC%82%E6%AD%A5%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
 
 <br>
 
@@ -284,7 +284,7 @@ setImmediate延迟执行2
 > 浏览器提出了`Web Workers`，它通过将`JavaScript执行`与`UI`渲染分离，可以很好地利用多核 CPU 为大量计
 > 算服务。同时前端`WebWorkers`也是一个利用消息机制合理使用多核 CPU 的理想模型。
 
-- 中间件 ![中间件](./packages/nodejs-deep-book/images/%E4%B8%AD%E9%97%B4%E4%BB%B6.png)
+- 中间件 ![中间件](./packages/nodejs深入浅出/images/%E4%B8%AD%E9%97%B4%E4%BB%B6.png)
   > `next()`流程控制
 
 <br>
@@ -335,11 +335,11 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
 
 ### 垃圾回收机制
 
-![image-20220526171938382](./packages/nodejs-deep-book/images/v8%E5%86%85%E5%AD%98%E5%88%86%E4%BB%A3%E6%A8%A1%E5%9E%8B.png)
+![image-20220526171938382](./packages/nodejs深入浅出/images/v8%E5%86%85%E5%AD%98%E5%88%86%E4%BB%A3%E6%A8%A1%E5%9E%8B.png)
 
 - 垃圾回收新生代算法：Scavenge 算法
 
-![image-20220526171938382](./packages/nodejs-deep-book/images/v8%E6%96%B0%E7%94%9F%E4%BB%A3%E7%AE%97%E6%B3%95.png)
+![image-20220526171938382](./packages/nodejs深入浅出/images/v8%E6%96%B0%E7%94%9F%E4%BB%A3%E7%AE%97%E6%B3%95.png)
 
 `缺点`：空间换时间的算法 From 中存活的对象全部复制到 To，清空 From 内存，To-From 角色互换
 
@@ -364,7 +364,7 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
   > V8 对于老生代采用的垃圾回收策略是：主要使用 Mark-Sweep，在空间不足以对从新生代中晋升过来的对象进
   > 行分配时才使用 Mark-Compact
 
-![image-20220526171938382](./packages/nodejs-deep-book/images/v8%E6%A0%87%E8%AE%B0%E6%89%AB%E9%99%A4%E7%AE%97%E6%B3%95.png)
+![image-20220526171938382](./packages/nodejs深入浅出/images/v8%E6%A0%87%E8%AE%B0%E6%89%AB%E9%99%A4%E7%AE%97%E6%B3%95.png)
 
 - v8 真实回收方式：垃圾回收的 3 种基本算法都需要将应用逻辑暂停下来，待执行完垃圾回收后再恢复执行应用
   逻辑。
@@ -374,7 +374,7 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
   - `老生代垃圾回收`：内存配置大，`全停顿`不再适合，而是用`增量标记`，拆分为许多小“步进”，每做完一“
     步进”就让 JavaScript 应用逻辑执行一小会儿，垃圾回收与应用逻辑交替执行直到标记阶段完成。
 
-![image-20220526171938382](./packages/nodejs-deep-book/images/v8%E5%A2%9E%E9%87%8F%E6%AD%A5%E8%BF%9B.png)
+![image-20220526171938382](./packages/nodejs深入浅出/images/v8%E5%A2%9E%E9%87%8F%E6%AD%A5%E8%BF%9B.png)
 
 > V8 后续还引入了延迟清理（lazy sweeping）与增量式整理（incremental compaction），让清理与整理动作也
 > 变成增量式的“步进”交替方式。同时还计划引入并行标记与并行清理，进一步利用多核性能降低每次停顿的时间
@@ -387,7 +387,7 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
 - `Buffer.alloc()`从内存中创建，`Buffer.unsafe()`从`arrayBuffers`中创建，超出`arrayBuffer / 2`时会从
   内存中创建
 - 详细查看：http://nodejs.cn/api-v14/buffer.html#static-method-bufferallocunsafesize
-- node 内存图 ![node内存图](./packages/nodejs-deep-book/images/node%E5%86%85%E5%AD%98%E5%9B%BE.png)
+- node 内存图 ![node内存图](./packages/nodejs深入浅出/images/node%E5%86%85%E5%AD%98%E5%9B%BE.png)
 
 ### 避免内存缓存
 
@@ -426,9 +426,9 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
   构造小 Buffer 对象时，会去检查 pool 对象，如果 pool 没有被创建，将会创建一个新的 slab 单元指向它，
   并记录分配了多大。
 
-  <img src="./packages/nodejs-deep-book/images/buffer1.png" style="zoom:50%;" />
+  <img src="./packages/nodejs深入浅出/images/buffer1.png" style="zoom:50%;" />
 
-  <img src="./packages/nodejs-deep-book/images/buffer2.png" style="zoom:50%;" />
+  <img src="./packages/nodejs深入浅出/images/buffer2.png" style="zoom:50%;" />
 
   ⚠️ 注意：如果在有 1KB 小对象的情况下，再次插入 7.5KB 的对象，因为没有足够的空间所以需要再开辟一个
   slab(8KB 内存) ♻️ 回收：只要有一个 slab 内的小对象存活，那么这块 slab 就无法回收！
@@ -445,32 +445,32 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
 
 - TCP 三次握手
 
-  <img src="./packages/nodejs-deep-book/images/tcp.png" style="zoom:50%;" />
+  <img src="./packages/nodejs深入浅出/images/tcp.png" style="zoom:50%;" />
 
   - http 请求流程 http 执行流程：在请求产生的过程中，http 模块拿到连接中传来的数据，调用二进制模块
     http_parser 进行解析，在解析完请求报文的报头后，触发 request 事件，调用用户的业务逻辑
-    <img src="./packages/nodejs-deep-book/images/node http流程.png" />
+    <img src="./packages/nodejs深入浅出/images/node http流程.png" />
 
-* websocket 握手流程 <img src="./packages/nodejs-deep-book/images/websocket握手流程.png" />
+* websocket 握手流程 <img src="./packages/nodejs深入浅出/images/websocket握手流程.png" />
 
-* websocket 数据帧 <img src="./packages/nodejs-deep-book/images/websocket数据帧.png" />
+* websocket 数据帧 <img src="./packages/nodejs深入浅出/images/websocket数据帧.png" />
 
-* TLS/SSL <img src="./packages/nodejs-deep-book/images/TLS:SSL.png" />
+* TLS/SSL <img src="./packages/nodejs深入浅出/images/TLS:SSL.png" />
 
 ## web 应用构建
 
-- 浏览器缓存 <img src="./packages/nodejs-deep-book/images/浏览器缓存.png" />
+- 浏览器缓存 <img src="./packages/nodejs深入浅出/images/浏览器缓存.png" />
 
 ## 多进程
 
-<img src="./packages/nodejs-deep-book/images/多进程.png" />
+<img src="./packages/nodejs深入浅出/images/多进程.png" />
 
-- 多进程通信原理 <img src="./packages/nodejs-deep-book/images/进程间通信原理.png" />
+- 多进程通信原理 <img src="./packages/nodejs深入浅出/images/进程间通信原理.png" />
 
-- 多子进程占用一个端口 <img src="./packages/nodejs-deep-book/images/多子进程占用一个端口.png" />
+- 多子进程占用一个端口 <img src="./packages/nodejs深入浅出/images/多子进程占用一个端口.png" />
 
 - 父子进程通信，平滑重启、自杀信号
-  <img src="./packages/nodejs-deep-book/images/进程间通信平滑重启.png" />
+  <img src="./packages/nodejs深入浅出/images/进程间通信平滑重启.png" />
 
 - cluster 集群只能管理一组进程
-  <img src="./packages/nodejs-deep-book/images/cluster集群管理一组进程.png" />
+  <img src="./packages/nodejs深入浅出/images/cluster集群管理一组进程.png" />
