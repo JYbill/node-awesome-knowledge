@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "exceljs": "^4.3.0"
+    "exceljs": "^4.3.0",
+    "rxjs": "^7.8.0"
   }
 }
