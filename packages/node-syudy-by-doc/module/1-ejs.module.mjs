@@ -2,10 +2,8 @@ let name = "x";
 let obj = {
   uname: "xiaoqinvar.",
 };
-module.exports = {
-  name,
-  obj,
-};
+export { name, obj };
+export default { name, obj };
 setTimeout(() => {
   name = "yo.";
   obj.uname = "aka";

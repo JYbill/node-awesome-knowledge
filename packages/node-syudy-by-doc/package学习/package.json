@@ -1,5 +1,5 @@
 {
-  "name": "packages",
+  "name": "pkg",
   "version": "1.0.0",
   "description": "此包用于导入pkg包",
   "type": "module",
