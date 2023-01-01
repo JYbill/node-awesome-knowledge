@@ -472,5 +472,5 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
 - 父子进程通信，平滑重启、自杀信号
   <img src="./packages/nodejs深入浅出/images/进程间通信平滑重启.png" />
 
-- cluster 集群只能管理一组进程
+- cluster 模块就是对 child_process 模块对封装，更简单，更健壮，更安全
   <img src="./packages/nodejs深入浅出/images/cluster集群管理一组进程.png" />
