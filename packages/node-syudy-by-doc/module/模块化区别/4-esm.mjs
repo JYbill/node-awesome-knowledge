@@ -1,2 +1,2 @@
 import core from "./4-core.cjs";
-export { core };
+export default core;

@@ -1,15 +1,8 @@
-/**
- * @file: 3-main.mjs
- * @author: xiaoqinvar
- * @desc: 通过ESM包装cjs后，整条链路都是cjs规范
- * @dependencies:
- * @date: 2022-12-31 23:26:24
- */
-import cjs from "./4-module.cjs";
-import { core as coreM } from "./4-module.mjs";
-
-// 引用修改全部受影响, 此时共享同一个对象
-cjs.updName();
-cjs.name = "蜘蛛";
-console.log(coreM); // { name: '蜘蛛', obj: { name: 'ha.' }, updName: [Function: updName] }
-console.log(cjs); // { name: '蜘蛛', obj: { name: 'ha.' }, updName: [Function: updName] }
+import cjs from "./4-core.cjs";
+import esm from "./4-esm.mjs";
+console.log(cjs === esm); // true
+console.log("cjs", cjs.title, esm.author); // cjs 博客 { uname: 'xiaoqinvar.' }
+console.log("esm", esm.title, esm.author); // esm 博客 { uname: 'xiaoqinvar.' }
+cjs.update();
+console.log("cjs", cjs.title, esm.author); // cjs 博客 { uname: 'aka. xqv yo.' }
+console.log("esm", esm.title, esm.author); // esm 博客 { uname: 'aka. xqv yo.' }

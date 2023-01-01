@@ -6,4 +6,4 @@ function update() {
   title = "update title.";
   author.uname = "aka. xqv yo.";
 }
-module.exports = { title, author, update };
+export default { title, author, update };
