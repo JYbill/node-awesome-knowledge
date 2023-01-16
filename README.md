@@ -1,3 +1,7 @@
+# 解决方案书籍
+
+- [《Redis 开发与运维》书籍知识点](./packages/redis%E5%BC%80%E5%8F%91%E4%B8%8E%E8%BF%90%E7%BB%B4//redis%E5%BC%80%E5%8F%91%E4%B8%8E%E8%BF%90%E7%BB%B4.md)
+
 # node 高级篇代码
 
 > 记录自己学习 node 高级的过程
