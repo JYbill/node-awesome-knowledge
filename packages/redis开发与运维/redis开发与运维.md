@@ -171,3 +171,48 @@ select dbIndex
 ## 慢查询分析
 
 ![](./images/4ddb4448-9af4-49c6-84f9-03702c097324.jpeg)
+
+##
+
+# 结合 Lua 脚本
+
+- 执行 lua 脚本
+
+```bash
+# redis-cli中执行lua脚本
+eval 'return "hello " .. KEYS[1] .. ARGV[1]' 1 redis world
+# 返回 -> "hello redisworld"
+# KEYS[1] -> redis
+# ARGV[1] -> world
+
+# 通过文件执行lua脚本
+redis-cli --eval filePath
+```
+
+- 发送 lua 脚本并使用`evalsha`执行
+
+```bash
+redis-cli script load "$(cat lua_get.lua)"
+# 返回-> "7413dc2440db1fea7c0a0bde841fa68eefaf149c"（hash字符串）
+evalsha
+	7413dc2440db1fea7c0a0bde841fa68eefaf149c
+	1 # key个数
+	redis # 参数
+	world # 参数
+# 返回 -> "hello redisworld"
+```
+
+- lua 调用 Redis API
+
+```lua
+-- lua脚本
+-- call()：调用失败会报错，结束执行
+-- pcall()：调用失败会忽略错误，继续执行
+redis.call("set", "hello", "world")
+
+-- 等价于redis中
+eval 'return redis.call("get", KEYS[1])' 1 hello
+-- 返回 "world"
+```
+
+> 💡 Lua 可以使用 redis.log 函数将日志输出到 Redis 日志中，注意控制日志级别
