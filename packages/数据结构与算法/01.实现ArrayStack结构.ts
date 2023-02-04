@@ -1,13 +1,12 @@
 /**
- * @file: 封装Stack结构.ts
  * @author: xiaoqinvar
- * @desc: Stack结构实现
- * @dependencies:
+ * @desc: 基于Array实现的栈结构
  * @date: 2023-02-04 11:43:31
  */
+import IStack from "./interface/stack.interface";
 
 // 数组实现的Stack
-class ArrayStack<T = any> {
+export default class ArrayStack<T = any> implements IStack<T>{
   private stack: T[] = [];
 
   /**
@@ -69,4 +68,4 @@ async function main() {
   console.log(stack1.peek());
 }
 
-main();
+// main();
