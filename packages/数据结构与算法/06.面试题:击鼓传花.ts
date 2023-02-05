@@ -29,3 +29,5 @@ function hotPotato(nameList: string[], num: number): number {
 const nameList = ["小张", "小明", "小青蛙", "小钦", "xqv", "xiaoqinvar"];
 const index = hotPotato(nameList, 1);
 console.log("中奖索引: ", index);
+// 花落:  xiaoqinvar
+// 中奖索引:  5
