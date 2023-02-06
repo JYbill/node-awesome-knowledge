@@ -12,6 +12,22 @@ export class Node<T = any> {
 export class LinkedList<T = any> implements ILinkedList<T> {
   header: Node<T> | null = null;
   size: number = 0;
+
+  getAt(position: number): T | null {
+    if (position < 0 || position >= this.size) {
+      console.error("getAt索引越界");
+      return null;
+    }
+    const [preNode, currentNode] = this.getNode(position);
+    const current = currentNode;
+    // 处理ts校验
+    if (!current) {
+      console.error("请检查链表结果，此处不应该为", current);
+      return null;
+    }
+    return current.element;
+  }
+
   /**
    * 末尾插入元素
    * @param element
@@ -37,7 +53,7 @@ export class LinkedList<T = any> implements ILinkedList<T> {
    * @param element
    */
   insertAt(position: number, element: T): boolean {
-    if (position < 0 || position > this.size) {
+    if (position < 0 || position >= this.size) {
       console.error(`链表insertAt position ${position}越界`);
       return false;
     }
@@ -51,15 +67,9 @@ export class LinkedList<T = any> implements ILinkedList<T> {
       newNode.next = this.header;
       this.header = newNode;
     } else {
-      // 链表元素不为空
-      let preNode = this.header; // position的节点
-      let nextNode = this.header.next!; // position位置节点的next节点
-      for (let i = 1; i < position; i++) {
-        preNode = nextNode;
-        nextNode = nextNode.next!;
-      }
+      const [preNode, currentNode] = this.getNode(position);
       // 插入元素
-      newNode.next = nextNode;
+      newNode.next = currentNode;
       preNode.next = newNode;
     }
     this.size++; // 链表长度自增
@@ -67,16 +77,25 @@ export class LinkedList<T = any> implements ILinkedList<T> {
   }
 
   /**
-   * 获取最后一个节点
-   * @private
-   * @return Node<T> 获取链表最后一个Node节点
+   * 根据位置删除节点
+   * @param position
    */
-  private findLastNode(): Node<T> {
-    let currentNode = this.header as Node<T>;
-    while (currentNode.next !== null) {
-      currentNode = currentNode.next;
+  removeAt(position: number): T | null {
+    if (position < 0 || position >= this.size) return null;
+
+    let removeNode = null;
+    if (position === 0) {
+      // 头节点指下个节点
+      removeNode = this.header;
+      this.header = this.header?.next ?? null;
+    } else {
+      // 删除中间或者最后
+      const [preNode, currentNode] = this.getNode(position);
+      removeNode = currentNode;
+      preNode.next = currentNode?.next ?? null;
     }
-    return currentNode;
+    this.size--;
+    return (removeNode as Node<T>).element;
   }
 
   /**
@@ -97,6 +116,33 @@ export class LinkedList<T = any> implements ILinkedList<T> {
     }
     console.log("header -> " + printArr.join(" -> "));
   }
+
+  /**
+   * 获取最后一个节点
+   * @private
+   * @return Node<T> 获取链表最后一个Node节点
+   */
+  private findLastNode(): Node<T> {
+    let currentNode = this.header as Node<T>;
+    while (currentNode.next !== null) {
+      currentNode = currentNode.next;
+    }
+    return currentNode;
+  }
+
+  private getNode(position: number): [Node<T>, Node<T> | null] {
+    if (position < 0 || position >= this.size) {
+      throw Error(`getNode链表索引越界：${position}`);
+    }
+    let currentNode = this.header;
+    let preNode: Node<T> | null = null;
+    let index = 0;
+    while (index++ < position && currentNode) {
+      preNode = currentNode;
+      currentNode = currentNode.next;
+    }
+    return [preNode!, currentNode];
+  }
 }
 
 function main() {
@@ -109,5 +155,22 @@ function main() {
   linkedList.insertAt(0, "0");
   linkedList.insertAt(5, "4");
   linkedList.traverse();
+
+  // 删除测试
+  console.log("删除第一个元素: ", linkedList.removeAt(0));
+  linkedList.traverse();
+  console.log("删除中间元素: ", linkedList.removeAt(2));
+  linkedList.traverse();
+  console.log("删除最后元素: ", linkedList.removeAt(3));
+  linkedList.traverse();
+
+  // getAt测试
+  console.log("getAt测试 ------>");
+  console.log(linkedList.getAt(0));
+  console.log(linkedList.getAt(1));
+  console.log(linkedList.getAt(2));
+  console.log(linkedList.getAt(-1));
+  console.log(linkedList.getAt(3));
+  console.log("getAt测试 <------");
 }
 main();
