@@ -13,6 +13,10 @@ export class LinkedList<T = any> implements ILinkedList<T> {
   header: Node<T> | null = null;
   size: number = 0;
 
+  /**
+   * 根据索引获取节点内容
+   * @param position
+   */
   getAt(position: number): T | null {
     if (position < 0 || position >= this.size) {
       console.error("getAt索引越界");
@@ -99,6 +103,20 @@ export class LinkedList<T = any> implements ILinkedList<T> {
   }
 
   /**
+   * 根据给定元素进行删除，存在即返回，不存在返回null
+   * @param element
+   */
+  removeBy(element: T): T | null {
+    const index = this.indexOf(element);
+    if (index <= -1) {
+      console.error("removeBy链表中不存在该元素");
+      return null;
+    }
+
+    return this.removeAt(index);
+  }
+
+  /**
    * 遍历打印链表
    */
   traverse(): void {
@@ -115,6 +133,45 @@ export class LinkedList<T = any> implements ILinkedList<T> {
       currentNode = currentNode.next;
     }
     console.log("header -> " + printArr.join(" -> "));
+  }
+
+  /**
+   * 根据索引修改元素内容
+   * @param position
+   * @param element
+   */
+  updateAt(position: number, element: T): boolean {
+    if (position < 0 || position >= this.size) {
+      console.error("updateAt链表索引越界");
+      return false;
+    }
+    const [preNode, currentNode] = this.getNode(position);
+    (currentNode as Node<T>).element = element;
+    return true;
+  }
+
+  /**
+   * 根据元素值查询对应的索引位置
+   * @param element 元素值
+   */
+  indexOf(element: T): number {
+    let currentNode = this.header;
+    let index = 0;
+    do {
+      if (currentNode?.element === element) {
+        return index;
+      }
+      currentNode = currentNode?.next ?? null;
+      index++;
+    } while (currentNode);
+    return -1;
+  }
+
+  /**
+   * 链表是否为空
+   */
+  isEmpty(): boolean {
+    return this.size === 0;
   }
 
   /**
@@ -172,5 +229,34 @@ function main() {
   console.log(linkedList.getAt(-1));
   console.log(linkedList.getAt(3));
   console.log("getAt测试 <------");
+
+  // updateAt测试
+  console.log("updateAt测试 ------->");
+  linkedList.updateAt(0, "测试");
+  linkedList.updateAt(2, "索引为2");
+  linkedList.traverse();
+  console.log("updateAt测试 <-------");
+
+  // indexOf测试
+  console.log("indexOf测试 ------->");
+  console.log(linkedList.indexOf("测试"));
+  console.log(linkedList.indexOf("索引为2"));
+  linkedList.traverse();
+  console.log("indexOf测试 <-------");
+
+  // removeBy测试
+  console.log("removeBy测试 ------->");
+  console.log(linkedList.removeBy("测试"));
+  console.log(linkedList.removeBy("索引为2"));
+  console.log(linkedList.removeBy("1.1"));
+  linkedList.traverse();
+  console.log("removeBy测试 <-------");
+
+  // isEmpty测试
+  console.log("isEmpty测试 ------->");
+  console.log(linkedList.isEmpty());
+  linkedList.traverse();
+  console.log("isEmpty测试 <-------");
 }
+
 main();
