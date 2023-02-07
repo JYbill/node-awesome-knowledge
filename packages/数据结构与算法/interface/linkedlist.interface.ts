@@ -1,4 +1,6 @@
-export default interface ILinkedList<T> {
+import IList from "./list.interface";
+
+export default interface ILinkedList<T> extends IList<T> {
   getAt(position: number): T | null;
   append(element: T): void;
   insertAt(position: number, element: T): boolean;

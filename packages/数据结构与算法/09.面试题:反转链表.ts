@@ -77,7 +77,18 @@ function reverseList2(head: ListNode | null): ListNode | null {
 function reverseList3(head: ListNode | null): ListNode | null {
   if (head === null || head.next === null) return head;
 
-  const newHead = reverseList3(head.next);
+  const newHead = reverseList3(head.next); // 返回的这个是新的head头节点，只起到引用作用而已
+  // 此时的head是最后一个元素的前一个节点
+  //                        v
+  // null -> 0 -> 1 -> 2 -> 3 -> 4
+  // 操作流程
+  // null -> 0 -> 1 -> 2 -> 3 <- 4
+  //                        v
+  //                       null
+  //
+  // null -> 0 -> 1 -> 2 <- 3 <- 4
+  //                   v
+  //                  null
   head.next.next = head;
   head.next = null;
   return newHead;

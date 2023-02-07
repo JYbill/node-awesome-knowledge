@@ -11,14 +11,21 @@ export class Node<T = any> {
 
 export class LinkedList<T = any> implements ILinkedList<T> {
   header: Node<T> | null = null;
-  size: number = 0;
+  length: number = 0;
+
+  /**
+   * 长度
+   */
+  size(): number {
+    return this.length;
+  }
 
   /**
    * 根据索引获取节点内容
    * @param position
    */
   getAt(position: number): T | null {
-    if (position < 0 || position >= this.size) {
+    if (position < 0 || position >= this.length) {
       console.error("getAt索引越界");
       return null;
     }
@@ -38,7 +45,7 @@ export class LinkedList<T = any> implements ILinkedList<T> {
    */
   append(element: T): void {
     const newNode = new Node(element);
-    this.size++; // 链表长度自增
+    this.length++; // 链表长度自增
 
     // header为空
     if (this.header === null) {
@@ -57,7 +64,7 @@ export class LinkedList<T = any> implements ILinkedList<T> {
    * @param element
    */
   insertAt(position: number, element: T): boolean {
-    if (position < 0 || position >= this.size) {
+    if (position < 0 || position >= this.length) {
       console.error(`链表insertAt position ${position}越界`);
       return false;
     }
@@ -76,7 +83,7 @@ export class LinkedList<T = any> implements ILinkedList<T> {
       newNode.next = currentNode;
       preNode.next = newNode;
     }
-    this.size++; // 链表长度自增
+    this.length++; // 链表长度自增
     return true;
   }
 
@@ -85,7 +92,7 @@ export class LinkedList<T = any> implements ILinkedList<T> {
    * @param position
    */
   removeAt(position: number): T | null {
-    if (position < 0 || position >= this.size) return null;
+    if (position < 0 || position >= this.length) return null;
 
     let removeNode = null;
     if (position === 0) {
@@ -98,7 +105,7 @@ export class LinkedList<T = any> implements ILinkedList<T> {
       removeNode = currentNode;
       preNode.next = currentNode?.next ?? null;
     }
-    this.size--;
+    this.length--;
     return (removeNode as Node<T>).element;
   }
 
@@ -141,7 +148,7 @@ export class LinkedList<T = any> implements ILinkedList<T> {
    * @param element
    */
   updateAt(position: number, element: T): boolean {
-    if (position < 0 || position >= this.size) {
+    if (position < 0 || position >= this.length) {
       console.error("updateAt链表索引越界");
       return false;
     }
@@ -171,7 +178,7 @@ export class LinkedList<T = any> implements ILinkedList<T> {
    * 链表是否为空
    */
   isEmpty(): boolean {
-    return this.size === 0;
+    return this.length === 0;
   }
 
   /**
@@ -188,7 +195,7 @@ export class LinkedList<T = any> implements ILinkedList<T> {
   }
 
   private getNode(position: number): [Node<T>, Node<T> | null] {
-    if (position < 0 || position >= this.size) {
+    if (position < 0 || position >= this.length) {
       throw Error(`getNode链表索引越界：${position}`);
     }
     let currentNode = this.header;
