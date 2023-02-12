@@ -5,12 +5,12 @@
  */
 
 export default class HashMap<T = any> {
-  storage: [string, T][][] = []; // 测试用，未加上private
+  private storage: [string, T][][] = []; // 测试用，未加上private
   private loaderFactor = 0.75; // 装填因子
   private minFactor = 0.25; // 缩容因子
   private primeNum = 31; // 幂等(质数)
-  private minLength = 15; // 最小长度
-  private length = 15; // hashMap的数组长度
+  private minLength = 17; // 最小长度
+  private length = 17; // hashMap的数组长度
   private count = 0; // 元素个数
   constructor() {
     this.storage.length = this.length;
@@ -85,6 +85,13 @@ export default class HashMap<T = any> {
   }
 
   /**
+   * hashMap的数组长度
+   */
+  size(): number {
+    return this.storage.length;
+  }
+
+  /**
    * 哈希函数
    * @param key 需要哈希化的字符串
    */
@@ -108,9 +115,17 @@ export default class HashMap<T = any> {
       const oldStorage = this.storage;
       this.storage = [];
       if (isEnlarge) {
-        this.storage.length = this.length * 2;
+        let enlargeSize = Math.floor(this.length * 2);
+        enlargeSize = this.nextPrime(enlargeSize);
+        this.storage.length = enlargeSize;
       } else {
-        this.storage.length = this.length / 2;
+        let shrinkSize = Math.floor(this.length / 2);
+        if (shrinkSize < this.minLength) {
+          shrinkSize = this.minLength;
+        } else {
+          shrinkSize = this.nextPrime(shrinkSize);
+        }
+        this.storage.length = shrinkSize;
       }
       this.length = this.storage.length;
       for (const bucket of oldStorage) {
@@ -134,6 +149,34 @@ export default class HashMap<T = any> {
       return;
     }
   }
+
+  /**
+   * 根据传入数字
+   * 如果是质数直接返回
+   * 如果不是质数返回>num的质数
+   * @param num
+   * @private
+   */
+  private nextPrime(num: number): number {
+    while (!this.isPrime(num)) {
+      num++;
+    }
+    return num;
+  }
+
+  /**
+   * 判断数字是否是质数
+   * @param num
+   * @private
+   */
+  private isPrime(num: number): boolean {
+    if (num === 1 || num < 0) return false;
+    const sqrt = Math.sqrt(num);
+    for (let i = 2; i <= sqrt; i++) {
+      if (num % i === 0) return false;
+    }
+    return true;
+  }
 }
 
 function main() {
@@ -150,7 +193,7 @@ function main() {
   // 测试put、get方法
   console.log(" ========= put get方法测试 start =========");
   hashMap.put("name1", "xiaoqinvar");
-  console.log(hashMap.storage);
+  console.log(hashMap.size());
   hashMap.put("name1", "xqv");
   hashMap.put("name2", "jybill");
   hashMap.put("name3", "Test");
@@ -163,7 +206,7 @@ function main() {
   hashMap.put("name10", "10");
   hashMap.put("name11", "11");
   hashMap.put("name12", "12");
-  console.log(hashMap.storage);
+  console.log(hashMap.size());
   console.log(hashMap.get("name1"));
   console.log(hashMap.get("name2"));
   console.log(hashMap.get("name3"));
@@ -178,7 +221,7 @@ function main() {
   hashMap.delete("name4");
   hashMap.delete("name5");
   hashMap.delete("name6");
-  console.log(hashMap.storage);
+  console.log(hashMap.size());
   console.log(" ========= delete方法测试 end =========");
 }
 
