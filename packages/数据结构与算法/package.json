@@ -1,0 +1,12 @@
+{
+  "name": "data-structures-and-algorithms",
+  "version": "1.0.0",
+  "description": "数据结构与算法",
+  "main": "",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hy-algokit": "^1.4.0"
+  }
+}

@@ -105,48 +105,52 @@ export default class HashMap<T = any> {
   }
 
   /**
+   * 扩容、缩容函数
+   * @param isEnlarge true：扩容，false：缩容
+   * @private
+   */
+  private enlargeOrShrink(isEnlarge: boolean): void {
+    const oldStorage = this.storage;
+    this.storage = [];
+    if (isEnlarge) {
+      let enlargeSize = Math.floor(this.length * 2);
+      enlargeSize = this.nextPrime(enlargeSize);
+      this.storage.length = enlargeSize;
+    } else {
+      let shrinkSize = Math.floor(this.length / 2);
+      if (shrinkSize < this.minLength) {
+        shrinkSize = this.minLength;
+      } else {
+        shrinkSize = this.nextPrime(shrinkSize);
+      }
+      this.storage.length = shrinkSize;
+    }
+    this.length = this.storage.length;
+    for (const bucket of oldStorage) {
+      if (!bucket) continue;
+      for (const [key, value] of bucket) {
+        const hashIndex = this.hashFunc(key);
+        if (!this.storage[hashIndex]) this.storage[hashIndex] = [];
+        this.storage[hashIndex].push([key, value]);
+      }
+    }
+  }
+
+  /**
    * 哈希表扩容操作
    * @private
    */
   private resize(): void {
     const factor = this.count / this.length;
-
-    const enlargeOrShrink = (isEnlarge: boolean): void => {
-      const oldStorage = this.storage;
-      this.storage = [];
-      if (isEnlarge) {
-        let enlargeSize = Math.floor(this.length * 2);
-        enlargeSize = this.nextPrime(enlargeSize);
-        this.storage.length = enlargeSize;
-      } else {
-        let shrinkSize = Math.floor(this.length / 2);
-        if (shrinkSize < this.minLength) {
-          shrinkSize = this.minLength;
-        } else {
-          shrinkSize = this.nextPrime(shrinkSize);
-        }
-        this.storage.length = shrinkSize;
-      }
-      this.length = this.storage.length;
-      for (const bucket of oldStorage) {
-        if (!bucket) continue;
-        for (const [key, value] of bucket) {
-          const hashIndex = this.hashFunc(key);
-          if (!this.storage[hashIndex]) this.storage[hashIndex] = [];
-          this.storage[hashIndex].push([key, value]);
-        }
-      }
-    };
     if (factor > this.loaderFactor) {
       // 扩容
-      enlargeOrShrink(true);
+      this.enlargeOrShrink(true);
       return;
     }
 
     // 缩容
     if (factor < this.minFactor && this.length > this.minLength) {
-      enlargeOrShrink(false);
-      return;
+      this.enlargeOrShrink(false);
     }
   }
 
