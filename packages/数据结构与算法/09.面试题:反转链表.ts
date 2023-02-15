@@ -71,7 +71,7 @@ function reverseList2(head: ListNode | null): ListNode | null {
 }
 
 /**
- * 反转链表方法三：递归解决方案；效率高，远离参考循环反转链表思路
+ * 反转链表方法三：递归解决方案；效率高，原理参考循环反转链表思路
  * @param head
  */
 function reverseList3(head: ListNode | null): ListNode | null {

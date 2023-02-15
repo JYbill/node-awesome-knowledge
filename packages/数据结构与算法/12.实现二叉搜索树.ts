@@ -23,6 +23,7 @@ class TreeNode<T> {
  */
 export default class BSTree<T = any> {
   private root: TreeNode<T> | null = null;
+  private printList: T[] = [];
 
   /**
    * 打印
@@ -41,6 +42,98 @@ export default class BSTree<T = any> {
     // 不存在根节点
     if (!this.root) this.root = newNode;
     else this.inertNodeByCompare(this.root, newNode);
+  }
+
+  /**
+   * 前序遍历
+   */
+  preOrderTraverse() {
+    this.printList = [];
+    this.preOrderTraverseNode(this.root);
+    // this.preOrderByLoop(this.root);
+    console.log(this.printList);
+  }
+  private preOrderTraverseNode(node: TreeNode<T> | null) {
+    if (node) {
+      this.printList.push(node.value);
+      this.preOrderTraverseNode(node.left);
+      this.preOrderTraverseNode(node.right);
+    }
+  }
+  private preOrderByLoop(node: TreeNode<T> | null) {
+    const stack: TreeNode<T>[] = [];
+    while (node || stack.length >= 1) {
+      // node存在或栈内未清空
+      while (node) {
+        // 只要node存在即遍历左节点
+        this.printList.push(node.value);
+        stack.push(node);
+        node = node.left;
+      }
+
+      // 当左节点遍历完后，弹栈开始遍历右节点，并再次进入循环遍历该右节点下的左节点
+      // 直到栈清空、左右节点都遍历完
+      node = stack.pop() ?? null;
+      node = node ? node.right : null;
+    }
+  }
+
+  /**
+   * 中序遍历
+   */
+  inOrderTraverse() {
+    this.printList = [];
+    this.inOrderTraverseNode(this.root);
+    console.log(this.printList);
+  }
+  inOrderTraverseNode(node: TreeNode<T> | null) {
+    if (node) {
+      this.inOrderTraverseNode(node.left);
+      this.printList.push(node.value);
+      this.inOrderTraverseNode(node.right);
+    }
+  }
+
+  /**
+   * 后续遍历
+   */
+  postOrderTraverse() {
+    this.printList = [];
+    this.postOrderTraverseNode(this.root);
+    console.log(this.printList);
+  }
+  postOrderTraverseNode(node: TreeNode<T> | null) {
+    if (node) {
+      this.postOrderTraverseNode(node.left);
+      this.postOrderTraverseNode(node.right);
+      this.printList.push(node.value);
+    }
+  }
+
+  /**
+   * 层序遍历
+   * 层序遍历推荐用循环实现很容易理解，也很简单
+   */
+  levelOrderTraverse() {
+    this.printList = [];
+    if (!this.root) {
+      console.log(this.printList);
+      return;
+    }
+
+    const queue: TreeNode<T>[] = [];
+    queue.push(this.root);
+
+    // 当队列中不再存在树节点时，意味着完成了层序遍历
+    while (queue.length >= 1) {
+      const node = queue.shift() as TreeNode<T>;
+      this.printList.push(node.value); // 获取队列中的出队节点
+
+      // 如果有左子节点和右子节点则放入队列中
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
+    }
+    console.log(this.printList);
   }
 
   /**
@@ -85,5 +178,13 @@ function main() {
   bsTree.insert(25);
   bsTree.insert(6);
   bsTree.print();
+  console.log("前序遍历：");
+  bsTree.preOrderTraverse();
+  console.log("中序遍历：");
+  bsTree.inOrderTraverse();
+  console.log("后序遍历：");
+  bsTree.postOrderTraverse();
+  console.log("层序遍历：");
+  bsTree.levelOrderTraverse();
 }
 main();

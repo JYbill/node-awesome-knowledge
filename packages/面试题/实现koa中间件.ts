@@ -37,8 +37,8 @@ function compose(middleware: any) {
   return (ctx: any, next: any) => {
     // 执行next的核心方法
     function dispatch(i: any): any {
+      if (i >= middleware.length) return () => {};
       const fn = middleware[i];
-      if (!fn) return;
       return fn(ctx, dispatch.bind(null, i + 1)); // 这里一定要记住是绑定，而不是执行，执行交给中间件执行！
     }
     return dispatch(0); // 第一个中间件开始
