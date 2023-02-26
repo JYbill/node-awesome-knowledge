@@ -60,6 +60,12 @@ export default class BSTree<T = any> {
       this.preOrderTraverseNode(node.right);
     }
   }
+
+  /**
+   * 前序循环遍历
+   * @param node
+   * @private
+   */
   private preOrderByLoop(node: TreeNode<T> | null) {
     const stack: TreeNode<T>[] = [];
     while (node || stack.length >= 1) {
@@ -137,6 +143,50 @@ export default class BSTree<T = any> {
   }
 
   /**
+   * 获取最大值
+   */
+  getMaxValue(): T | null {
+    let node = this.root;
+    if (!node) return null;
+    while (node?.right) {
+      node = node.right;
+    }
+    return node.value;
+  }
+
+  /**
+   * 获取最小值
+   */
+  getMinValue(): T | null {
+    let node = this.root;
+    if (!node) return null;
+    while (node?.left) {
+      node = node.left;
+    }
+    return node.value;
+  }
+
+  /**
+   * 是否存在当前值
+   * @param value
+   */
+  has(value: T): boolean {
+    let node = this.root;
+    if (!node) return false;
+
+    while (node) {
+      if (node.value === value) {
+        return true;
+      } else if (value < node.value) {
+        node = node.left;
+      } else {
+        node = node.right;
+      }
+    }
+    return false;
+  }
+
+  /**
    * 递归查找适合插入的位置
    * @param node 对比已存在的树节点
    * @param newNode 需要插入的节点
@@ -186,5 +236,12 @@ function main() {
   bsTree.postOrderTraverse();
   console.log("层序遍历：");
   bsTree.levelOrderTraverse();
+  console.log("二叉树最大值：");
+  console.log(bsTree.getMaxValue());
+  console.log("二叉树最小值：");
+  console.log(bsTree.getMinValue());
+  console.log("二叉树是否存在值：");
+  console.log(bsTree.has(25));
+  console.log(bsTree.has(5));
 }
 main();
