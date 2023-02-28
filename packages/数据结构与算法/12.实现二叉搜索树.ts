@@ -12,6 +12,7 @@ import { btPrint } from "hy-algokit";
 class TreeNode<T> {
   left: TreeNode<T> | null = null;
   right: TreeNode<T> | null = null;
+  parent: TreeNode<T> | null = null; // 父节点
   value: T;
   constructor(data: T) {
     this.value = data;
@@ -171,7 +172,7 @@ export default class BSTree<T = any> {
    * @param value
    */
   has(value: T): boolean {
-    let node = this.root;
+    /*let node = this.root;
     if (!node) return false;
 
     while (node) {
@@ -183,7 +184,9 @@ export default class BSTree<T = any> {
         node = node.right;
       }
     }
-    return false;
+    return false;*/
+
+    return !!this.searchNode(value);
   }
 
   /**
@@ -208,6 +211,49 @@ export default class BSTree<T = any> {
       }
     }
   }
+
+  /**
+   * 删除节点
+   * 思路：
+   *  1. value是否存在二叉树中
+   *  2. 要被删除的node是一个叶子节点，需要拿到它的父节点
+   *  3. 要被删除的node有一个节点
+   *  4. 要被删除的node有两个节点
+   */
+  remove(value: T): boolean {
+    const node = this.searchNode(value);
+    console.log(node?.parent?.value);
+    return false;
+  }
+
+  /**
+   * 查询并设置节点的parent
+   * @param value
+   * @private
+   */
+  private searchNode(value: T): TreeNode<T> | null {
+    let node = this.root;
+    if (!node) return null; // 不存在节点
+
+    let parent = null;
+    let current = this.root;
+    while (current) {
+      if (current.value === value) {
+        current.parent = parent;
+        return current;
+      }
+
+      parent = current;
+      if (value < current.value) {
+        current = current.left;
+      } else {
+        current = current.right;
+      }
+    }
+
+    // 未找到节点
+    return null;
+  }
 }
 
 function main() {
@@ -228,20 +274,29 @@ function main() {
   bsTree.insert(25);
   bsTree.insert(6);
   bsTree.print();
-  console.log("前序遍历：");
-  bsTree.preOrderTraverse();
-  console.log("中序遍历：");
+  /*  console.log("前序遍历：");
+  bsTree.preOrderTraverse();*/
+
+  /*console.log("中序遍历：");
   bsTree.inOrderTraverse();
   console.log("后序遍历：");
   bsTree.postOrderTraverse();
   console.log("层序遍历：");
-  bsTree.levelOrderTraverse();
-  console.log("二叉树最大值：");
+  bsTree.levelOrderTraverse();*/
+
+  /*console.log("二叉树最大值：");
   console.log(bsTree.getMaxValue());
   console.log("二叉树最小值：");
   console.log(bsTree.getMinValue());
   console.log("二叉树是否存在值：");
   console.log(bsTree.has(25));
-  console.log(bsTree.has(5));
+  console.log(bsTree.has(3));
+  console.log(bsTree.has(19));
+  console.log(bsTree.has(4));
+  console.log(bsTree.has(20));*/
+
+  console.log("二叉树删除节点：");
+  bsTree.remove(11);
+  bsTree.remove(5);
 }
 main();
