@@ -17,6 +17,20 @@ class TreeNode<T> {
   constructor(data: T) {
     this.value = data;
   }
+
+  /**
+   * 是否是父节点的左子节点
+   */
+  get isRight(): boolean {
+    return this === this.parent?.right;
+  }
+
+  /**
+   * 是否是父节点的右子节点
+   */
+  get isLeft(): boolean {
+    return this === this.parent?.left;
+  }
 }
 
 /**
@@ -93,7 +107,7 @@ export default class BSTree<T = any> {
     this.inOrderTraverseNode(this.root);
     console.log(this.printList);
   }
-  inOrderTraverseNode(node: TreeNode<T> | null) {
+  private inOrderTraverseNode(node: TreeNode<T> | null) {
     if (node) {
       this.inOrderTraverseNode(node.left);
       this.printList.push(node.value);
@@ -109,7 +123,7 @@ export default class BSTree<T = any> {
     this.postOrderTraverseNode(this.root);
     console.log(this.printList);
   }
-  postOrderTraverseNode(node: TreeNode<T> | null) {
+  private postOrderTraverseNode(node: TreeNode<T> | null) {
     if (node) {
       this.postOrderTraverseNode(node.left);
       this.postOrderTraverseNode(node.right);
@@ -172,20 +186,6 @@ export default class BSTree<T = any> {
    * @param value
    */
   has(value: T): boolean {
-    /*let node = this.root;
-    if (!node) return false;
-
-    while (node) {
-      if (node.value === value) {
-        return true;
-      } else if (value < node.value) {
-        node = node.left;
-      } else {
-        node = node.right;
-      }
-    }
-    return false;*/
-
     return !!this.searchNode(value);
   }
 
@@ -216,13 +216,53 @@ export default class BSTree<T = any> {
    * 删除节点
    * 思路：
    *  1. value是否存在二叉树中
-   *  2. 要被删除的node是一个叶子节点，需要拿到它的父节点
-   *  3. 要被删除的node有一个节点
-   *  4. 要被删除的node有两个节点
+   *  2. 要被删除的node是一个叶子节点，需要拿到它的父节点，然后判断是父节点的左子节点还是右子节点，然后直接删除即可(简单)
+   *  3. 要被删除的node有一个子节点；拿到父节点，让被删除的node的左子节点或右子节点成为父节点的子节点即可(中等)
+   *  4. 要被删除的node有两个子节点(复杂)
    */
   remove(value: T): boolean {
-    const node = this.searchNode(value);
-    console.log(node?.parent?.value);
+    const node = this.searchNode(value); // 1. 查找节点和它的父节点
+    if (!node) return false;
+
+    const parent = node.parent;
+    // 2. 删除叶子节点
+    if (node.left === null && node.right === null) {
+      if (parent === null) {
+        // 根节点
+        this.root = null;
+      } else if (node.isLeft) {
+        // 父节点的左子节点
+        parent.left = null;
+      } else if (node.isRight) {
+        // 父节点的右子节点
+        parent.right = null;
+      }
+    }
+
+    // 3. 被删除的节点有一个子节点，子节点提升为父节点的子节点
+    else if (node.left === null) {
+      if (parent === null) {
+        // 根节点
+        this.root = node.right;
+      } else if (node.isLeft) {
+        // 父左子节点成为子节点的右节点
+        parent.left = node.right;
+      } else if (node.isRight) {
+        // 父左右节点成为子节点的右节点
+        parent.right = node.right;
+      }
+    } else if (node.right === null) {
+      if (parent === null) {
+        // 根节点
+        this.root = node.left;
+      } else if (node.isLeft) {
+        // 父左子节点成为子节点的左节点
+        parent.left = node.left;
+      } else if (node.isRight) {
+        // 父左右节点成为子节点的左节点
+        parent.right = node.left;
+      }
+    }
     return false;
   }
 
@@ -295,8 +335,18 @@ function main() {
   console.log(bsTree.has(4));
   console.log(bsTree.has(20));*/
 
-  console.log("二叉树删除节点：");
-  bsTree.remove(11);
+  console.log("二叉树删除叶子节点测试：");
+  bsTree.remove(3);
+  bsTree.remove(10);
+  bsTree.remove(25);
+  bsTree.print();
+  console.log("二叉树删除单节点测试：");
   bsTree.remove(5);
+  bsTree.remove(9);
+  bsTree.remove(20);
+  bsTree.print();
+  console.log("二叉树删除双节点测试：");
+  bsTree.remove(13);
+  bsTree.print();
 }
 main();
