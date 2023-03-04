@@ -523,3 +523,159 @@ db.test.find({"x" : {"$gt" : 10, "$lt" : 20}})
 // db.test.find({"x" : {"$gt" : 10, "$lt" : 20}}).min({"x" : 10}).max({"x" : 20})
 // 解决方案三：不允许出现字段对应类型不一致的场景！👍
 ```
+
+- 数组嵌套查询
+
+```js
+// 文档
+"title" : "Raiders of the Lost Ark" ,
+"filming locations" : [
+    { "city": "Los Angeles", "state": "CA", "country": "USA" },
+    { "city": "Rome", "state": "Lazio", "country": "Italy" },
+    { "city": "Florence", "state": "sc", "country": "USA"}
+]
+db.user.find({ "from.city": "Rome" }) // ✅匹配[{..., city: "Rome",...}]的文档，允许多或少字段
+db.user.find({ from: {city: "Rome"} }) // ❌只会匹配[{city: "Rome"}]的文档，多字段、少字段都匹配不到
+```
+
+> ⚠️ 上面数组嵌套查询，当查询为`find({ 条件1, 条件2 })`时，此时条件 = 条件 1 || 条件 2，如果我们想满足数组是，条件 = 条件 1 && 条件 2 时，需要使用`$elemMatch`操作符
+
+- 查询数组元素满足多个条件
+
+```js
+// 数组中有一个元素满足即可
+db.user.find({
+  "from.city": "Rome",
+  "from.country": "Italy",
+});
+
+// 数组中每个元素必须全部满足
+db.user.find({
+  $elemMatch: { city: "Rome", country: "Italy" },
+});
+```
+
+### 4.4 $where
+
+- $where：它允许你在查询中执行任意的 JS 代码。函数返回`true`，文档就作为结果集的一部分返回；如果函数返回`false`，文档就不返回
+
+> ⚠️ 禁止终端用户随意使用`$where`子句
+
+```ts
+// 查询：role字段长度大于0 && role字段类型不是"字符串"类型的文档
+db.users.find({
+  $where: "this.role.length > 0 && typeof this.role !== 'string'",
+});
+```
+
+- $where 比普通查询慢得多的原因
+
+1. 每个文档都必须从 BSON 转换为 JS 对象，然后通过"$where"表达式计算
+
+2. $where操作无法走索引，所以应该尽可能的先用条件查询走索引过滤，最后再用$where 对结果微调
+3. 尽可能使用聚合操作符$expr运算符代替$where 操作符
+
+### 4.5 游标
+
+- 游标用法：只有在`next()`时才会查询获取前 100 个结果或者前 4MB 的数据（两者之中较小者），在所有数据耗尽之后才会再去查询是否有更多的数据
+
+```ts
+const cursor = db.collection.find();
+while (cursor.hasNext()) {
+  const doc = cursor.next();
+  console.log(doc);
+}
+```
+
+> 💡 应用程序中如果一定要用游标处理大数据分页场景，可以在内存中保存每个用户对应游标的 map 集合，这样游标查询内容就不会混乱；当然可以选择更好的用过滤条件去分页
+
+### 4.5.1 limit、skip 和 sort
+
+#### 排序
+
+- `sort({})`: 根据字段排序，1 升序，-1 降序
+
+```ts
+db.users.find({}).sort({
+  age: 1, // 先根据age字段升序排列
+  name: -1, // age字段相同时，再按name字段降序排列
+});
+```
+
+- 对于一个字段多种类型时，有一个预定义的排序顺序
+
+```ts
+1. 最小值
+2. null
+3. 数字（整型、长整型、双精度浮点型、小数型）
+4. 字符串
+5. 对象/文档
+6. 数组
+7. 二进制数据
+8. ObjectId
+9. Boolean
+10. 日期
+11. 时间戳
+12. 正则表达式
+13. 最大值
+```
+
+#### 分页
+
+- `skip()`、`limit()`
+- 分页提示: 当数据量大时，不要轻易使用 skip，skip 是查出来后一个一个跳过，最后获取结果
+
+> 解决方案：在**查询阶段避免大数据量**，改为排序 ➕ 条件条件过滤
+>
+> （如：时间排序，time > 上一次最后时间 limit(n)）
+
+```ts
+// 使用skip
+db.information.find({}).skip(100).limit(20);
+
+// 在查询阶段避免读取大量数据
+db.information
+  .find({
+    conversation_id: ObjectId("6397edc27d248ed52ee7750b"),
+  })
+  .sort({
+    createdAt: -1,
+  })
+  .limit(20);
+```
+
+### 4.5.2 　避免略过大量结果
+
+- 大数据分页场景：排序 ➕ 条件条件过滤
+
+```ts
+// 第一次：降序排列获取20条数据
+db.users.find({}).limit(20).sort({ createAt: -1 });
+// 后续：根据上一次最后一条数据的createAt字段作为条件，获取比它大的20条
+const lastCreateAt = request.query.createAt;
+db.users
+  .find({ createAt: { $gt: lastCreateAt } })
+  .limit(20)
+  .sort({ createAt: -1 });
+```
+
+> 💡 只需确保有一个包含创建时间键的索引
+
+- 获取随机文档场景：添加 random 字段
+
+```ts
+const randomNum = Math.random();
+let res = db.users.findOne({ random: { $gt: randomNum } }); // 查询大于随机数值的第一个随机数，但有可能过大没有数据
+if (res === null) {
+  res = db.users.findOne({ random: { $lt: randomNum } });
+}
+return res;
+```
+
+> 💡 只需确保有一个包含随机键的索引
+
+### 4.5.3 　游标生命周期
+
+- 在服务器端，游标会占用内存和资源。一旦游标遍历完结果之后，或者客户端发送一条消息要求终止，数据库就可以释放它正在使用的资源。
+- 还有一些情况可能导致游标终止以及随后的清理。当游标超出客户端的作用域时，驱动程序会向数据库发送一条特殊的消息，让数据库知道它可以“杀死”该游标。最后，即使用户没有遍历完所有结果而且游标仍在作用域内，如果 10 分钟没有被使用的话，数据库游标也将自动“销毁”。这样，如果客户端崩溃或者出错，MongoDB 就不需要维护上千个被打开的游标了。
+- 有时可能的确需要一个游标维持很长时间。在这种情况下。注意：如果关闭了游标超时，则必须遍历完所有结果或主动将其销毁以确保游标被关闭。否则，它会一直占用数据库的资源，直到服务器重新启动。
