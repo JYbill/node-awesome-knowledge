@@ -227,18 +227,11 @@ export default class BSTree<T = any> {
     if (!node) return false;
 
     const parent = node.parent;
+    let replaceNode: TreeNode<T> | null = null;
+
     // 2. 删除叶子节点
     if (node.left === null && node.right === null) {
-      if (parent === null) {
-        // 根节点
-        this.root = null;
-      } else if (node.isLeft) {
-        // 父节点的左子节点
-        parent.left = null;
-      } else if (node.isRight) {
-        // 父节点的右子节点
-        parent.right = null;
-      }
+      replaceNode = null;
     }
 
     // 3. 被删除的节点有一个子节点，子节点提升为父节点的子节点
@@ -259,27 +252,9 @@ export default class BSTree<T = any> {
        *    null    sonNode
        *             ...
        */
-      if (parent === null) {
-        // 根节点
-        this.root = node.right;
-      } else if (node.isLeft) {
-        // 父左子节点成为子节点的右节点
-        parent.left = node.right;
-      } else if (node.isRight) {
-        // 父左右节点成为子节点的右节点
-        parent.right = node.right;
-      }
+      replaceNode = node.right;
     } else if (node.right === null) {
-      if (parent === null) {
-        // 根节点
-        this.root = node.left;
-      } else if (node.isLeft) {
-        // 父左子节点成为子节点的左节点
-        parent.left = node.left;
-      } else if (node.isRight) {
-        // 父左右节点成为子节点的左节点
-        parent.right = node.left;
-      }
+      replaceNode = node.left;
     }
 
     // ‼️ 4. 以上条件都不满足，即当前被删除的节点存在左子节点 和 右子节
@@ -303,20 +278,19 @@ export default class BSTree<T = any> {
      */
     else {
       const successorNode = this.getSuccessorNode(node);
-      if (node.right !== successorNode) {
-        successorNode.parent!.left = successorNode.right;
-        successorNode.left = node.left;
-        successorNode.right = node.right;
-      }
-      if (node.parent === null) {
-        this.root = successorNode;
-      } else if (node.isRight) {
-        // 被删除节点为父节点的左子节点
-        parent!.right = successorNode;
-      } else {
-        // 被删除节点为父节点的右子节点
-        parent!.left = successorNode;
-      }
+      replaceNode = successorNode;
+    }
+
+    // 节点替换
+    if (parent === null) {
+      // 根节点
+      this.root = replaceNode;
+    } else if (node.isLeft) {
+      // 父节点的左子节点
+      parent.left = replaceNode;
+    } else if (node.isRight) {
+      // 父节点的右子节点
+      parent.right = replaceNode;
     }
     return false;
   }
@@ -328,14 +302,21 @@ export default class BSTree<T = any> {
    * @private
    */
   private getSuccessorNode(removeNode: TreeNode<T>): TreeNode<T> {
-    let node = removeNode.right as TreeNode<T>;
+    let successorNode = removeNode.right as TreeNode<T>;
     let parent = null;
-    while (node.left) {
-      parent = node;
-      node = node.left;
-      node.parent = parent;
+    while (successorNode.left) {
+      parent = successorNode;
+      successorNode = successorNode.left;
+      successorNode.parent = parent;
     }
-    return node;
+
+    // 如果删除的节点不是右子节点，说明该后继节点 存在右叶子节点 or 为null
+    if (removeNode.right !== successorNode) {
+      successorNode.parent!.left = successorNode.right;
+      successorNode.left = removeNode.left;
+      successorNode.right = removeNode.right;
+    }
+    return successorNode;
   }
 
   /**
