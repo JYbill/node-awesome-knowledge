@@ -218,7 +218,7 @@ export default class BSTree<T = any> {
    *  1. value是否存在二叉树中
    *  2. 要被删除的node是一个叶子节点，需要拿到它的父节点，然后判断是父节点的左子节点还是右子节点，然后直接删除即可(简单)
    *  3. 要被删除的node有一个子节点；拿到父节点，让被删除的node的左子节点或右子节点替换删除节点即可(中等)
-     *  4. 要被删除的node有两个子节点，需要在左子树或右子树中任意一边找到最接近删除节点大小的节点(复杂)
+   *  4. 要被删除的node有两个子节点，需要在左子树或右子树中任意一边找到最接近删除节点大小的节点(复杂)
    *    4.1. 方式一：找到左子树中最大的节点，替换当前删除的节点（前驱节点）
    *    4.2. 方式二：找到右子树中最小的节点，替换当前删除的节点（后继节点）
    */
@@ -243,6 +243,22 @@ export default class BSTree<T = any> {
 
     // 3. 被删除的节点有一个子节点，子节点提升为父节点的子节点
     else if (node.left === null) {
+      // 3.1 被删除node的左节点为空，证明被删除节点仅有右节点
+      // 让被删除node的父节点的左节点 或 右节点 = 被删除节点的右节点
+      /**
+       * 演示被删除的节点仅有右子节点，将右子节点提升为该子节点的父节点的左子节点
+       * 同理，有四种情况
+       * 1. 父左子节点为被删除的节点，该节点仅有左子节点
+       * 2. 父右子节点为被删除的节点，该节点仅有左子节点
+       * 3. 父左子节点为被删除的节点，该节点仅有右子节点
+       * 4. 父右子节点为被删除的节点，该节点仅有右子节点
+       *          parentNode                parentNode
+       *          |         |               |         |
+       *     removeNode    node   =>     sonNode     node
+       *     |        |     ...            ...        ...
+       *    null    sonNode
+       *             ...
+       */
       if (parent === null) {
         // 根节点
         this.root = node.right;
@@ -265,7 +281,61 @@ export default class BSTree<T = any> {
         parent.right = node.left;
       }
     }
+
+    // ‼️ 4. 以上条件都不满足，即当前被删除的节点存在左子节点 和 右子节
+    /**
+     * 1. 双节点下，后继节点为叶子节点，获取到被删除的节点的父节点直接替换即可
+     *           root                            root
+     *        |        |                      |        |
+     *      remove    node        =>       successor  node
+     *     |      |                        |
+     *   leaf    successor(后继节点)       leaf
+     *
+     * 2. 双节点下，后继节点存在右子节点（不可能存在左子节点，因为要找最小，只可能有右子节点）
+     * 3. 小心根节点越界问题，根节点的parent为null，所以只能设置root = 后继节点
+     *            remove                           后继节点
+     *         |          |                       |       |
+     *      node1        node2        =>         node1   node2
+     *                 |                                |
+     *             后继节点                            node3
+     *                   |
+     *                 node3
+     */
+    else {
+      const successorNode = this.getSuccessorNode(node);
+      if (node.right !== successorNode) {
+        successorNode.parent!.left = successorNode.right;
+        successorNode.left = node.left;
+        successorNode.right = node.right;
+      }
+      if (node.parent === null) {
+        this.root = successorNode;
+      } else if (node.isRight) {
+        // 被删除节点为父节点的左子节点
+        parent!.right = successorNode;
+      } else {
+        // 被删除节点为父节点的右子节点
+        parent!.left = successorNode;
+      }
+    }
     return false;
+  }
+
+  /**
+   * 删除节点：查询最小的后继节点
+   * - 为什么查找最小的？
+   * - 右侧最小的节点替换被删除的节点才能够满足二叉搜索树的特点：左大右小原则
+   * @private
+   */
+  private getSuccessorNode(removeNode: TreeNode<T>): TreeNode<T> {
+    let node = removeNode.right as TreeNode<T>;
+    let parent = null;
+    while (node.left) {
+      parent = node;
+      node = node.left;
+      node.parent = parent;
+    }
+    return node;
   }
 
   /**
@@ -315,7 +385,7 @@ function main() {
   bsTree.insert(18);
   bsTree.insert(25);
   bsTree.insert(6);
-  bsTree.print();
+  // bsTree.print();
   /*  console.log("前序遍历：");
   bsTree.preOrderTraverse();*/
 
@@ -337,18 +407,21 @@ function main() {
   console.log(bsTree.has(4));
   console.log(bsTree.has(20));*/
 
-  console.log("二叉树删除叶子节点测试：");
-  bsTree.remove(3);
-  bsTree.remove(10);
-  bsTree.remove(25);
+  // console.log("二叉树删除叶子节点测试：");
+  bsTree.remove(12);
+  // bsTree.remove(10);
+  // bsTree.remove(25);
   bsTree.print();
-  console.log("二叉树删除单节点测试：");
+  // console.log("二叉树删除单节点测试：");
+  // bsTree.remove(5);
+  // bsTree.remove(9);
+  // bsTree.remove(20);
+  // bsTree.print();
+  console.log("二叉树删除双节点测试：");
   bsTree.remove(5);
   bsTree.remove(9);
-  bsTree.remove(20);
-  bsTree.print();
-  console.log("二叉树删除双节点测试：");
-  bsTree.remove(13);
+  bsTree.remove(15);
+  bsTree.remove(11);
   bsTree.print();
 }
 main();
