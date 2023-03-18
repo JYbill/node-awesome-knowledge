@@ -10,7 +10,7 @@
   "author": "xiaoqinvar",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^17.0.45",
+    "@types/node": "^18.15.3",
     "nodemon": "^2.0.20",
     "typescript": "^4.8.3"
   },
