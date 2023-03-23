@@ -3,6 +3,7 @@
  * @Author: 小钦var
  * @Date: 2023/3/21 19:46
  */
+import { testSort } from "hy-algokit";
 
 /**
  * 假设一个数组有5个元素进行排序    <br>
@@ -26,12 +27,6 @@ function bubbleSort(list: number[]): number[] {
 }
 
 function main() {
-  const list = new Array(20);
-  for (let i = 0; i < 20; i++) {
-    list[i] = Math.ceil(Math.random() * 100);
-  }
-  console.log("排序前：", list.join(", "));
-  const sortedList = bubbleSort(list);
-  console.log("排序后：", sortedList.join(", "));
+  testSort(bubbleSort);
 }
 main();
