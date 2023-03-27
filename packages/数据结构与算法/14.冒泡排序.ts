@@ -13,20 +13,25 @@ import { testSort } from "hy-algokit";
  */
 function bubbleSort(list: number[]): number[] {
   for (let i = 0; i < list.length - 1; i++) {
+    let hasSwap = false; // 一旦本次冒泡发现没有交换，说明是一个有序的数组，则后续直接break退出即可
     // 每次排序后最大值在数组最后一位
     for (let j = 0; j < list.length - 1 - i; j++) {
       // 每次只比较(数组长度内 - 已排最值个数) ⚠️ j + 1越界
       if (list[j] > list[j + 1]) {
+        hasSwap = true;
         list[j] = list[j] + list[j + 1];
         list[j + 1] = list[j] - list[j + 1];
         list[j] = list[j] - list[j + 1];
       }
     }
+    if (!hasSwap) break;
   }
   return list;
 }
 
 function main() {
-  testSort(bubbleSort);
+  for (let i = 0; i < 100; i++) {
+    testSort(bubbleSort);
+  }
 }
 main();
