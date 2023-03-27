@@ -14,7 +14,7 @@ import { testSort } from "hy-algokit";
  */
 function selectSort(list: number[]): number[] {
   const n = list.length;
-  // 每一次执行完毕，左侧第一个即完成
+  // 每一趟排出一个值
   for (let i = 0; i < n - 1; i++) {
     let index = i;
 
@@ -23,10 +23,12 @@ function selectSort(list: number[]): number[] {
       if (list[j] < list[index]) index = j;
     }
 
-    // 每次找出最值后进行交换，只交换一次
-    const temp = list[index];
-    list[index] = list[i];
-    list[i] = temp;
+    // 只有最值下标和当前趟不一致时，才需要交换
+    if (i !== index) {
+      const temp = list[index];
+      list[index] = list[i];
+      list[i] = temp;
+    }
   }
   return list;
 }
