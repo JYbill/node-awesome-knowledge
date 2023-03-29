@@ -5,6 +5,10 @@
  */
 import { testSort } from "hy-algokit";
 
+/**
+ * `分治法`，先分割子数组，最后在归并时对数组排序
+ * @param list
+ */
 function mergeSort(list: number[]): number[] {
   // 1.1 限制条件，长度为1的数组直接返回
   if (list.length === 1) return list;
