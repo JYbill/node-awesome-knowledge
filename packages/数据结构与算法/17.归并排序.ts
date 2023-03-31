@@ -39,7 +39,7 @@ function mergeSort(list: number[]): number[] {
     mergeList.push.apply(mergeList, leftArr.slice(i));
   }
   if (j < rightArr.length) {
-    mergeList.push.apply(mergeList, rightArr.slice(i));
+    mergeList.push.apply(mergeList, rightArr.slice(j));
   }
   return mergeList;
 }

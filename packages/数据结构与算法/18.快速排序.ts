@@ -44,7 +44,7 @@ function quickSort(list: number[]): number[] {
     swap(list, i, right);
 
     // 递归
-    divide(left, j);
+    divide(left, i - 1);
     divide(i + 1, right);
   }
   return list;
