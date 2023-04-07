@@ -5,22 +5,6 @@
  */
 
 function quickSort(list: number[]): number[] {
-  function divide(left: number, right: number): void {
-    if (left >= right) return;
-
-    let i = left;
-    let j = right - 1;
-    const standard = list[right];
-    while (i <= j) {
-      while (list[i] < standard) i++;
-      while (list[j] > standard) j--;
-      if (i <= j) swap(list, i, j);
-    }
-    swap(list, i, right);
-    divide(left, i - 1);
-    divide(i + 1, right);
-  }
-  divide(0, list.length - 1);
   return list;
 }
 
