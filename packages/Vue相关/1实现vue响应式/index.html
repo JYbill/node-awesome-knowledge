@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      display: flow-root;
+    }
+
+    #app {
+      width: 50%;
+      height: 45%;
+      margin: 20px auto 0 auto;
+      padding: 10px;
+      background-color: #b8c1ec;
+      border: 1px solid #999;
+      border-radius: 10px;
+
+      text-align: left;
+      font-size: 26px;
+    }
+
+    #app span {
+      line-height: 70px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <span>姓：</span><span class="first-name">少</span><br>
+  <span>名：</span><span class="last-name">年包青蛙</span><br>
+  <span>年龄：</span><span class="age">24岁</span><br>
+  <span>输入姓名：</span></label><input type="text" oninput="window.person.name = this.value"><br>
+  <span>输入生日：</span><input type="number" oninput="window.person.age = this.value">
+</div>
+
+<script type="module" src="./index.js"></script>
+</body>
+</html>
