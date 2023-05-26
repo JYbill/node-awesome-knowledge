@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>hello threejs</title>
+</head>
+<body>
+</body>
+<script type="importmap">
+  {
+    "imports": {
+			"three": "./build/build/three.module.js",
+      "three/addons/": "./build/examples/jsm/"
+		}
+	}
+</script>
+<script type="module">
+  import * as THREE from 'three';
+  const scene = new THREE.Scene();
+  console.log(scene)
+</script>
+</html>

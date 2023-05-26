@@ -10,5 +10,6 @@ node_modules
 
 # custom
 dist
+build
 
 .env*
