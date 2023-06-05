@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Group</title>
+  <style>
+    .stat {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+<div class="stat"></div>
+</body>
+<script type="importmap">
+  {
+    "imports": {
+			"three": "./build/build/three.module.js",
+      "three/addons/": "./build/examples/jsm/"
+		}
+	}
+
+
+</script>
+<script type="module">
+  import * as THREE from 'three';
+  import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+  import Stats from 'three/addons/libs/stats.module.js';
+
+  const scene = new THREE.Scene();
+  const geometry = new THREE.BoxGeometry(30, 50, 50);
+
+  // 网格
+  const material = new THREE.MeshLambertMaterial({ // 兰伯特漫反射材质
+    side: THREE.DoubleSide,
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.5,
+  });
+  const mesh1 = new THREE.Mesh(geometry, material);
+  mesh1.name = "一号正方体";
+  const mesh2 = new THREE.Mesh(geometry, material);
+  mesh2.name = "二号正方体";
+  const group = new THREE.Group();
+  group.name = "空间";
+  group.add(mesh1);
+  group.add(mesh2);
+  mesh2.translateX(100)
+
+  // 实例化一个透视投影相机对象
+  const width = 800;
+  const height = 500;
+  const camera = new THREE.PerspectiveCamera(50, width / height, 1, 5000);
+  camera.position.set(200, 200, 200);
+  camera.lookAt(0, 0, 0); // 相机对准网格物体坐标
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.target = mesh1; // 方向光指向对象网格模型mesh，可以不设置，默认的位置是0,0,0
+  light.position.set(0, 100, 200);
+
+  // 添加在场景内
+  scene.add(group);
+  scene.add(light); // 添加光源
+  const axesHelper = new THREE.AxesHelper(200);
+  scene.add(axesHelper); // 添加辅助坐标系
+
+  // 性能监视器
+  const stats = new Stats();
+  document.body.appendChild(stats.domElement);
+
+  // 创建渲染器对象
+  const renderer = new THREE.WebGLRenderer({antialias: true});
+  renderer.setPixelRatio(window.devicePixelRatio); // 设置像素比
+  renderer.setClearColor(0x444444, 1); //设置背景颜色
+  renderer.setSize(width, height); // 设置渲染区域的尺寸
+  renderer.render(scene, camera); // 渲染
+  document.querySelector('.stat').appendChild(renderer.domElement); // 将渲染生成HTML Canvas元素
+
+  // 设置相机控件轨道控制器OrbitControls
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.addEventListener('change', () => renderer.render(scene, camera));
+
+  function render() {
+    renderer.render(scene, camera); //执行渲染操作
+    group.rotateY(0.005);
+    stats.update();
+    requestAnimationFrame(render);//请求再次执行渲染函数render，渲染下一帧
+  }
+  render();
+
+  console.log(group.getObjectByName("一号正方1体"))
+</script>
+</html>
