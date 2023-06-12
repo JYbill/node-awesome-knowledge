@@ -31,14 +31,24 @@
   import Stats from 'three/addons/libs/stats.module.js';
 
   const scene = new THREE.Scene();
-  const geometry = new THREE.BoxGeometry(30, 50, 50);
+  // const geometry = new THREE.BoxGeometry(50, 100, 50);
+  // const geometry = new THREE.SphereGeometry(60, 25, 25);
+  const geometry = new THREE.PlaneGeometry(50, 50);
+  // const geometry = new THREE.CircleGeometry(30);
+  // 纹理加载器
+  const texLoader = new THREE.TextureLoader();
+  const texture = texLoader.load('./images/emoji2.png');
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(10, 10);
 
   // 网格
   const material = new THREE.MeshLambertMaterial({ // 兰伯特漫反射材质
     side: THREE.DoubleSide,
-    color: 0xffffff,
+    // color: "orange", // 使用颜色会与贴图混合
     transparent: true,
-    opacity: 0.5,
+    // opacity: 0.5,
+    map: texture
   });
   const mesh1 = new THREE.Mesh(geometry, material);
   mesh1.name = "一号正方体";
@@ -50,6 +60,7 @@
   group.add(mesh2);
   mesh2.translateX(100)
 
+
   // 实例化一个透视投影相机对象
   const width = 800;
   const height = 500;
@@ -60,11 +71,19 @@
   light.target = mesh1; // 方向光指向对象网格模型mesh，可以不设置，默认的位置是0,0,0
   light.position.set(0, 100, 200);
 
+  // 网格地面辅助器
+  const gridHelper = new THREE.GridHelper(300, 15, 0xffffff, 0xffffff);
+
   // 添加在场景内
   scene.add(group);
   scene.add(light); // 添加光源
-  const axesHelper = new THREE.AxesHelper(200);
-  scene.add(axesHelper); // 添加辅助坐标系
+  const sceneAxis = new THREE.AxesHelper(200);
+  const mesh1Axis = new THREE.AxesHelper(50);
+  const mesh2Axis = new THREE.AxesHelper(50);
+  mesh1.add(mesh1Axis);
+  mesh2.add(mesh2Axis);
+  scene.add(sceneAxis); // 添加辅助坐标系
+  scene.add(gridHelper);
 
   // 性能监视器
   const stats = new Stats();
@@ -84,12 +103,15 @@
 
   function render() {
     renderer.render(scene, camera); //执行渲染操作
-    group.rotateY(0.005);
+    // group.rotateY(0.005);
+    texture.offset.x +=0.005;
+    texture.offset.y +=0.005;
     stats.update();
     requestAnimationFrame(render);//请求再次执行渲染函数render，渲染下一帧
   }
   render();
 
-  console.log(group.getObjectByName("一号正方1体"))
+  mesh2.rotateX(-Math.PI / 6);
+  mesh2.position.y = 50;
 </script>
 </html>
