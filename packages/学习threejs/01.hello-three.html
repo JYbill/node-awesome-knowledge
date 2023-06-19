@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>hello</title>
+  <style>
+    .stat {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+<div class="stat"></div>
+</body>
+<script type="importmap">
+  {
+    "imports": {
+			"three": "./build/build/three.module.js",
+      "three/addons/": "./build/examples/jsm/"
+		}
+	}
+
+</script>
+<script type="module">
+  import * as THREE from 'three';
+  import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+  import Stats from 'three/addons/libs/stats.module.js';
+  import {GUI} from 'three/addons/libs/lil-gui.module.min.js';
+
+  // 场景
+  const scene = new THREE.Scene();
+  // 几何体
+  /*const geometry = new THREE.BufferGeometry();
+  const vertices = new Float32Array([
+    0, 0, 0, //顶点1坐标
+    80, 0, 0, //顶点2坐标
+    80, 80, 0, //顶点3坐标
+    0, 80, 0, //顶点4坐标
+  ]);
+  const indexes = new Uint8Array([0, 1, 2, 0, 2, 3]);
+  geometry.index = new THREE.BufferAttribute(indexes, 1);
+  // 法线
+  const normals = new Float32Array([
+    0, 0, 1, //顶点1法线( 法向量 )
+    0, 0, 1, //顶点2法线
+    0, 0, 1, //顶点3法线
+    0, 0, 1, //顶点4法线
+  ]);
+  geometry.attributes.normal = new THREE.BufferAttribute(normals, 3);
+  const attribue = new THREE.BufferAttribute(vertices, 3);
+  geometry.attributes.position = attribue;*/
+  // const geometry = new THREE.BoxGeometry(30, 30, 30); // 创建一个长方体几何对象Geometry
+  //BoxGeometry：长方体
+  const geometry = new THREE.BoxGeometry(30, 50, 50);
+  // SphereGeometry：球体
+  // const geometry = new THREE.SphereGeometry(15, 5, 5);
+  // CylinderGeometry：圆柱
+  // const geometry = new THREE.CylinderGeometry(20,20,100);
+  // PlaneGeometry：矩形平面
+  // const geometry = new THREE.PlaneGeometry(20,20, 2, 1);
+  // CircleGeometry：圆形平面
+  // const geometry = new THREE.CircleGeometry(10);
+
+  // 网格
+  // const material = new THREE.MeshPhongMaterial({
+  const material = new THREE.MeshLambertMaterial({ // 兰伯特漫反射材质
+                                                   // const material = new THREE.MeshBasicMaterial({
+    side: THREE.DoubleSide,
+    // shininess: 1000,
+    color: 0xffffff,
+    // specular: "orange",
+    transparent: true,
+    opacity: 0.5,
+    // wireframe: true, // 线条模式渲染mesh对应的三角形
+  });
+  const meshList = [];
+  for (let i = 0; i < 1; i++) {
+    const mesh = new THREE.Mesh(geometry, material); // 网格模型对象Mesh
+    mesh.position.set(i * 50, 0, 0);
+    meshList.push(mesh);
+  }
+  const mesh1 = meshList[0];
+
+  // 点
+  /*const material = new THREE.PointsMaterial({
+    color: "orange",
+    size: 10.0 //点对象像素尺寸
+  });
+  const mesh1 = new THREE.Points(geometry, material); // 点模型对象
+  const meshList = [mesh1];*/
+
+  // 线
+  // const material = new THREE.LineBasicMaterial({ color: "orange" });
+  // const mesh1 = new THREE.Line(geometry, material); // 连续线段
+  // const mesh1 = new THREE.LineLoop(geometry, material); // 闭合线
+  // const mesh1 = new THREE.LineSegments(geometry, material); // 非连续线段
+  // const meshList = [mesh1];
+
+  // 实例化一个透视投影相机对象
+  const width = 800;
+  const height = 500;
+  const camera = new THREE.PerspectiveCamera(50, width / height, 1, 5000);
+  camera.position.set(200, 200, 200);
+  camera.lookAt(0, 0, 0); // 相机对准网格物体坐标
+
+  // 辅助坐标系观察对象
+  const axesHelper = new THREE.AxesHelper(200);
+
+  // 光源
+  // 参数1?：0xffffff是纯白光, 灯光的十六进制颜色
+  // 参数2?：1.0,表示光照强度，默认为1
+  // 参数3?: 500, 光的最大范围，默认0无限制
+  // 参数4?: 光沿光的距离变暗的量, 默认2
+  // const light = new THREE.PointLight(0xffffff, 1, 1000);
+  // const light = new THREE.AmbientLight(0xffffff, 3);
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.target = mesh1; // 方向光指向对象网格模型mesh，可以不设置，默认的位置是0,0,0
+  light.position.set(0, 100, 200);
+
+  // 光源辅助器
+  /**
+   * 创建球形网格可视对象
+   * (light : PointLight, sphereSize?: Float, color?: Hex)
+   * light: 光源对象
+   * sphereSize：球形辅助对象的尺寸，默认为1
+   * color：可视对象的颜色，默认光源颜色
+   */
+  const lightHelper = new THREE.PointLightHelper(light, 10);
+  const directionalLight = new THREE.DirectionalLightHelper(light, 5, 0xff0000);
+
+  // 克隆
+  // 网格拷贝的对象内部geometry、material都是共享内存中同一个对象
+  /*const mesh2 = mesh1.clone();
+  mesh2.geometry = mesh1.geometry.clone();
+  mesh2.material = mesh1.material.clone();
+  mesh2.geometry.translate(100, 0, 0); // 几何物体沿x移动100
+  meshList.push(mesh2);*/
+
+  // 添加在场景内
+  meshList.forEach(mesh => {
+    scene.add(mesh); // 添加网格
+  })
+  scene.add(light); // 添加光源
+  scene.add(axesHelper); // 添加辅助坐标系
+  scene.add(lightHelper); // 添加光源辅助器
+  scene.add(directionalLight); // 平行光辅助器
+
+  // 性能监视器
+  const stats = new Stats();
+  stats.setMode(1);
+  document.body.appendChild(stats.domElement);
+
+  // GUI图形化界面
+  const gui = new GUI();
+  gui.domElement.style.left = '0';
+  gui.domElement.style.top = '550px';
+  gui.domElement.style.width = '300px';
+  const positionFolder = gui.addFolder('位置');
+  positionFolder.close();
+  setTimeout(() => {
+    positionFolder.open();
+  }, 1000)
+  positionFolder.add(mesh1.position, 'x', 0, 200);
+  positionFolder.add(mesh1.position, 'y', 0, 200);
+  positionFolder.add(mesh1.position, 'z', 0, 200).onChange((val) => {
+    console.log("z", val)
+  });
+  gui.add(light, 'intensity', 0, 10);
+  gui.addColor(mesh1.material, 'color').onChange(function (value) {
+    console.log("color", value)
+  });
+  gui.add({bool: true}, 'bool');
+
+  // 创建渲染器对象
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true
+  });
+  renderer.setPixelRatio(window.devicePixelRatio); // 设置像素比
+  renderer.setClearColor(0x444444, 1); //设置背景颜色
+  renderer.setSize(width, height); // 设置渲染区域的尺寸
+  renderer.render(scene, camera); // 渲染
+  document.querySelector('.stat').appendChild(renderer.domElement); // 将渲染生成HTML Canvas元素
+
+  // 设置相机控件轨道控制器OrbitControls
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.addEventListener('change', function () {
+    renderer.render(scene, camera); //执行渲染操作
+    // console.log('camera.position',camera.position);
+  });
+
+  // 渲染循环
+  const clock = new THREE.Clock();
+
+  function render() {
+    // const spt = clock.getDelta()*1000;//毫秒
+    // console.log('两帧渲染时间间隔(毫秒)',spt);
+    // console.log('帧率FPS',1000/spt);
+    // mesh1.rotateY(0.01);//每次绕y轴旋转0.01弧度
+    // mesh1.rotation.z += 0.01;
+    renderer.render(scene, camera); //执行渲染操作
+    stats.update();
+    requestAnimationFrame(render);//请求再次执行渲染函数render，渲染下一帧
+  }
+
+  render();
+</script>
+</html>

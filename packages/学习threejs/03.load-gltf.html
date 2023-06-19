@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gltf</title>
+  <style>
+    .stat {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+<div class="stat"></div>
+</body>
+<script type="importmap">
+  {
+    "imports": {
+			"three": "./build/build/three.module.js",
+      "three/addons/": "./build/examples/jsm/"
+		}
+	}
+</script>
+<script type="module">
+  import * as THREE from 'three';
+  import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+  import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+  import Stats from 'three/addons/libs/stats.module.js';
+
+  const scene = new THREE.Scene();
+  const geometry = new THREE.BoxGeometry(10, 10, 10);
+  geometry.translate(100, 0, 0);
+
+  // gltf加载器
+  const loader = new GLTFLoader();
+  loader.load('./gltf/lieutenantHead/lieutenantHead.gltf', function (gltf) {
+    console.log(gltf);
+    console.log('gltf对象场景属性', gltf.scene);
+    scene.add(gltf.scene);
+  })
+
+  // 网格
+  const material = new THREE.MeshLambertMaterial({ // 兰伯特漫反射材质
+    side: THREE.DoubleSide,
+    transparent: true,
+  });
+  const mesh1 = new THREE.Mesh(geometry, material);
+
+  // 透视相机
+  const width = 800;
+  const height = 500;
+  const camera = new THREE.PerspectiveCamera(50, width / height, 1, 1000);
+  camera.position.set(-80, 30, 0);
+
+  // 灯光
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.target = mesh1; // 方向光指向对象网格模型mesh，可以不设置，默认的位置是0,0,0
+  light.position.set(0, 100, 200);
+
+  // 添加在场景内
+  scene.add(mesh1);
+  scene.add(light); // 添加光源
+  const sceneAxis = new THREE.AxesHelper(200);
+  scene.add(sceneAxis); // 添加辅助坐标系
+
+  // 创建渲染器对象
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.setPixelRatio(window.devicePixelRatio); // 设置像素比
+  renderer.setClearColor(0x444444, 1); //设置背景颜色
+  renderer.setSize(width, height); // 设置渲染区域的尺寸
+  renderer.render(scene, camera); // 渲染
+  document.querySelector('.stat').appendChild(renderer.domElement); // 将渲染生成HTML Canvas元素
+
+  // 设置相机控件轨道控制器OrbitControls
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.addEventListener('change', () => renderer.render(scene, camera));
+
+  // 性能监控
+  const stats = new Stats();
+  document.body.appendChild(stats.domElement);
+
+  function render() {
+    stats.update();
+    renderer.render(scene, camera); //执行渲染操作
+    requestAnimationFrame(render);//请求再次执行渲染函数render，渲染下一帧
+  }
+
+  render();
+</script>
+</html>
