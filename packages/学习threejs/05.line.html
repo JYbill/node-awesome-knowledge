@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>liner</title>
+  <style>
+    .model {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 999;
+      width: 100vw;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="model"></div>
+</body>
+<script type="importmap">
+  {
+    "imports": {
+			"three": "./build/build/three.module.js",
+      "three/addons/": "./build/examples/jsm/"
+		}
+	}
+
+
+
+</script>
+<script type="module">
+  import * as THREE from 'three';
+  import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+  import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+  import Stats from 'three/addons/libs/stats.module.js';
+
+  const scene = new THREE.Scene();
+
+  // 圆形算法
+  /*const geometry = new THREE.BufferGeometry();
+  const point3List = [];
+  const rx = 10;
+  const ry = 10;
+  const R = 10; // 半径
+  const N = 10; // 分为10段
+  const radian = 2 * Math.PI / N; // 弧度
+  // 得到每一个圆弧点点坐标
+  for (let i = 0; i < N; i++) {
+    const currRadian = i * radian; // 当前点点弧度
+    const x = rx + R * Math.cos(currRadian);
+    const y = ry + R * Math.sin(currRadian);
+    point3List.push(new THREE.Vector2(x, y, 0));
+  }
+  geometry.setFromPoints(point3List);*/
+  // const curve = new THREE.EllipseCurve(0, 0, 10, 10); // 椭圆弧线
+  // const curve = new THREE.ArcCurve(0, 0, 10, 0, Math.PI, true); // 逆时针半圆弧线
+  // 三维样条曲线
+  /*const curve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-50, 20, 90),
+    new THREE.Vector3(-10, 40, 40),
+    new THREE.Vector3(0, 0, 0),
+    new THREE.Vector3(60, -60, 0),
+    new THREE.Vector3(70, 0, 80)
+  ]);*/
+  // 二维二次贝塞尔曲线
+  /*const p1 = new THREE.Vector2(0, 0),
+    p2 = new THREE.Vector2(5, 5),
+    p3 = new THREE.Vector2(10, 5);*/
+  // 三维二次贝塞尔曲线
+  /*const p1 = new THREE.Vector3(0, 0, 0);
+  const p2 = new THREE.Vector3(6, 5, 2);
+  const p3 = new THREE.Vector3(10, 10, 10);
+  const curve = new THREE.QuadraticBezierCurve3(p1, p2, p3);*/
+  // 二维三次贝塞尔曲线
+  /*const p1 = new THREE.Vector2(0, 0);
+  const p2 = new THREE.Vector2(3, 2);
+  const p3 = new THREE.Vector2(6, 8);
+  const p4 = new THREE.Vector2(10, 10);
+  const curve = new THREE.CubicBezierCurve(p1, p2, p3, p4);*/
+  // 三维三次贝塞尔曲线
+  /*const p1 = new THREE.Vector3(0, 0, 0);
+  const p2 = new THREE.Vector3(3, 2, 3);
+  const p3 = new THREE.Vector3(6, 8, 5);
+  const p4 = new THREE.Vector3(10, 10, 0);
+  const curve = new THREE.CubicBezierCurve3(p1, p2, p3, p4);*/
+  // 案例：根据两点，确定中点，使用三维二次贝塞尔曲线
+  /*const p1 = new THREE.Vector3(-30, 0, -30);
+  const p3 = new THREE.Vector3(30, 0, 30);
+  const x2 = (p1.x + p3.x) / 2;
+  const y2 = 30;
+  const z2 = (p1.z + p3.z) / 2;
+  const p2 = new THREE.Vector3(x2, y2, z2);*/
+  // 2D直线
+  /*const p1 = new THREE.Vector2(0, 0);
+  const p2 = new THREE.Vector2(5, 5);
+  const curve = new THREE.LineCurve(p1, p2);
+  const points = curve.getPoints(5);*/
+  // 3D直线
+  /*const p1 = new THREE.Vector3(0, 0, 0);
+  const p2 = new THREE.Vector3(5, 5, 5);
+  const curve = new THREE.LineCurve3(p1, p2);
+  const points = curve.getPoints(5);*/
+  // 案例：组合直线、曲线形成U型
+  /*const origin = 0;
+  const lineLeft = new THREE.LineCurve(new THREE.Vector2(origin - 5, 10), new THREE.Vector2(origin - 5, 0));
+  const lineRight = new THREE.LineCurve(new THREE.Vector2(origin + 5, 0), new THREE.Vector2(origin + 5, 10));
+  const arc = new THREE.ArcCurve(origin, origin, 5, Math.PI, 0);
+  const curvePath = new THREE.CurvePath();
+  curvePath.curves.push(lineLeft, arc, lineRight);
+  const points = curvePath.getPoints(10);*/
+  // 案例：三维曲线生成管道
+  // const curve = new THREE.CatmullRomCurve3([
+  //   new THREE.Vector3(-5, 2, 9),
+  //   new THREE.Vector3(-1, 4, 4),
+  //   new THREE.Vector3(0, 0, 0),
+  //   new THREE.Vector3(6, -6, 0),
+  //   new THREE.Vector3(7, 0, 8)
+  // ])
+  // const p1 = new THREE.Vector3(0, 0);
+  // const p2 = new THREE.Vector3(5, 5);
+  // const curve = new THREE.LineCurve3(p1, p2);
+  // const p1 = new THREE.Vector3(0, 0, 0);
+  // const p2 = new THREE.Vector3(3, 2, 3);
+  // const p3 = new THREE.Vector3(6, 8, 5);
+  // const p4 = new THREE.Vector3(10, 10, 0);
+  // const curve = new THREE.CubicBezierCurve3(p1, p2, p3, p4);
+  // const p1 = new THREE.Vector3(0, 0,100)
+  // const p2 = new THREE.Vector3(0, 0,30);
+  // const p3 = new THREE.Vector3(0, 0,0);
+  // const p4 = new THREE.Vector3(30, 0, 0);
+  // const p5 = new THREE.Vector3(100, 0, 0);
+  // // 1. 3D直线线段
+  // const line1 = new THREE.LineCurve3(p1, p2);
+  // // 2. 三维二次贝塞尔曲线
+  // const curve = new THREE.QuadraticBezierCurve3(p2, p3, p4);
+  // // 3. 3D直线线段
+  // const line2 = new THREE.LineCurve3(p4, p5);
+  // const curvePath = new THREE.CurvePath();
+  // 三条线拼接为一条曲线
+  // curvePath.curves.push(line1, curve, line2);
+  // const geometry = new THREE.TubeGeometry(curvePath);
+  // 旋转成型
+  // const geometry = new THREE.LatheGeometry([
+  //   new THREE.Vector2(0, 0),
+  //   new THREE.Vector2(3, 3)
+  // ], 5, 0, Math.PI);
+  // const points = new THREE.SplineCurve([
+  //   new THREE.Vector2(0, 0),
+  //   new THREE.Vector2(3, 3),
+  //   new THREE.Vector2(4, 5),
+  //   new THREE.Vector2(1, 6),
+  // ]).getPoints(5);
+  // const geometry = new THREE.LatheGeometry(points);
+  // 轮廓填充
+  /*const shape = new THREE.Shape([
+    new THREE.Vector2(0, 5),
+    new THREE.Vector2(5, 0),
+    new THREE.Vector2(0, -5),
+    new THREE.Vector2(-5, 0),
+  ]);
+  const geometry = new THREE.ShapeGeometry(shape);*/
+  // 拉伸
+  /*const shape = new THREE.Shape([
+    new THREE.Vector2(0, 0), //多边形起点
+    new THREE.Vector2(0, 10),
+    new THREE.Vector2(10, 10),
+    new THREE.Vector2(10, 0),
+  ]);
+  const curve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0, 30, 0),
+    new THREE.Vector3(30, 30, 0),
+  ])
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    // depth: 5,
+    // bevelEnabled: true, // 开启倒钩圆角，默认true
+    // bevelThickness: 5, // 倒钩圆角厚度
+    // bevelSize: 5, // 倒钩圆角尺寸
+    // bevelSegments: 20, // 倒钩圆角细分精度，默认：3
+    extrudePath: curve, // 不会支持倒钩斜角
+    step: 50,
+  })*/
+  // Shape形状对象
+  /*const shape = new THREE.Shape();
+  shape.moveTo(50, 50);
+  shape.lineTo(50, 100);
+  shape.lineTo(100, 100);
+  shape.lineTo(100, 50);
+  shape.lineTo(50, 50);*/
+  // Shape绘制半圆弧
+  /*const shape = new THREE.Shape();
+  shape.moveTo(50, 50);
+  shape.lineTo(150, 50);
+  shape.arc(0, 50, 50, - Math.PI / 2, Math.PI / 2);
+  shape.lineTo(50, 150);*/
+  // Shape绘制绝对圆弧
+  /*const shape = new THREE.Shape();
+  shape.moveTo(20, 20);
+  shape.lineTo(100, 20);
+  shape.absarc(100, 30, 10, - Math.PI / 2, Math.PI / 2);
+  shape.lineTo(20, 40);
+  const geometry = new THREE.ShapeGeometry(shape);*/
+  /*const shape = new THREE.Shape();
+  shape.lineTo(100, 0);
+  shape.lineTo(100, 100);
+  shape.lineTo(0, 100);
+  const path1 = new THREE.Path();
+  path1.absarc(20, 20, 10);
+  const path2 = new THREE.Path();
+  path2.moveTo(50, 50);
+  path2.lineTo(80, 50);
+  path2.lineTo(80, 80);
+  path2.lineTo(50, 80);
+  shape.holes.push(path1, path2);
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: 30,
+    bevelEnabled: false,
+    curveSegments: 20,
+  });*/
+  // 模型边界线
+  // const geometry = new THREE.BoxGeometry(50, 50, 50);
+  /*const geometry = new THREE.CylinderGeometry(50, 50, 100);
+  const material = new THREE.MeshLambertMaterial({
+    color: "#f25f4c",
+    side: THREE.DoubleSide,
+  })
+  const mesh1 = new THREE.Mesh(geometry, material);*/
+  /*
+  const edge = new THREE.EdgesGeometry(geometry, 10);
+  const lineMaterial = new THREE.LineBasicMaterial({
+    color: "#4AA19E"
+  });
+  const lineMesh = new THREE.LineSegments(edge, lineMaterial);*/
+  // 外部模型边界线
+  /*const loader = new GLTFLoader();
+  loader.load('./gltf/lieutenantHead/lieutenantHead.gltf', function (gltf) {
+    gltf.scene.traverse((item) => {
+      if (!item.isMesh) return;
+      const edgesGeometry = new THREE.EdgesGeometry(item.geometry, 60); // 模型边界
+      const edgesMaterial = new THREE.LineBasicMaterial({ color: 0x00ffff });
+      const line = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+      item.add(line); // 将line边界线作为模型mesh的子节点
+    });
+    scene.add(gltf.scene);
+  });*/
+  // 顶点颜色
+  /*const geometry = new THREE.BufferGeometry();
+  const vertices = new Float32Array([
+      1, 1, 0,
+      3, 2, 0,
+      5, 2, 0,
+      7, 5, 0,
+  ]);
+  geometry.attributes.position = new THREE.BufferAttribute(vertices, 3);
+  // const indexes = new Uint8Array([0, 1, 2, 0, 2, 3]);
+  // geometry.index = new THREE.BufferAttribute(indexes, 1);
+  const colors = new Float32Array([
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1,
+      1, 0, 0,
+  ])
+  geometry.attributes.color = new THREE.BufferAttribute(colors, 3);
+  // const normals = new Float32Array([
+  //   0, 0, 1,
+  //   0, 0, 1,
+  //   0, 0, 1,
+  //   0, 0, 1,
+  // ])
+  // geometry.attributes.normal = new THREE.BufferAttribute(normals, 3);
+  // geometry.rotateY(Math.PI / 3);
+  const material = new THREE.LineBasicMaterial({
+    vertexColors: true,
+    // color: "pink"
+  });
+  const mesh1 = new THREE.Line(geometry, material);*/
+  // 三维样条线顶点渐变
+  const curve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-50, 20, 90),
+    new THREE.Vector3(-10, 40, 40),
+    new THREE.Vector3(0, 0, 0),
+    new THREE.Vector3(60, -60, 0),
+    new THREE.Vector3(70, 0, 80)
+  ]);
+  const points = curve.getPoints(20);
+  const geometry = new THREE.BufferGeometry();
+  geometry.setFromPoints(points);
+  const colorList = [];
+  // console.log("顶点个数", geometry.attributes.position.count)
+  const startColor = new THREE.Color("red");
+  const endColor = new THREE.Color("blue");
+  for (let i = 0; i < geometry.attributes.position.count; i++) {
+    const color = startColor.clone().lerp(endColor, i / 20);
+    colorList.push(color.r, color.g, color.b);
+  }
+  const colors = new Float32Array(colorList);
+  // console.log(colors)
+  geometry.attributes.color = new THREE.BufferAttribute(colors, 3);
+  const material = new THREE.LineBasicMaterial({
+    // color: "red",
+    vertexColors: true,
+  });
+  const mesh1 = new THREE.Line(geometry, material)
+  // Color颜色
+  /*const c1 = new THREE.Color("red");
+  const c2 = new THREE.Color("blue");
+  const c3 = new THREE.Color();
+  c1.lerp(c2, 0.5);
+  console.log(c1);*/
+
+
+  // 验证贝塞尔曲线的线模型
+  /*const checkGeometry = new THREE.BufferGeometry();
+  checkGeometry.setFromPoints([p1, p2]);
+  const checkMaterial = new THREE.LineBasicMaterial({color: "#FFFFFF"});
+  const checkMesh = new THREE.Line(checkGeometry, checkMaterial);*/
+
+
+  // 二维养条线
+  /*const splineCurve = new THREE.SplineCurve([
+    new THREE.Vector2(-10, 0),
+    new THREE.Vector2(0, 30),
+    new THREE.Vector2(10, 0),
+  ]);
+  const material2 = new THREE.LineBasicMaterial({
+    size: 0.3,
+    color: "red"
+  })
+  const points2d = splineCurve.getPoints(20);
+  const geometry2d = new THREE.BufferGeometry();
+  geometry2d.setFromPoints(points2d);
+  const mesh2 = new THREE.Line(geometry2d, material2);*/
+
+
+  // 点
+  /*const pointMaterial = new THREE.PointsMaterial({size: 3, color: "#e53170"});
+  const mesh2 = new THREE.Points(geometry, pointMaterial);*/
+
+  // Group
+  const group1 = new THREE.Group();
+  group1.add(mesh1);
+  // group1.add(lineMesh);
+  // group1.add(mesh2);
+
+  // 透视相机
+  const width = window.innerWidth;
+  const height = 500;
+  const camera = new THREE.PerspectiveCamera(50, width / height, 1, 1000);
+  camera.position.set(0, 5, 200);
+
+  // 灯光
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.target = mesh1; // 方向光指向对象网格模型mesh，可以不设置，默认的位置是0,0,0
+  light.position.set(0, 100, 200);
+
+  // 添加在场景内
+  scene.add(group1);
+  scene.add(light); // 添加光源
+  const sceneAxis = new THREE.AxesHelper(200);
+  scene.add(sceneAxis); // 添加辅助坐标系
+
+  // 渲染器
+  const renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.setPixelRatio(window.devicePixelRatio); // 设置像素比
+  renderer.setClearColor(0x444444, 1); //设置背景颜色
+  renderer.setSize(width, height); // 设置渲染区域的尺寸
+  renderer.render(scene, camera); // 渲染
+  document.querySelector('.model').appendChild(renderer.domElement); // 将渲染生成HTML Canvas元素
+  renderer.domElement.style.width = "100%";
+  renderer.domElement.style.height = "auto";
+
+  // 设置相机控件轨道控制器OrbitControls
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.addEventListener('change', () => renderer.render(scene, camera));
+
+  // 性能监控
+  const stats = new Stats();
+  document.body.appendChild(stats.domElement);
+
+  function render() {
+    stats.update();
+    renderer.render(scene, camera); //执行渲染操作
+    requestAnimationFrame(render);//请求再次执行渲染函数render，渲染下一帧
+  }
+
+  render();
+</script>
+</html>
