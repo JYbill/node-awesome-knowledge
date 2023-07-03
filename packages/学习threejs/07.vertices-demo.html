@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vertices Demo</title>
+  <style>
+    .model {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 999;
+      width: 100vw;
+      height: auto;
+    }
+    .content {
+      width: 100vw;
+      height: 50vh;
+      background-color: #eeeeee;
+      font-size: 24px;
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="model"></div>
+</body>
+<script type="importmap">
+  {
+    "imports": {
+			"three": "./build/build/three.module.js",
+      "three/addons/": "./build/examples/jsm/"
+		}
+	}
+</script>
+<script type="module">
+  import * as THREE from 'three';
+  import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+  import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+  import Stats from 'three/addons/libs/stats.module.js';
+
+  const scene = new THREE.Scene();
+
+  // 灯光
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(0, 100, 200);
+
+  // gltf加载器
+  const loader = new GLTFLoader();
+  loader.load('./gltf/lieutenantHead/lieutenantHead.gltf', function (gltf) {
+    gltf.scene.scale.x = 2;
+    gltf.scene.scale.y = 2;
+    gltf.scene.scale.z = 2;
+    gltf.scene.position.z = -5;
+    gltf.scene.position.x = -2;
+    gltf.scene.rotation.y = Math.PI + Math.PI / 6;
+    // const jacket = gltf.scene.getObjectByName("node_Jacket_clean_-5168");
+    const jacket = gltf.scene.getObjectByName("node_Bandages_-5158");
+    jacket.material = new THREE.MeshLambertMaterial({
+      vertexColors:true,
+    });
+    console.log(gltf.scene);
+    const jacketAttr = jacket.geometry.attributes;
+    console.log("顶点", jacketAttr.position);
+    console.log("颜色", jacketAttr.color);
+    console.log("索引", jacketAttr.attributes); // 可能有也可能没有
+    console.log("顶点数", jacketAttr.position.count);
+
+    // 拿到y轴上的最大值和最小值
+    let maxY = 0;
+    let minY = 0;
+    let distanceY = 0;
+    for (let i = 0; i < jacketAttr.position.count; i++) {
+      const y = jacketAttr.position.getY(i);
+      if (i === 0) {
+        maxY = y;
+        minY = y;
+        continue;
+      }
+
+      if (y > maxY) {
+        maxY = y
+        continue;
+      }
+      if (y < minY) minY = y;
+    }
+    distanceY = maxY - minY;
+    // console.log(minY, maxY, distanceY);
+
+    // 颜色
+    const maxColor = new THREE.Color("red");
+    const minColor = new THREE.Color("blue");
+    const colorList = [];
+    for (let i = 0; i < jacketAttr.position.count; i++) {
+      const y = jacketAttr.position.getY(i);
+      const currDistanceY = y - minY;
+      const percent = currDistanceY / distanceY;
+      // console.log(percent)
+      const currColor = maxColor.clone().lerpColors(minColor, maxColor, percent);
+      colorList.push(currColor.r, currColor.g, currColor.b);
+    }
+    const color = new THREE.BufferAttribute(new Float32Array(colorList), 3);
+    // console.log(color);
+    jacketAttr.color = color;
+
+    gltf.scene.add(new THREE.AxesHelper(10)); // 添加辅助坐标系;
+    scene.add(gltf.scene);
+    light.target = gltf.scene; // 方向光指向对象网格模型mesh，可以不设置，默认的位置是0,0,0
+  })
+
+  // 透视相机
+  const width = window.innerWidth;
+  const height = 500;
+  const camera = new THREE.PerspectiveCamera(50, width / height, 1, 1000);
+  camera.position.set(8, 1, 30);
+
+  // 添加在场景内
+  scene.add(light); // 添加光源
+  const sceneAxis = new THREE.AxesHelper(200);
+  scene.add(sceneAxis); // 添加辅助坐标系
+
+  // 创建渲染器对象
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true,
+    preserveDrawingBuffer: true,
+  });
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.setClearColor("#090505", 1); //设置背景颜色
+  renderer.setClearAlpha(0.8);
+  renderer.setSize(width, height); // 设置渲染区域的尺寸
+  renderer.render(scene, camera); // 渲染
+  document.querySelector('.model').appendChild(renderer.domElement); // 将渲染生成HTML Canvas元素
+  renderer.domElement.style.width = "100%";
+  renderer.domElement.style.height= "auto";
+
+  // 设置相机控件轨道控制器OrbitControls
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.addEventListener('change', () => renderer.render(scene, camera));
+
+  // 性能监控
+  const stats = new Stats();
+  document.body.appendChild(stats.domElement);
+
+  function render() {
+    stats.update();
+    renderer.render(scene, camera); //执行渲染操作
+    requestAnimationFrame(render);//请求再次执行渲染函数render，渲染下一帧
+  }
+  render();
+</script>
+</html>
