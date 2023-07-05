@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Light</title>
+  <style>
+    .model {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 999;
+      width: 100vw;
+      height: auto;
+    }
+    .content {
+      width: 100vw;
+      height: 50vh;
+      background-color: #eeeeee;
+      font-size: 24px;
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="model"></div>
+</body>
+<script type="importmap">
+  {
+    "imports": {
+			"three": "./build/build/three.module.js",
+      "three/addons/": "./build/examples/jsm/"
+		}
+	}
+</script>
+<script type="module">
+  import * as THREE from 'three';
+  import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+  import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+  import Stats from 'three/addons/libs/stats.module.js';
+
+
+  // 性能监控
+  const stats = new Stats();
+  document.body.appendChild(stats.domElement);
+
+  const scene = new THREE.Scene();
+
+  // 灯光
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(0, 40, 50);
+  light.castShadow = true; // 1. 光源默认不产生阴影，需要代码开启
+  // console.log(light.shadow); // DirectionalLightShadow 平行光阴影对象
+  // console.log(light.shadow.camera); // 它有一个camera属性，该属性是一个正投影相机OrthographicCamera对象
+  const shadowCamera = light.shadow.camera;
+  const N = 0.8;
+  shadowCamera.top = 10 * N;
+  shadowCamera.bottom = -10 * N;
+  shadowCamera.left = -10 * N;
+  shadowCamera.right = 10 * N;
+  shadowCamera.near = 0.5;
+  shadowCamera.far = 500;
+  // light.shadow.mapSize.set(1024, 1024)
+  // console.log("阴影默认mapSize", light.shadow.mapSize); // Vector2{x: 512, y: 512}
+  light.shadow.radius = 6;
+  // console.log('模糊弱化阴影半径', light.shadow.radius);
+  // console.log(shadowCamera)
+  /*const light = new THREE.SpotLight(0xffffff, 1.0);
+  light.angle = Math.PI / 9;
+  light.position.set(0, 100, 100);
+  light.target.position.set(50, 50, 50);
+  console.log(light.target.position)
+  const spotLightHelper = new THREE.SpotLightHelper(light, 0xffffff);*/
+
+  // 光源阴影相机辅助器
+  const cameraHelper = new THREE.CameraHelper(light.shadow.camera);
+  const dirLightHelper = new THREE.DirectionalLightHelper(light, 5, "green");
+
+  // plane
+  const geometry = new THREE.PlaneGeometry(100, 50);
+  geometry.translate(0, -5, -20);
+  const material = new THREE.MeshLambertMaterial();
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.receiveShadow = true; // 3. 接受阴影的物体
+
+  // 贴图纹理
+  const cubeTexture = new THREE.CubeTextureLoader()
+    .setPath('./images/')
+    .load(['emoji2.png', 'emoji2.png', 'emoji2.png', 'emoji2.png', 'emoji2.png', 'emoji2.png']);
+  cubeTexture.colorSpace = THREE.SRGBColorSpace;
+
+  // gltf加载器的
+  const loader = new GLTFLoader();
+  loader.load('./gltf/lieutenantHead/lieutenantHead.gltf', function (gltf) {
+    gltf.scene.scale.x = 2;
+    gltf.scene.scale.y = 2;
+    gltf.scene.scale.z = 2;
+    gltf.scene.position.z = -5;
+    gltf.scene.position.x = -2;
+    gltf.scene.rotation.y = Math.PI + Math.PI / 6;
+    gltf.scene.traverse((model) => {
+      if (!model.isMesh) return;
+      if (model.name === "node_Bandages_-5158") {
+        console.log(model.material)
+        model.material.envMap = cubeTexture;
+        model.material.metalness = 0.5;
+        model.material.roughness = 0.1;
+        model.material.envMapIntensity = 1;
+      }
+      model.castShadow = true; // 2. 开启mesh产生阴影
+    });
+    scene.add(gltf.scene);
+    // light.target = gltf.scene; // 方向光指向对象网格模型mesh，可以不设置，默认的位置是0,0,0
+  })
+
+  // 添加在场景内
+  scene.add(mesh);
+  scene.add(light); // 添加光源
+  scene.add(cameraHelper);
+  scene.add(dirLightHelper); // 聚光源可视化对象
+  const sceneAxis = new THREE.AxesHelper(200);
+  scene.add(sceneAxis); // 添加辅助坐标系
+
+  // 透视相机
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const camera = new THREE.PerspectiveCamera(50, width / height, 1, 9000);
+  camera.position.set(8, 50, 130);
+
+  // 创建渲染器对象
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true,
+    preserveDrawingBuffer: true,
+  });
+  renderer.shadowMap.enabled = true; // 4. 允许WebGL渲染阴影
+  renderer.shadowMap.type = THREE.VSMShadowMap;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.setClearColor(0x444444, 1); //设置背景颜色
+  renderer.setClearAlpha(0.9);
+  renderer.setSize(width, height); // 设置渲染区域的尺寸
+  renderer.render(scene, camera); // 渲染
+  document.querySelector('.model').appendChild(renderer.domElement); // 将渲染生成HTML Canvas元素
+  renderer.domElement.style.width = "100%";
+  renderer.domElement.style.height= "auto";
+
+  // 设置相机控件轨道控制器OrbitControls
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.addEventListener('change', () => renderer.render(scene, camera));
+
+  function render() {
+    stats.update();
+    renderer.render(scene, camera); //执行渲染操作
+    requestAnimationFrame(render);//请求再次执行渲染函数render，渲染下一帧
+  }
+  render();
+</script>
+</html>
