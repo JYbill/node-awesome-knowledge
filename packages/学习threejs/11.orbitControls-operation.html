@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Loading GLTF Demo</title>
+  <title>OrbitControls Operation</title>
   <style>
     .model {
       position: fixed;
@@ -38,7 +38,7 @@
   import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
   import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
   import Stats from 'three/addons/libs/stats.module.js';
-
+  import { MapControls } from 'three/addons/controls/MapControls.js';
 
   // 性能监控
   const stats = new Stats();
@@ -61,7 +61,6 @@
     gltf.scene.rotation.y = Math.PI + Math.PI / 6;
     gltf.scene.traverse((model) => {
       if (!model.isMesh) return;
-      console.log(model)
     });
     scene.add(gltf.scene);
     light.target = gltf.scene; // 方向光指向对象网格模型mesh，可以不设置，默认的位置是0,0,0
@@ -95,7 +94,23 @@
 
   // 设置相机控件轨道控制器OrbitControls
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.addEventListener('change', () => renderer.render(scene, camera));
+  controls.addEventListener('change', () => {
+    renderer.render(scene, camera)
+  });
+  /*controls.minDistance = 20;
+  controls.maxDistance = 100;
+  controls.minPolarAngle = 0;
+  controls.maxPolarAngle = Math.PI;
+  controls.minAzimuthAngle = - Math.PI / 2;
+  controls.maxAzimuthAngle = Math.PI / 2;*/
+
+  // MapControls
+  /*const controls = new MapControls(camera, renderer.domElement);
+  controls.addEventListener('change', () => {
+    console.log("pos", camera.position);
+    console.log('target', controls.target);
+    renderer.render(scene, camera)
+  });*/
 
   function render() {
     stats.update();
