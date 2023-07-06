@@ -88,7 +88,6 @@
   renderer.setClearColor(0x444444, 1); //设置背景颜色
   renderer.setClearAlpha(0.9);
   renderer.setSize(width, height); // 设置渲染区域的尺寸
-  renderer.render(scene, camera); // 渲染
   document.querySelector('.model').appendChild(renderer.domElement); // 将渲染生成HTML Canvas元素
   renderer.domElement.style.width = "100%";
   renderer.domElement.style.height= "auto";
