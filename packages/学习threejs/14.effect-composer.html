@@ -12,6 +12,7 @@
       width: 100vw;
       height: auto;
     }
+
     .content {
       width: 100vw;
       height: 50vh;
@@ -32,17 +33,22 @@
       "three/addons/": "./build/examples/jsm/"
 		}
 	}
+
 </script>
 <script type="module">
   import * as THREE from 'three';
   import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
   import Stats from 'three/addons/libs/stats.module.js';
-  import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-  import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-  import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
-  import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-  import { GlitchPass } from 'three/addons/postprocessing/GlitchPass.js';
-
+  import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+  import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+  import {OutlinePass} from 'three/addons/postprocessing/OutlinePass.js';
+  import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+  import {GlitchPass} from 'three/addons/postprocessing/GlitchPass.js';
+  import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+  import {GammaCorrectionShader} from 'three/addons/shaders/GammaCorrectionShader.js';
+  import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
+  import {FXAAShader} from 'three/addons/shaders/FXAAShader.js';
+  import {SMAAPass} from 'three/addons/postprocessing/SMAAPass.js';
 
   // 性能监控
   const stats = new Stats();
@@ -54,12 +60,33 @@
   const light = new THREE.DirectionalLight(0xffffff, 1);
   light.position.set(0, 100, 200);
 
-  const geometry = new THREE.BoxGeometry(10, 10, 10);
-  const material = new THREE.MeshLambertMaterial({ color: 0x999999 });
-  const mesh = new THREE.Mesh(geometry, material);
+  // gltf加载器
+  let mesh = null;
+  const loader = new GLTFLoader();
+
+  async function loadModel() {
+    return new Promise(resolve => {
+      loader.load('./gltf/lieutenantHead/lieutenantHead.gltf', function (gltf) {
+        gltf.scene.scale.x = 2;
+        gltf.scene.scale.y = 2;
+        gltf.scene.scale.z = 2;
+        gltf.scene.position.z = -5;
+        gltf.scene.position.x = -2;
+        gltf.scene.rotation.y = Math.PI + Math.PI / 6;
+        gltf.scene.traverse((model) => {
+        });
+        // console.log(gltf.scene.children[0].children[0])
+        mesh = gltf.scene.children[0].children[0];
+        scene.add(gltf.scene);
+        light.target = gltf.scene; // 方向光指向对象网格模型mesh，可以不设置，默认的位置是0,0,0
+        resolve();
+      })
+    })
+  }
+
+  await loadModel();
 
   // 添加在场景内
-  scene.add(mesh);
   scene.add(light); // 添加光源
   const sceneAxis = new THREE.AxesHelper(200);
   scene.add(sceneAxis); // 添加辅助坐标系
@@ -82,28 +109,45 @@
   renderer.setSize(width, height); // 设置渲染区域的尺寸
   document.querySelector('.model').appendChild(renderer.domElement); // 将渲染生成HTML Canvas元素
   renderer.domElement.style.width = "100%";
-  renderer.domElement.style.height= "auto";
+  renderer.domElement.style.height = "auto";
 
   // OrbitControls
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.addEventListener('change', () => {});
+  controls.addEventListener('change', () => {
+  });
 
   // 后期处理
   const composer = new EffectComposer(renderer);
   const renderPass = new RenderPass(scene, camera);
+  composer.addPass(renderPass);
+
   const v2 = new THREE.Vector2(window.innerWidth, window.innerHeight);
-  /*const outlinePass = new OutlinePass(v2, scene, camera);
+  const outlinePass = new OutlinePass(v2, scene, camera);
   outlinePass.selectedObjects = [mesh];
   outlinePass.visibleEdgeColor.set("skyblue"); // 设置描边颜色
-  outlinePass.edgeThickness = 5; // 设置描边厚度
-  outlinePass.edgeStrength = 20; // 设置描边光强度
-  outlinePass.pulsePeriod = 10; // 描边是闪烁频率[0不闪烁, 1快速闪烁, ...越大越慢]
-  composer.addPass(outlinePass);*/
+  outlinePass.edgeThickness = 3; // 设置描边厚度
+  outlinePass.edgeStrength = 10; // 设置描边光强度
+  outlinePass.pulsePeriod = 2; // 描边是闪烁频率[0不闪烁, 1快速闪烁, ...越大越慢]
   const bloomPass = new UnrealBloomPass(v2);
   bloomPass.strength = 0.5;
 
-  composer.addPass(renderPass);
-  composer.addPass(bloomPass);
+  const glitchPass = new GlitchPass();
+  // composer.addPass(outlinePass);
+  // composer.addPass(bloomPass);
+  // composer.addPass(glitchPass);
+
+  const gammaPass = new ShaderPass(GammaCorrectionShader);
+  composer.addPass(gammaPass);
+
+  /*const FAXXShader = new ShaderPass(FXAAShader);
+  FAXXShader.uniforms.resolution.value.x = 1 / (window.innerWidth * pixelRatio);
+  FAXXShader.uniforms.resolution.value.y = 1 / (window.innerHeight * pixelRatio);
+  composer.addPass(FAXXShader);*/
+
+  /*const pixelRatio = renderer.getPixelRatio();
+  const smaaPass = new SMAAPass(window.innerWidth * pixelRatio, window.innerHeight * pixelRatio);
+  composer.addPass(smaaPass);*/
+
 
   (function renderLoop() {
     stats.update();
