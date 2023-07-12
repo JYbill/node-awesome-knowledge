@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>垂直居中</title>
+  <style>
+    .parent {
+      height: 500px;
+      width: 300px;
+      margin: 0 auto;
+      background-color: orangered;
+
+      /*方式一*/
+      /*line-height: 500px;*/
+
+      /*方式二*/
+      /*display: flex;
+      align-items: center;*/
+
+      /*方式三*/
+      /*display: grid;
+      align-items: center;
+      !*align-content: center;*!*/
+    }
+    .child {
+      height: 300px;
+      width: 300px;
+      background-color: skyblue;
+
+      /*方式一*/
+      /*display: inline-block;
+      vertical-align: middle;*/
+    }
+  </style>
+</head>
+<body>
+  <div class="parent">
+    <div class="child"></div>
+  </div>
+</body>
+</html>

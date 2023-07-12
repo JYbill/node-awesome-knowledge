@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>水平居中</title>
+  <style>
+    .parent {
+      background: red;
+      /*方式一*/
+      /*text-align: center;*/
+
+      /*方法四*/
+      /*display: flex;
+      justify-content: center;*/
+
+      /*方法五*/
+      display: grid;
+      justify-items: center;
+      justify-content: center;
+    }
+    .child {
+      height: 300px;
+      width: 300px;
+      background: orange;
+      /*方式一*/
+      /*display: inline-block;
+      vertical-align: bottom;*/
+
+      /*方式二*/
+      /*margin: 0 auto;*/
+
+      /*方式三*/
+      /*position: relative;
+      left: 50%;
+      transform: translateX(-50%);*/
+    }
+  </style>
+</head>
+<body>
+  <div class="parent">
+    <div class="child"></div>
+  </div>
+</body>
+</html>
