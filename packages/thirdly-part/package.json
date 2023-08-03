@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "exceljs": "^4.3.0",
+    "pinyin-pro": "^3.16.1",
     "rxjs": "^7.8.0"
   }
 }
