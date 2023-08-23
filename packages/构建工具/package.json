@@ -1,0 +1,7 @@
+{
+  "name": "build-util",
+  "description": "构建工具学习案例",
+  "devDependencies": {
+    "rollup": "^3.20.2"
+  }
+}

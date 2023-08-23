@@ -39,3 +39,4 @@ class Proxy {
 const proxy = new Proxy();
 proxy.killer = new NPC2();
 console.log(proxy.calculate(1, 2));
+export {};
