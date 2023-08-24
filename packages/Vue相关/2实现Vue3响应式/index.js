@@ -23,8 +23,9 @@ let activeFn = undefined;
 /**
  * 副作用函数功能：包装函数，[[set]]执行时清理遗留的effectWrapper函数，避免重复执行
  * @param fn
+ * @param options 选项
  */
-function effect(fn) {
+function effect(fn, options) {
   const cleanup = (deps) => {
     for (const depSet of deps) {
       depSet.delete(effectWrapper);
@@ -39,6 +40,7 @@ function effect(fn) {
     effectStack.pop();
     activeFn = effectStack[effectStack.length - 1];
   };
+  effectWrapper.options = options;
   effectWrapper.deps = [];
   effectWrapper();
 }
@@ -110,7 +112,11 @@ function trigger(target, field, value) {
   }
   // 真实需要运行的依赖函数
   setRun.forEach((effectWrapper) => {
-    effectWrapper();
+    if (effectWrapper.options.scheduler) {
+      effectWrapper.options.scheduler(effectWrapper);
+    } else {
+      effectWrapper();
+    }
   });
 }
 
@@ -126,7 +132,6 @@ const dataProxy = new Proxy(data, {
 });
 
 /* 用例测试 */
-console.log("================= 访问代理属性的值测试⬇️ =================");
 /*effect(() => {
   // fn1
   console.log("test1", dataProxy.text);
@@ -155,17 +160,33 @@ console.log("================= 访问代理属性的值测试⬇️ ============
 });*/
 
 // 无限递归测试
-effect(() => {
+/*effect(() => {
   dataProxy.text += " ok.";
   console.log("测试无限递归", dataProxy.text);
-});
+});*/
 
-console.log("================= 访问代理属性的值测试⬆️ =================");
+// 可调度功能
+/*effect(
+  () => {
+    console.log("读取", dataProxy.text);
+  },
+  {
+    scheduler(fn) {
+      setTimeout(() => {
+        fn();
+      }, 500);
+    },
+  }
+);
+dataProxy.text = "调度功能";
+console.log("调度结束");
+*/
+
+// console.log("================= 访问代理属性的值测试⬆️ =================");
 
 // 测试[[set]]
-console.log("================= 设置代理属性的值测试⬇️ =================");
+// console.log("================= 设置代理属性的值测试⬇️ =================");
 setTimeout(() => {
   // dataProxy.flag = false;
-  dataProxy.text = "hello Proxy";
-  console.log("================= 设置代理属性的值测试⬆️ =================");
+  // dataProxy.text = "hello Proxy";
 }, 500);
