@@ -17,6 +17,7 @@ WeakMap：存储{Proxy代理对象, Map}
 */
 
 // 当前正在执行的函数
+const effectStack = []; // 存储effect函数的栈
 let activeFn = undefined;
 
 /**
@@ -31,10 +32,12 @@ function effect(fn) {
     effectWrapper.deps = [];
   };
   const effectWrapper = () => {
-    cleanup(effectWrapper.deps);
+    cleanup(effectWrapper.deps); // 第一次初始化清空，后续每次[[set]]都会清空
     activeFn = effectWrapper;
+    effectStack.push(effectWrapper);
     fn();
-    activeFn = undefined;
+    effectStack.pop();
+    activeFn = effectStack[effectStack.length - 1];
   };
   effectWrapper.deps = [];
   effectWrapper();
@@ -71,7 +74,7 @@ function trace(target, field) {
   const effectWrapper = activeFn;
   effectWrapper.deps.push(set);
   set.add(effectWrapper);
-  // console.log("debug get Map: ", map);
+  // console.log("debug get Map: ", field, set);
 }
 
 /**
@@ -91,12 +94,24 @@ function trigger(target, field, value) {
 
   // set存在但是没数据
   const set = map.get(field);
-  if (set.length <= 0) {
+  if (!set || set.length <= 0) {
     return;
   }
 
-  const setRun = new Set(set);
-  setRun.forEach((effectWrapper) => effectWrapper());
+  // 所有执行依赖函数
+  const setRun = new Set();
+  if (set) {
+    set.forEach((effectWrapper) => {
+      // 解决无限递归问题，当activeFn===effectWrapper说明，在一个effect里既有[[get]]同时存在[[set]]行为
+      if (effectWrapper !== activeFn) {
+        setRun.add(effectWrapper);
+      }
+    });
+  }
+  // 真实需要运行的依赖函数
+  setRun.forEach((effectWrapper) => {
+    effectWrapper();
+  });
 }
 
 const dataProxy = new Proxy(data, {
@@ -110,16 +125,12 @@ const dataProxy = new Proxy(data, {
   },
 });
 
+/* 用例测试 */
 console.log("================= 访问代理属性的值测试⬇️ =================");
-effect(() => {
+/*effect(() => {
   // fn1
   console.log("test1", dataProxy.text);
-});
-function test2Fn() {
-  // fn2
-  console.log("test2", dataProxy.text);
-}
-effect(test2Fn);
+});*/
 
 // 不存在的值测试
 /*effect(function () {
@@ -128,16 +139,33 @@ effect(test2Fn);
 });*/
 
 // 分支测试
-effect(function effect4() {
+/*effect(function effect4() {
   // fn4：分支切换和cleanup
   console.log("test4", dataProxy.flag ? dataProxy.text : "not ok!");
+});*/
+
+// 嵌套effect测试
+/*effect(function wrapper1() {
+  console.log("wrapper1 running...");
+  effect(function wrapper2() {
+    console.log("wrapper2 running...");
+    console.log("[[get]] dataProxy.flag", dataProxy.flag);
+  });
+  console.log("[[get]] dataProxy.text", dataProxy.text);
+});*/
+
+// 无限递归测试
+effect(() => {
+  dataProxy.text += " ok.";
+  console.log("测试无限递归", dataProxy.text);
 });
+
 console.log("================= 访问代理属性的值测试⬆️ =================");
 
 // 测试[[set]]
 console.log("================= 设置代理属性的值测试⬇️ =================");
 setTimeout(() => {
-  dataProxy.flag = false;
-  // dataProxy.text = "hello Proxy"; // 执行fn1、fn2
+  // dataProxy.flag = false;
+  dataProxy.text = "hello Proxy";
   console.log("================= 设置代理属性的值测试⬆️ =================");
 }, 500);
