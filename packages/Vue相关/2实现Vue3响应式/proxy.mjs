@@ -165,8 +165,13 @@ function computed(fn) {
  * watch 监听器
  * @param obj {Object} 响应式对象
  * @param cb {function}
+ *
+ * @typedef {object} watchOptions
+ * @property {string} immediate
+ * @property {"post" | "sync"} flush 钩子执行时机 "post"微任务队列 "sync"同步
+ * @param options {watchOptions}
  */
-function watch(obj, cb) {
+function watch(obj, cb, options) {
 
   /**
    * 遍历obj对象上的key，能够深度watch下触发监听器
@@ -195,15 +200,32 @@ function watch(obj, cb) {
 
   // 旧值与新值
   let oldValue = undefined, newValue = undefined;
-  const effectFn = effect(getter, {
-    lazy: true,
-    scheduler() {
+  // 任务调度：获取新值，替换旧值
+  const job = () => {
+    if (options?.flush === "post") {
+      jobQueue.add(() => {
+        newValue = effectFn();
+        cb(newValue, oldValue);
+        oldValue = newValue;
+      });
+      flushJob();
+    } else {
       newValue = effectFn();
       cb(newValue, oldValue);
       oldValue = newValue;
-    },
+    }
+  }
+  const effectFn = effect(getter, {
+    lazy: true,
+    scheduler: job,
   });
-  oldValue = effectFn();
+
+  // 存在立即执行参数
+  if (options.immediate) {
+    job();
+  } else {
+    oldValue = effectFn();
+  }
 }
 
 export default function (data) {
