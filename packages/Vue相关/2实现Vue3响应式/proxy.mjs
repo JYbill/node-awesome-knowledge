@@ -202,22 +202,20 @@ function watch(obj, cb, options) {
   let oldValue = undefined, newValue = undefined;
   // 任务调度：获取新值，替换旧值
   const job = () => {
-    if (options?.flush === "post") {
-      jobQueue.add(() => {
-        newValue = effectFn();
-        cb(newValue, oldValue);
-        oldValue = newValue;
-      });
-      flushJob();
-    } else {
-      newValue = effectFn();
-      cb(newValue, oldValue);
-      oldValue = newValue;
-    }
+    newValue = effectFn();
+    cb(newValue, oldValue);
+    oldValue = newValue;
   }
   const effectFn = effect(getter, {
     lazy: true,
-    scheduler: job,
+    scheduler() {
+      if (options?.flush === "post") {
+        jobQueue.add(job);
+        flushJob();
+      } else {
+        job();
+      }
+    },
   });
 
   // 存在立即执行参数

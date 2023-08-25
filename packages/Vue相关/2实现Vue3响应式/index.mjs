@@ -98,7 +98,7 @@ dataProxy.text = "test1";
 dataProxy.text = "test2";*/
 
 // 测试watch监听器选项
-/*watch(() => dataProxy.text, (older, newer) => {
+watch(() => dataProxy.text, (older, newer) => {
   console.log("监听到修改", older, newer);
 }, {
   immediate: true,
@@ -107,5 +107,5 @@ dataProxy.text = "test2";*/
 })
 dataProxy.text = "修改测试1";
 dataProxy.text = "修改测试2";
-dataProxy.text = "修改测试3";*/
+dataProxy.text = "修改测试3";
 
