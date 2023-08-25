@@ -3,7 +3,7 @@
  * @Author: 小钦var
  * @Date: 2023/8/23 09:55
  */
-import Proxy, {effect, flushJob, jobQueue, computed} from "./proxy.mjs";
+import Proxy, {effect, flushJob, jobQueue, computed, watch} from "./proxy.mjs";
 
 // 测试数据
 const dataProxy = Proxy({text: "world", flag: true});
@@ -80,11 +80,20 @@ dataProxy.text = "hello computer";
 console.log(textFlag.value) // 计算
 console.log(textFlag.value) // 不需要计算
 */
+
 // 测试计算属性嵌套问题
-const textFlag = computed(() => dataProxy.text + dataProxy.flag);
+/*const textFlag = computed(() => dataProxy.text + dataProxy.flag);
 effect(() => {
   console.log("computed", textFlag.value);
 })
 dataProxy.text = "hello computer ";
-// console.log("textFlag", textFlag.value)
+// console.log("textFlag", textFlag.value)*/
+
+// 测试watch监听器
+/*watch(() => dataProxy.text, (older, newer) => {
+  console.log("监听到修改", older, newer);
+})
+dataProxy.text = "test";
+dataProxy.text = "test1";
+dataProxy.text = "test2";*/
 

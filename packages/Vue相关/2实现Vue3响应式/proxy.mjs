@@ -17,6 +17,7 @@ let activeFn = undefined;
 // 任务队列
 const jobQueue = new Set();
 let isFlushing = false;
+
 function flushJob() {
   if (isFlushing) return;
   isFlushing = true;
@@ -160,6 +161,51 @@ function computed(fn) {
   return computer;
 }
 
+/**
+ * watch 监听器
+ * @param obj {Object} 响应式对象
+ * @param cb {function}
+ */
+function watch(obj, cb) {
+
+  /**
+   * 遍历obj对象上的key，能够深度watch下触发监听器
+   * @param obj {* | function}
+   * @param seen {Set} 此Set的作用是防止obj存在循环依赖导致无限递归下去
+   */
+  function traverse(obj, seen = new Set()) {
+    const flag = typeof obj !== "object" ||
+      obj === null ||
+      obj === undefined ||
+      seen.has(obj);
+    if (flag) return;
+
+    seen.add(obj);
+    for (const key in obj) {
+      traverse(obj[key], seen);
+    }
+    return obj;
+  }
+
+  // 用户传入的是一个函数，表示只希望坚挺部分值，如：() => obj.text（只监听obj.text）
+  let getter = () => traverse(obj);
+  if (typeof obj === "function") {
+    getter = obj;
+  }
+
+  // 旧值与新值
+  let oldValue = undefined, newValue = undefined;
+  const effectFn = effect(getter, {
+    lazy: true,
+    scheduler() {
+      newValue = effectFn();
+      cb(newValue, oldValue);
+      oldValue = newValue;
+    },
+  });
+  oldValue = effectFn();
+}
+
 export default function (data) {
   return new Proxy(data, {
     get(target, field) {
@@ -175,5 +221,5 @@ export default function (data) {
 }
 
 export {
-  effect, jobQueue, flushJob, computed
+  effect, jobQueue, flushJob, computed, watch
 }
