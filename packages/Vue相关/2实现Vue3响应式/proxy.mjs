@@ -14,6 +14,17 @@ WeakMap：存储{Proxy代理对象, Map}
 const effectStack = []; // 存储effect函数的栈
 let activeFn = undefined;
 
+// 任务队列
+const jobQueue = new Set();
+let isFlushing = false;
+function flushJob() {
+  if (isFlushing) return;
+  isFlushing = true;
+  Promise.resolve().then(() => {
+    jobQueue.forEach(fn => fn());
+  });
+}
+
 /**
  * 副作用函数功能：包装函数，[[set]]执行时清理遗留的effectWrapper函数，避免重复执行
  * @param fn
@@ -30,13 +41,18 @@ function effect(fn, options) {
     cleanup(effectWrapper.deps); // 第一次初始化清空，后续每次[[set]]都会清空
     activeFn = effectWrapper;
     effectStack.push(effectWrapper);
-    fn();
+    const res = fn();
     effectStack.pop();
     activeFn = effectStack[effectStack.length - 1];
+    return res;
   };
   effectWrapper.options = options;
   effectWrapper.deps = [];
-  effectWrapper();
+  if (!(options?.lazy)) {
+    effectWrapper();
+  } else {
+    return effectWrapper;
+  }
 }
 
 /**
@@ -46,7 +62,7 @@ function effect(fn, options) {
  */
 function trace(target, field) {
   // 非函数调用，直接代码调用情况。不做任何操作
-  if (!activeFn || !target[field]) return;
+  if (!activeFn || !Object.hasOwn(target, field)) return;
 
   // weakMap记录桶
   let map = bucket.get(target);
@@ -103,12 +119,45 @@ function trigger(target, field, value) {
   }
   // 真实需要运行的依赖函数
   setRun.forEach((effectWrapper) => {
-    if (effectWrapper.options.scheduler) {
+    if (effectWrapper?.options?.scheduler) {
       effectWrapper.options.scheduler(effectWrapper);
     } else {
       effectWrapper();
     }
   });
+}
+
+/**
+ * 计算属性
+ * @param fn
+ * @return {{readonly value: undefined}|undefined}
+ */
+function computed(fn) {
+  let res = undefined;
+  let dirty = true;
+
+  const effectFn = effect(fn, {
+    lazy: true,
+    scheduler() {
+      if (!dirty) {
+        dirty = true;
+        trigger(computer, "value");
+      }
+    }
+  });
+
+  const computer = {
+    get value() {
+      if (dirty) {
+        res = effectFn();
+        dirty = false;
+      }
+      trace(computer, "value");
+      return res;
+    }
+  }
+
+  return computer;
 }
 
 export default function (data) {
@@ -126,5 +175,5 @@ export default function (data) {
 }
 
 export {
-  effect
+  effect, jobQueue, flushJob, computed
 }
