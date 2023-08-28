@@ -135,11 +135,11 @@ watch(() => dataProxy.text, async (newer, older, onInvalidate) => {
   if (!expire) {
     findData = result;
   }
-  console.log("debug 竞态问题", findData);
+  console.log("debug 赋值结果：", findData);
 })
 
 dataProxy.text = "竞态问题1";
 setTimeout(() => {
-  dataProxy.text = "竞态问题 finally";
+  dataProxy.text = "finally";
 }, 300);
 
