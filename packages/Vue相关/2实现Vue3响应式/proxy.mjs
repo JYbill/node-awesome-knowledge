@@ -198,12 +198,23 @@ function watch(obj, cb, options) {
     getter = obj;
   }
 
+  // 竞态问题
+  let cleanFn = undefined;
+  function onInvalidate(fn) {
+    cleanFn = fn;
+  }
+
   // 旧值与新值
   let oldValue = undefined, newValue = undefined;
   // 任务调度：获取新值，替换旧值
   const job = () => {
     newValue = effectFn();
-    cb(newValue, oldValue);
+
+    // 清理"上一次"⚠️的竞态问题
+    if (cleanFn) {
+      cleanFn();
+    }
+    cb(newValue, oldValue, onInvalidate);
     oldValue = newValue;
   }
   const effectFn = effect(getter, {
@@ -219,7 +230,7 @@ function watch(obj, cb, options) {
   });
 
   // 存在立即执行参数
-  if (options.immediate) {
+  if (options?.immediate) {
     job();
   } else {
     oldValue = effectFn();

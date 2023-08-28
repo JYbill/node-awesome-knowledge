@@ -98,7 +98,7 @@ dataProxy.text = "test1";
 dataProxy.text = "test2";*/
 
 // 测试watch监听器选项
-watch(() => dataProxy.text, (older, newer) => {
+/*watch(() => dataProxy.text, (older, newer) => {
   console.log("监听到修改", older, newer);
 }, {
   immediate: true,
@@ -107,5 +107,39 @@ watch(() => dataProxy.text, (older, newer) => {
 })
 dataProxy.text = "修改测试1";
 dataProxy.text = "修改测试2";
-dataProxy.text = "修改测试3";
+dataProxy.text = "修改测试3";*/
+
+// 测试watch 竞态问题
+watch(() => dataProxy.text, async (newer, older, onInvalidate) => {
+
+  let expire = false;
+
+  // 竞态问题
+  onInvalidate(() => {
+    expire = true;
+  })
+
+  const result = await new Promise((resolve) => {
+    let time = 0;
+    if (newer === "竞态问题1") {
+      time = 500;
+    } else if (newer === "竞态问题 finally") {
+      time = 100;
+    }
+    setTimeout(() => {
+      resolve(newer);
+    }, time);
+  });
+
+  let findData = undefined;
+  if (!expire) {
+    findData = result;
+  }
+  console.log("debug 竞态问题", findData);
+})
+
+dataProxy.text = "竞态问题1";
+setTimeout(() => {
+  dataProxy.text = "竞态问题 finally";
+}, 300);
 
