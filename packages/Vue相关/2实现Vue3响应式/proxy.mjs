@@ -12,7 +12,7 @@ WeakMap：存储{Proxy代理对象, Map}
 
 // 当前正在执行的函数
 const effectStack = []; // 存储effect函数的栈
-let activeFn = undefined;
+let activeFn;
 
 // 任务队列
 const jobQueue = new Set();
@@ -134,7 +134,7 @@ function trigger(target, field, value) {
  * @return {{readonly value: undefined}|undefined}
  */
 function computed(fn) {
-  let res = undefined;
+  let res;
   let dirty = true;
 
   const effectFn = effect(fn, {
@@ -199,13 +199,13 @@ function watch(obj, cb, options) {
   }
 
   // 竞态问题
-  let cleanFn = undefined;
+  let cleanFn;
   function onInvalidate(fn) {
     cleanFn = fn;
   }
 
   // 旧值与新值
-  let oldValue = undefined, newValue = undefined;
+  let oldValue, newValue;
   // 任务调度：获取新值，替换旧值
   const job = () => {
     newValue = effectFn();
