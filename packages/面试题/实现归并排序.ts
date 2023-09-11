@@ -1,10 +1,10 @@
 /**
- * @Description: 打卡9.4✅
+ * @Description: 打卡9.11✅
  * @Author: 小钦var
  * @Date: 2023/3/30 19:16
  */
 function sortArray(list: number[]): number[] {
-  return list;
+  return [];
 }
 
 function main() {
