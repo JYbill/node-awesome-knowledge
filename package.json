@@ -10,9 +10,9 @@
   "author": "xiaoqinvar",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^18.15.3",
-    "nodemon": "^2.0.20",
-    "typescript": "^4.8.3"
+    "@types/node": "^18.17.15",
+    "nodemon": "^2.0.22",
+    "typescript": "^4.9.5"
   },
   "dependencies": {
     "axios": "^1.1.3",

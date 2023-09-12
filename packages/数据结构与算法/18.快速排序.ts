@@ -9,7 +9,7 @@ import { testSort } from "hy-algokit";
  * 快速排序：在原数组的基础上进行划分基准(privet)，并进行递归交换排序
  * @param list
  */
-function quickSort(list: number[]): number[] {
+export function quickSort(list: number[]): number[] {
   const n = list.length;
   divide(0, n - 1);
 
