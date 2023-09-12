@@ -131,7 +131,7 @@ watch(() => dataProxy.text, async (newer, older, onInvalidate) => {
     }, time);
   });
 
-  let findData = undefined;
+  let findData;
   if (!expire) {
     findData = result;
   }

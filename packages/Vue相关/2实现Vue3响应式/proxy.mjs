@@ -39,7 +39,7 @@ function effect(fn, options) {
     effectWrapper.deps = [];
   };
   const effectWrapper = () => {
-    cleanup(effectWrapper.deps); // 第一次初始化清空，后续每次[[set]]都会清空
+    cleanup(effectWrapper.deps); // 第一次初始化清空，后续每次[[set]]都会清空多个key具备相同函数的情况，清空多余的函数（也就是多次触发优化为触发一次）
     activeFn = effectWrapper;
     effectStack.push(effectWrapper);
     const res = fn();
@@ -174,7 +174,7 @@ function computed(fn) {
 function watch(obj, cb, options) {
 
   /**
-   * 遍历obj对象上的key，能够深度watch下触发监听器
+   * 遍历obj对象上的key，[[get]] obj[key]，能够深度watch下触发监听器
    * @param obj {* | function}
    * @param seen {Set} 此Set的作用是防止obj存在循环依赖导致无限递归下去
    */
@@ -192,7 +192,7 @@ function watch(obj, cb, options) {
     return obj;
   }
 
-  // 用户传入的是一个函数，表示只希望坚挺部分值，如：() => obj.text（只监听obj.text）
+  // 用户传入的是一个函数，表示只希望监听部分值，如：() => obj.text（只监听obj.text）
   let getter = () => traverse(obj);
   if (typeof obj === "function") {
     getter = obj;
