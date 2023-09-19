@@ -2,7 +2,11 @@
   "name": "build-util",
   "description": "构建工具学习案例",
   "devDependencies": {
+    "css-loader": "^6.8.1",
+    "mini-css-extract-plugin": "^2.7.6",
     "rollup": "^3.20.2",
-    "webpack": "^5.74.0"
+    "style-loader": "^3.3.3",
+    "webpack": "^5.74.0",
+    "webpack-dev-server": "^4.11.1"
   }
 }
