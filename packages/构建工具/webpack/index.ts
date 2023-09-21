@@ -1,8 +1,8 @@
 function log() {
-  console.log("hello webpack");
+  console.log(import.meta.webpack);
 }
 
-function showNum(n) {
+function showNum(n: number) {
   return n;
 }
 

@@ -5,7 +5,7 @@
     "sourceMap": true,
     // es模块交互，推荐开启，否则命名空间导入或默认导入又问题，详细差官网配置
     "esModuleInterop": true,
-    "module": "NodeNext",
+    "module": "ESNext",
     // 导入文件采用大小写一致
     "forceConsistentCasingInFileNames": true,
     // 严格模式
@@ -22,6 +22,6 @@
     // "typeRoots": ["./"]
     // 不允许type类型为any
     "noImplicitAny": true,
-    "moduleResolution": "Node"
+    "moduleResolution": "node"
   }
 }

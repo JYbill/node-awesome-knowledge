@@ -21,7 +21,6 @@ const path = require("path");
  * - 模块层面替换
  * [id]	模块的 ID
  * [moduleid]	同上，但已弃用
- * [hash]	模块的 Hash 值
  * [modulehash]	同上，但已弃用
  * [contenthash]	模块内容的Hash值，默认20位
  *
@@ -82,7 +81,7 @@ module.exports = function (env, argv) {
      * };
      * ```
      */
-    entry: ["./index.js"],
+    entry: ["./index.ts"],
     mode: "development",
 
     /**
@@ -94,7 +93,7 @@ module.exports = function (env, argv) {
      * - "electron-main": 构建为 Electron 主线程
      * - "electron-renderer": 构建为 Electron 渲染线程
      */
-    target: "web",
+    target: "node",
 
     /**
      * 作用：配置Webpack如何生成Source Map
@@ -164,11 +163,11 @@ module.exports = function (env, argv) {
       publicPath: "/dist/",
       clean: false, // 清空输出文件夹
       // assetModuleFilename: "images/[name][ext]",
-      library: {
-        name: "xqv",
-        type: "window",
-        export: "default",
-      },
+      // library: {
+      //   name: "xqv",
+      //   type: "window",
+      //   export: "default",
+      // },
       // pathinfo: true,
     },
     /* **************************** Entry配置（结束） **************************** */
@@ -198,6 +197,7 @@ module.exports = function (env, argv) {
         vue$: "./node_modules/vue/core/vue.min.js", // 只有命中以vue结尾的导入语句
       },
       symlinks: true,
+      extensions: [".ts", ".mts", ".js"],
     },
 
     /**
@@ -241,6 +241,30 @@ module.exports = function (env, argv) {
           // 静态资源处理
           test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
           type: "asset/resource",
+        },
+        {
+          // 整合 babel
+          test: /\.m?js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader",
+            options: {
+              // presets: ["@babel/preset-env"],
+            },
+          },
+        },
+        {
+          // 整合 TS
+          test: /\.m?ts$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: "ts-loader",
+              options: {
+                transpileOnly: true, // ts-loader用 TSC 只编译不做语法检查
+              },
+            },
+          ],
         },
       ],
     },

@@ -10,12 +10,12 @@
   "author": "xiaoqinvar",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^18.17.15",
-    "nodemon": "^2.0.22",
-    "typescript": "^4.9.5"
+    "@types/node": "^18.17.18",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
-    "axios": "^1.1.3",
+    "axios": "^1.5.0",
     "vm2": "^3.9.19"
   }
 }
