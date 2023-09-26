@@ -1,17 +1,5 @@
-function log() {
-  console.log(import.meta.webpack);
-}
+import "./index.css";
+import { save } from "./shaking";
 
-function showNum(n: number) {
-  return n;
-}
-
-require("./index.css");
-log();
-
-export default {
-  log,
-};
-export const exportObj = {
-  showNum,
-};
+console.log(process.env["NODE_ENV"]);
+console.log(save);

@@ -1,6 +1,13 @@
 // plugins
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const DllReferencePlugin = require("webpack/lib/DllReferencePlugin");
+const DefinePlugin = require("webpack/lib/DefinePlugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")[
+  "BundleAnalyzerPlugin"
+];
+const BasicPlugin = require("./plugins/BasicPlugin");
 
 const path = require("path");
 
@@ -93,7 +100,7 @@ module.exports = function (env, argv) {
      * - "electron-main": 构建为 Electron 主线程
      * - "electron-renderer": 构建为 Electron 渲染线程
      */
-    target: "node",
+    target: "web",
 
     /**
      * 作用：配置Webpack如何生成Source Map
@@ -121,10 +128,10 @@ module.exports = function (env, argv) {
      * - externalsType：默认值为"var"
      * > 💡 更多参考：[externalsType 外部扩展类型](https://webpack.docschina.org/configuration/externals/#externalstype)
      */
-    externalsType: "var",
-    externals: {
-      jquery: "jQuery", // 将`import $ from 'jquery';`替换为全局的jQuery变量，不包含在打包内容！
-    },
+    // externalsType: "var",
+    // externals: {
+    // jquery: "jQuery", // 将`import $ from 'jquery';`替换为全局的jQuery变量，不包含在打包内容！
+    // },
 
     /* **************************** Entry配置（开始） **************************** */
     /**
@@ -141,6 +148,8 @@ module.exports = function (env, argv) {
      * > ⚠️ "devServe.publicPath" 是静态资源资源文件夹访问内容的路径
      * > ⚠️ "output.publicPath" 是构建内容的访问路径
      * ```
+     * // 对于打包发不到cdn服务器应该配置为：//cdn.test.com/dist/，"//"表示省略了"http:" or "https:"，这样可以根据当前访问html的环境进行请求对应的资源。
+     *
      * // 在 devServe 下，/static/index.html 才能访问到资源
      * devServe.publicPath = "/static/";
      *
@@ -159,9 +168,10 @@ module.exports = function (env, argv) {
      */
     output: {
       filename: "[name].js",
+      chunkFilename: "[name].js",
       path: path.resolve(__dirname, "dist"),
-      publicPath: "/dist/",
-      clean: false, // 清空输出文件夹
+      // publicPath: "/dist/",
+      clean: true, // 清空输出文件夹
       // assetModuleFilename: "images/[name][ext]",
       // library: {
       //   name: "xqv",
@@ -184,7 +194,7 @@ module.exports = function (env, argv) {
      *
      * - extensions: 默认是['.js', '.json']。在导入语句没带文件后缀时，尝试过程中用到的后缀列表
      *
-     * - modules：配置去哪些目录下寻找第三方模块，默认只会去"node_modules"去找\
+     * - modules：配置去哪些目录下寻找第三方模块，默认按照nodejs寻找规则
      *
      * - descriptionFiles: 默认["package.json"]，配置描述第三方模块的文件名称
      *
@@ -198,6 +208,7 @@ module.exports = function (env, argv) {
       },
       symlinks: true,
       extensions: [".ts", ".mts", ".js"],
+      // modules: [path.resolve(__dirname, "../node_modules")],
     },
 
     /**
@@ -214,10 +225,29 @@ module.exports = function (env, argv) {
         chunkFilename: "[name].css", // 非入口文件引入的chunk名
         ignoreOrder: false,
       }),
+      new HtmlWebpackPlugin({
+        template: "./index.html",
+      }),
+      /* new DllReferencePlugin({
+        manifest: require("./dll/lodash-manifest.json"),
+      }),*/
+      new DefinePlugin({
+        "process.env.NODE_ENV": JSON.stringify("development"),
+      }),
+      /*new BundleAnalyzerPlugin({
+        analyzerMode: "server",
+      }),*/
+      new BasicPlugin({
+        name: "xqv",
+      }),
     ],
     /* **************************** Plugin配置（结束） **************************** */
 
     /* **************************** Loader配置（开始） **************************** */
+    /**
+     * 作用：模块解析规则
+     * - noParse: 防止 webpack 解析那些任何与给定正则表达式相匹配的文件。忽略的文件中 不应该含有 import, require, define 的调用，或任何其他导入机制。忽略大型的 library 可以提高构建性能。
+     */
     module: {
       rules: [
         {
@@ -258,10 +288,16 @@ module.exports = function (env, argv) {
           test: /\.m?ts$/,
           exclude: /node_modules/,
           use: [
+            /*{
+              loader: "thread-loader",
+              options: {
+                poolTimeout: 500, // 可以设置为无穷大，以watch模式下使用；当超过指定毫秒时，关闭子进程
+              },
+            },*/
             {
               loader: "ts-loader",
               options: {
-                transpileOnly: true, // ts-loader用 TSC 只编译不做语法检查
+                happyPackMode: true,
               },
             },
           ],
@@ -306,7 +342,7 @@ module.exports = function (env, argv) {
         ],
       },
       static: {
-        publicPath: "/dist/",
+        // publicPath: "/dist/",
       },
     },
     /* **************************** DevServe配置（结束） **************************** */
@@ -341,10 +377,13 @@ module.exports = function (env, argv) {
      * - errorDetails: 默认"auto"(当只有2个或更少的错误时，它将显示错误详情)，是否添加错误的详情
      * - hash: 默认true, 是否添加关于编译哈希值的信息
      *
-     * - preset: 默认false，展示构建信息，更多预设值参考：[Stats Presets](https://webpack.docschina.org/configuration/stats/#stats-presets)
+     * - preset: 默认false，展示构建信息，更多预设值参考：[Stats Presets](https://webpack.docschina.org/configuration/stats/#stats-presets)，其中detailed能显示Tree-Shaking信息
+     *
+     * - optimizationBailout: 模块化失效的原因
      */
     stats: {
-      // preset: "normal",
+      // preset: "detailed",
+      // optimizationBailout: true,
     },
     /* **************************** Stats配置（结束） **************************** */
 
@@ -354,5 +393,46 @@ module.exports = function (env, argv) {
      */
     // cache: {},
     /* **************************** Cache配置（结束） **************************** */
+
+    /* **************************** Optimization配置（开始） **************************** */
+    /**
+     * 作用：优化
+     * - moduleIds: 选择模块id时需要使用哪种算法。"named" 显示更新的文件名，"natural" 显示更新的id，"deterministic" 显示更新的hash模块名
+     *
+     * - minimize: 告知webpack使用TerserPlugin压缩bundle
+     * - minimizer: 提供一个或多个定制过压缩插件实例(如：CssMinimizerWebpackPlugin、TerserWebpackPlugin)
+     *
+     * - providedExports: 默认true，告知webpack将模块提供"export"导出，便于Tree-Shaking。
+     * - usedExports: 默认false，production为true。只起到标记未使用代码功能，真实操作依赖Terse压缩插件的能力。true(对本地代码开启Tree-Shaking，不影响第三方库代码)、"global"(Tree-Shaking作用到运行时第三方库代码)
+     *
+     * - sideEffects: 生产环境默认"flag"，让webpack分析第三方包的[副作用代码](https://github.com/webpack/webpack/blob/main/examples/side-effects/README.md)。"flag"：不对源码和第三方库进行副作用分析，但允许使用"flag"。false: 对所有第三方库进行分析副作用函数标记。（如果显示设置该属性，生产环境会默认读取第三方包package.json的"sideEffects"属性进行副作用分析）true: 不进行副作用分析
+     *
+     * - concatenateModules: 默认false，production为true。根据模块图数据结构查找，哪些公共重读代码可以安全地被合并到单一模块中。
+     *
+     * - splitChunks: 内置的SplitChunksPlugin插件，用于自动拆分chunks
+     * - cacheGroups: 自定义分割规则
+     * - cacheGroups.{customName}.test: 匹配的路径
+     * - cacheGroups.{customName}.chunks: 分割类型
+     * - cacheGroups.{customName}.reuseExistingChunk: 如果当前 chunk 包含已从主 bundle 中拆分出的模块，则它将被重用，而不是生成新的模块。
+     */
+    optimization: {
+      providedExports: true,
+      usedExports: true,
+      moduleIds: "deterministic",
+      minimize: false,
+      minimizer: [new TerserPlugin(), "..."],
+      sideEffects: false,
+      splitChunks: {
+        cacheGroups: {
+          chunks: "all",
+          base: {
+            filename: "lodash.bundle.js",
+            test: /lodash/,
+            reuseExistingChunk: true,
+          },
+        },
+      },
+    },
+    /* **************************** Optimization配置（结束） **************************** */
   };
 };

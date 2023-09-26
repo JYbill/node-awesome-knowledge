@@ -5,6 +5,7 @@
 //    "declaration": true, // 生成.d.ts文件
 //    "declarationMap": true, // 生成map文件
 //    "emitDeclarationOnly": true, // 只生成.d.ts类型声明文件
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "noImplicitAny": false
   }
 }
