@@ -14,3 +14,4 @@ function main() {
 }
 
 main();
+export {};

@@ -1,13 +1,13 @@
 type AnyFuncType = (...args: any[]) => any;
 
 export function debounce<This = any>(callback: AnyFuncType, timeout: number) {
-  let timer: NodeJS.Timer | null = null;
+  let timer: NodeJS.Timer | number | null;
 
   return function (this: This, ...args: any[]) {
     if (timer) return;
     callback.apply(this, args);
     timer = setTimeout(() => {
-      clearTimeout(timer as NodeJS.Timer);
+      clearTimeout(timer as number);
       timer = null;
     }, timeout);
   };
