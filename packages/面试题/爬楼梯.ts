@@ -31,5 +31,27 @@ function test() {
   const count = dps(target, memo);
   console.log(`爬${target}层可以有${count}种走法.`);
 }
-test();
+// test();
+
+/**
+ * 爬楼梯动态规划版
+ * @param n
+ */
+function climbingStairsDP(n: number): number {
+  if (n === 1 || n === 2) return n;
+
+  const mem: number[] = new Array(n + 1).fill(-1);
+  mem[1] = 1;
+  mem[2] = 2;
+  for (let i = 3; i <= n; i++) {
+    mem[i] = mem[i - 1] + mem[i - 2];
+  }
+  return mem[n];
+}
+function testDP() {
+  const n = 9;
+  const count = climbingStairsDP(n);
+  console.log(`爬${n}层可以有${count}种走法.`);
+}
+testDP();
 export {};
