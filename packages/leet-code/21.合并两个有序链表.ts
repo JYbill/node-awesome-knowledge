@@ -1,5 +1,5 @@
 import * as string_decoder from "string_decoder";
-import { LinkedList } from "../数据结构与算法/08.单向linkedlist实现";
+import { LinkedList } from "../数据结构与算法/链表/08.单向linkedlist实现";
 
 /**
  * @Description: leetCode21：合并两个有序链表

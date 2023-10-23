@@ -222,7 +222,7 @@ export default class BSTree<T = any> {
    *    4.1. 方式一：找到左子树中最大的节点，替换当前删除的节点（前驱节点）
    *    4.2. 方式二：找到右子树中最小的节点，替换当前删除的节点（后继节点）
    */
-  remove(value: T): boolean {
+  remove(value: T) {
     const node = this.searchNode(value); // 1. 查找节点和它的父节点
     if (!node) return false;
 
