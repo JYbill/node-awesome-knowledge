@@ -1,11 +1,11 @@
 /**
- * @Description: 打卡10.23✅
+ * @Description: 打卡10.30✅
  * @Author: 小钦var
  * @Date: 2023/3/30 20:14
  */
 
 function quickSort(list: number[]): number[] {
-  return [];
+  return list;
 }
 
 function swap(list: number[], index1: number, index2: number): void {
