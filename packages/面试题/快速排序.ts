@@ -1,8 +1,8 @@
 /**
- * @Description: 打卡12.27✅
+ * @Description: 打卡1.8✅
  * @Author: 小钦var
  * @Date: 2023/3/30 20:14
- * @LastEditTime: 2024/01/03 17:29
+ * @LastEditTime: 2024/01/08 10:00
  */
 
 function quickSort(list: number[]): number[] {
