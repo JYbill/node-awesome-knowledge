@@ -19,9 +19,9 @@
     // 包含的ts库
     "lib": ["ESNext", "DOM"],
     // typing跟路径, 默认情况node_modules/@types都是可见的，除特例
-//     "typeRoots": ["@types"],
+    //     "typeRoots": ["@types"],
     // 不允许type类型为any
     "noImplicitAny": true,
-    "moduleResolution": "node"
+    "moduleResolution": "Node16"
   }
 }
