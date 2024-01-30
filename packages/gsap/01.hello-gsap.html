@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello GSAP</title>
+  <style>
+    .container {
+      width: 100%;
+      height: auto;
+      min-height: 200px;
+      display: grid;
+      grid-template-rows: repeat(3, 1fr);
+      grid-template-columns: repeat(3, 1fr);
+
+      .box {
+        width: 50px;
+        aspect-ratio: 1/1;
+        background-color: rgba(255, 0, 0, 0.414);
+      }
+    }
+
+    .cycle1,
+    .cycle2,
+    .cycle3 {
+      width: 100px;
+      aspect-ratio: 1/1;
+      background-color: orange;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+  </div>
+  <br>
+  <div class="cycle1"></div>
+  <div class="cycle2"></div>
+  <div class="cycle3"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/EasePack.min.js"></script>
+  <script>
+    setTimeout(() => {
+      // 基本使用
+      /* gsap.to(".box", {
+        y: "10",
+        stagger: {
+          each: 0.3,
+          from: "center",
+          grid: "auto",
+        }
+      }); */
+
+      // 时间线
+      /* let tl = gsap.timeline({ defaults: { duration: 1, yoyo: true, repeat: 2 } })
+      tl.to(".cycle1", { x: 100 });
+      tl.to(".cycle2", { x: 100 });
+      tl.to(".cycle3", { x: 100 }, "-=50%"); */
+
+      // 关键帧
+      /* gsap.to(".cycle1", {
+        keyframes: [
+          { x: 100, duration: 1, ease: "bounce.out" },
+          { y: 100, duration: 1, ease: "bounce.out" },
+        ],
+      }) */
+      // 百分比关键帧
+      /* gsap.to(".cycle1", {
+        keyframes: {
+          "50%": { x: 100 },
+          "100%": { y: 100 },
+          easeEach: "bounce.out",
+        },
+        duration: 3
+      }) */
+      // 数组关键帧
+      gsap.to(".cycle1", {
+        keyframes: {
+          x: [0, 100, 200],
+          y: [0, 100, 0],
+          easeEach: "bounce.out",
+        },
+        duration: 3
+      })
+    }, 500)
+  </script>
+</body>
+
+</html>
