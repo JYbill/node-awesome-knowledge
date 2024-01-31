@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .newer {
+      background-color: rgba(220, 24, 24, 0.589);
+    }
+
+    .older {
+      background-color: orangered;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="txt">This is the new textThis is the new text</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+  <script type="module">
+    await(async () => {
+      return new Promise((res) => {
+        setTimeout(res, 500);
+      })
+    })();
+
+
+    gsap.registerPlugin(TextPlugin)
+    gsap.to(".txt", {
+      duration: 5,
+      text: {
+        value: "This is the new text                    ",
+        delimiter: " ",
+        newClass: "newer",
+        oldClass: "older",
+        // padSpace: true,
+        preserveSpaces: false
+      },
+    });
+  </script>
+</body>
+
+</html>

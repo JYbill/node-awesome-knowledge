@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      width: 100%;
+      height: auto;
+      overflow-x: hidden;
+    }
+
+    .banner {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100vh;
+      background-color: antiquewhite;
+      text-align: center;
+    }
+
+    .container {
+      width: 100%;
+      height: auto;
+
+      .placeholder,
+      .one,
+      .two,
+      .three {
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        height: 100vh;
+      }
+
+      .placeholder {
+        background-color: orangered;
+      }
+
+      .one {
+        left: 0;
+        z-index: 1;
+        background-color: brown;
+      }
+
+      .two {
+        right: 0;
+        z-index: 2;
+        background-color: rgb(41, 159, 116);
+      }
+
+      .three {
+        top: 0;
+        z-index: 4;
+        background-color: rgb(106, 47, 234);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="banner">
+    <h1>Banner</h1>
+  </div>
+  <div class="container">
+    <div class="placeholder">1</div>
+    <div class="one">2</div>
+    <div class="two">3</div>
+    <div class="three">4</div>
+  </div>
+
+  <script type="module">
+    await(async () => {
+      return new Promise((res) => {
+        setTimeout(res, 500);
+      })
+    })();
+
+    gsap.registerPlugin(ScrollTrigger)
+    const tl = gsap.timeline({
+      defaults: { duration: 2, ease: "none" }
+    })
+    tl
+      .from(".one", { x: "-100%" })
+      .from(".two", { x: "100%" })
+      .from(".three", { y: "-100%" })
+
+    ScrollTrigger.create({
+      animation: tl,
+      trigger: ".container",
+      start: "top top",
+      end: "+=4000 bottom",
+      markers: true,
+      scrub: true,
+      pin: true,
+    })
+  </script>
+</body>
+
+</html>

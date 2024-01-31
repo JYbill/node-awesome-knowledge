@@ -40,6 +40,11 @@
       top: 900px;
       background-color: orangered;
     }
+
+    .d {
+      top: 1200px;
+      background-color: palegoldenrod;
+    }
   </style>
 </head>
 
@@ -48,6 +53,7 @@
     <div class="box a"></div>
     <div class="box b"></div>
     <div class="box c"></div>
+    <div class="box d"></div>
   </div>
   <script type="module">
     await(async () => {
@@ -61,16 +67,18 @@
     gsap.to(".c", {
       scrollTrigger: {
         trigger: ".c",
-        toggleActions: "play pause reverse pause",
-        start: "top 70%", // 在页面中间时开始动画
-        end: "bottom 30%",
-        scrub: 2,
+        // toggleActions: "play pause reverse pause",
+        start: "top center", // 在页面中间时开始动画
+        end: "bottom center",
+        scrub: 0.5,
         markers: true, // 辅助"start"的工具
+        pin: ".c",
+        pinSpacing: false,
       },
       x: "80vw",
       rotation: 360,
       duration: 5,
-      ease: "bounce"
+      // ease: "bounce"
     })
   </script>
 </body>
