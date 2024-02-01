@@ -18,7 +18,7 @@
 
 <body>
 
-  <div class="txt">This is the new textThis is the new text</div>
+  <div class="txt">This is the new text, and type is diff effect</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
@@ -32,14 +32,15 @@
 
     gsap.registerPlugin(TextPlugin)
     gsap.to(".txt", {
-      duration: 5,
+      duration: 3,
       text: {
-        value: "This is the new text                    ",
+        value: "This is the new text",
         delimiter: " ",
         newClass: "newer",
         oldClass: "older",
         // padSpace: true,
-        preserveSpaces: false
+        // preserveSpaces: false,
+        type: "diff",
       },
     });
   </script>
