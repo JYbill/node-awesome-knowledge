@@ -3,6 +3,12 @@
   height: auto;
   background: radial-gradient(#ccc, #999);
 
+  .imgBox {
+    min-width: 200px;
+    min-height: 200px;
+    width: 100%;
+    height: 100%;
+  }
   img {
     display: block;
   }
@@ -43,5 +49,6 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    z-index: 1;
   }
 }
