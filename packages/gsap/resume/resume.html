@@ -6,13 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="./css/global.css">
+  <link rel="stylesheet" href="./css/loading.css">
   <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/info.css">
   <title>RESUME</title>
 </head>
 
 <body>
   <div id="app">
     <div id="headerScroll"></div>
+
+    <!-- loading -->
+    <div class="loading">
+      <div class="wrapper">
+        <img draggable="false" src="./images/forg.png" alt="loading">
+      </div>
+      <div class="txt">loading</div>
+    </div>
 
     <!-- 头部 -->
     <div class="header">
@@ -68,6 +78,21 @@
         </g>
       </svg>
       <div id="imgGroup">
+        <!--  <img draggable="false" src="./images/forg1.png" data-x="-200" data-y="200" alt="xiaoqinvar一位全栈开发员">
+        <img draggable="false" src="./images/react.png" data-x="300" data-y="0" alt="React">
+        <img draggable="false" src="./images/element.png" data-x="200" data-y="250" alt="Element">
+        <img draggable="false" src="./images/java.png" data-x="-100" data-y="-150" alt="Java">
+        <img draggable="false" src="./images/apple.png" data-x="-500" data-y="50" alt="Apple">
+        <img draggable="false" src="./images/passport.png" data-x="-60" data-y="-10" alt="Passport.js">
+        <img draggable="false" src="./images/midway.png" data-x="-200" data-y="-200" alt="Midway.js">
+        <img draggable="false" src="./images/webpack.png" data-x="100" data-y="-150" alt="Webpack">
+        <img draggable="false" src="./images/docker.png" data-x="-300" data-y="50" alt="Docker">
+        <img draggable="false" src="./images/vue.png" data-x="-50" data-y="-200" alt="Vue">
+        <img draggable="false" src="./images/ts.png" data-x="-120" data-y="60" alt="TypesScript">
+        <img draggable="false" src="./images/prisma.png" data-x="400" data-y="-100" alt="Prisma">
+        <img draggable="false" src="./images/node.png" data-x="-60" data-y="150" alt="Node.js">
+        <img draggable="false" src="./images/nestjs.png" data-x="-200" data-y="200" alt="Nest.js">
+        <img draggable="false" src="./images/fullstack.png" data-x="300" data-y="-120" alt="Full Stack Developer"> -->
         <img src="https://picsum.photos/id/100/1000/800" data-x="300" data-y="0" alt="Sepia tone beach">
         <img src="https://picsum.photos/id/111/1000/800" data-x="200" data-y="250" alt="Vintage car">
         <img src="https://picsum.photos/id/140/1000/800" data-x="-100" data-y="-150" alt="Bare tree">
@@ -91,16 +116,54 @@
 
       <svg width="100%" height="100%" fill="none" stroke="#fff">
         <g id="cursor">
-          <circle id="cursorCircle" cx="0" cy="0" r="12" stroke-width="3" />
+          <circle fill="#232323" id="cursorCircle" cx="0" cy="0" r="12" stroke-width="3" />
           <path id="cursorClose" d="M-25,-25 L25,25 M-25,25 L25,-25" opacity="0" stroke-width="3.5" />
         </g>
       </svg>
+    </div>
+
+    <!-- 个人信息 -->
+    <div class="info">
+      <div class="bg"></div>
+      <div class="author">xiaoqinvar</div>
+      <div class="intro">
+        长话短说：我是一名工作时常3年的node.js全栈开发人员，擅长单点登录SSO系统以及对应安全细节，主要熟悉/精通技术栈：JS、TS、Vue、nest.js、node.js(顺便一提是java转的node.js)
+        <br>
+        我本是一名node全栈开发者，却被诡计多端的奸人所害！重来一世 我只想夺回我的后端岗位，现在只差，一家优质企业助我东山再起！
+      </div>
+      <div class="contact">
+        <div class="item">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-email"></use>
+          </svg>
+          <a href="mailto:752299324@qq.com">752299324@qq.com</a>
+        </div>
+        <div class="item">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-phone"></use>
+          </svg>
+          <a href="tel:17683860320">17683860320</a>
+        </div>
+        <div class="item">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-github"></use>
+          </svg>
+          <a target="_blank" href="https://github.com/JYbill">JYBill</a>
+        </div>
+        <div class="item">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-resume"></use>
+          </svg>
+          <a target="_blank" href="https://image.jybill.top/node.pdf">resume</a>
+        </div>
+      </div>
     </div>
   </div>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="./js/iconfont.js"></script>
   <script defer type="module">
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
   </script>

@@ -1,34 +1,57 @@
-// TODO: onload之前需要使用loading！
 // 滚动条
-gsap.set("#headerScroll", {
-  width: "100%",
-  height: "10000px",
-});
-gsap.set(".header", {
-  position: "fixed",
-  background: "#fff",
-  width: "100%",
-  maxWidth: "1200px",
-  height: "100%",
-  zIndex: 1, // debug
-  top: 0,
-  left: "50%",
-  x: "-50%",
-});
-
-// 初始化imageGroup
-gsap.set("#app .main, #imgGroup", {
-  opacity: 1,
-  position: "fixed",
-  width: "100%",
-  height: "100%",
-  top: 0,
-  left: 0,
-  perspective: 300,
+const loadingTween = gsap.to(".loading .wrapper", {
+  y: 50,
+  repeat: -1,
+  yoyo: true,
+  duration: 0.8,
+  ease: "back.out(0.5)",
 });
 
 window.onload = () => {
-  gsap.set("#app img", {
+  gsap.delayedCall(1.5, () => {
+    loadingTween.kill();
+    gsap.to("#app .loading", {
+      y: "-100%",
+      opacity: 0.2,
+      duration: 1,
+      onStart() {
+        gsap.to(window, {
+          scrollTo: 0,
+          duration: 1,
+          ease: "power1.inOut",
+        });
+      },
+    });
+  });
+  gsap.set("#headerScroll", {
+    width: "100%",
+    height: "10000px",
+    backgroundColor: "#000",
+    zIndex: -2,
+  });
+  gsap.set(".header", {
+    position: "fixed",
+    background: "#fff",
+    width: "100%",
+    maxWidth: "1200px",
+    height: "100%",
+    zIndex: 1, // debug
+    top: 0,
+    left: "50%",
+    x: "-50%",
+  });
+
+  // 初始化imageGroup
+  gsap.set("#app .main, #imgGroup, #app .info", {
+    opacity: 1,
+    position: "fixed",
+    width: "100%",
+    height: "100%",
+    top: 0,
+    left: 0,
+    perspective: 300,
+  });
+  gsap.set("#app .main img", {
     position: "absolute",
     attr: {
       id: (index, el, _imgList) => {
@@ -40,12 +63,16 @@ window.onload = () => {
   const tl = gsap
     .timeline({
       defaults: { duration: 1 },
+      onUpdate: () => {
+        if (gsap.getProperty("#cursorClose", "opacity") == 1) {
+          closeDetail();
+        }
+      },
       scrollTrigger: {
         trigger: "#headerScroll",
         start: "top top",
         end: "8000px",
         scrub: 1,
-        // markers: true,
       },
     })
     .fromTo(".sky", { y: 0 }, { y: -200 }, 0)
@@ -57,6 +84,9 @@ window.onload = () => {
     .fromTo(".mountFg", { y: -50 }, { y: -600 }, 0);
   tl.to(".header", { opacity: 0, duration: 1 });
   tl.set(".header", { display: "none" });
+  tl.set(".imgBox", {
+    z: -5000,
+  });
   tl.fromTo(
     "#txt1",
     { scale: 0.6, transformOrigin: "50%" },
@@ -65,39 +95,35 @@ window.onload = () => {
     .to("#txt1 path", {
       duration: 2,
       opacity: 0,
-      stagger: 0.1,
+      stagger: 0.05,
       ease: "power1.out",
     })
 
     // 图片元素
     // 从-5000 z轴移动到350的位置
-    .fromTo(
-      ".imgBox",
-      { z: -5000 },
-      {
-        z: 350,
-        stagger: -1,
-        ease: "none",
-        duration: 5,
-      }
-    )
-    // 放大3倍 -> 1.15过渡
+    .to(".imgBox", {
+      z: 350,
+      stagger: -1.2,
+      ease: "none",
+      duration: 5,
+    })
+    //   // 放大3倍 -> 1.15过渡
     .fromTo(
       ".imgBox img",
       { scale: 3 },
-      { duration: 6, scale: 1.15, stagger: -1, ease: "none" },
+      { duration: 3, scale: 0.7, stagger: -1, ease: "none" },
       3
     )
     // 从透明开始，且开始具有开始动画
     .from(
-      ".imgBox img",
+      ".imgBox",
       {
         duration: 0.3,
         opacity: 0,
         stagger: -1,
         ease: "power1.inOut",
       },
-      3
+      5
     )
     // 到透明结束，结束时具有透明度动画
     .to(
@@ -108,7 +134,7 @@ window.onload = () => {
         stagger: -1,
         ease: "expo.inOut",
       },
-      10
+      12
     )
 
     // 结束
@@ -130,6 +156,19 @@ window.onload = () => {
       },
       "end-=0.2"
     );
+  tl.set(".info", { zIndex: 1 }).fromTo(
+    ".info",
+    { opacity: 0 },
+    { opacity: 1 }
+  );
+  tl.set(".main", {
+    display: "none",
+    duration: 0,
+  });
+  tl.set(".info", {
+    display: "block",
+    duration: 0,
+  });
 
   /**
    * 初始化imgBox事件
@@ -160,11 +199,12 @@ window.onload = () => {
     });
 
     // 鼠标在图片上时，鼠标上跟随的圆圈放大动画
-    t.onmouseover = () =>
+    t.onmouseover = () => {
       gsap.to("#cursorCircle", {
         duration: 0.2,
         attr: { r: 30, "stroke-width": 4 },
       });
+    };
 
     // 鼠标按下图片时，同时发生
     //  图片缩
@@ -220,4 +260,50 @@ window.onload = () => {
       cursorY(e.clientY);
     };
   }
+  document.getElementById("detail").onclick = closeDetail;
 };
+
+/**
+ * 开启图片详情
+ * @param {*} t
+ */
+function showDetail(t) {
+  gsap
+    .timeline()
+    .set("#detailTxt", { textContent: t.alt }, 0)
+    .set(
+      "#detailImg",
+      {
+        "background-image": `url(${t.src})`,
+      },
+      0
+    )
+    .fromTo("#detail", { top: "100%" }, { top: 0, ease: "expo.inOut" }, 0)
+    .fromTo(
+      "#detailImg",
+      { y: "100%" },
+      { y: "0%", ease: "expo", duration: 0.7 },
+      0.2
+    )
+    .fromTo(
+      "#detailTxt",
+      { opacity: 0 },
+      { opacity: 1, ease: "power2.inOut" },
+      0.4
+    )
+    .to("#cursorCircle", { duration: 0.2, opacity: 0 }, 0.2)
+    .to("#cursorClose", { duration: 0.2, opacity: 1 }, 0.4);
+}
+
+/**
+ * 关闭图片详情
+ */
+function closeDetail() {
+  gsap
+    .timeline()
+    .to("#detailTxt", { duration: 0.3, opacity: 0 }, 0)
+    .to("#detailImg", { duration: 0.3, y: "-100%", ease: "power1.in" }, 0)
+    .to("#detail", { duration: 0.3, top: "-100%", ease: "expo.in" }, 0.1)
+    .to("#cursorClose", { duration: 0.1, opacity: 0 }, 0)
+    .to("#cursorCircle", { duration: 0.2, opacity: 1 }, 0.1);
+}
