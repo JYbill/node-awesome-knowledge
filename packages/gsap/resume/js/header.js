@@ -1,4 +1,24 @@
-// 滚动条
+// 注册插件
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+// 不同设备做处理
+const mobileReg =
+  /(iphone|ipod|ipad|android|blackberry|nokia|webos|bada|symbian|palm|windows\s+ce|windows\s+phone|mobile|tablet)/i;
+const isMobile = Boolean(navigator.userAgent.match(mobileReg));
+const scrubTime = 0;
+if (!isMobile) {
+  // PC端增加数据
+  const imgGroupEl = document.querySelector("#imgGroup");
+  const imgGroupHtml = `<img draggable="false" src="./images/react.png" data-x="300" data-y="0" alt="React">
+  <img draggable="false" src="./images/java.png" data-x="-100" data-y="-150" alt="Java">
+  <img draggable="false" src="./images/apple.png" data-x="-500" data-y="50" alt="Apple">
+  <img draggable="false" src="./images/element.png" data-x="200" data-y="250" alt="Element">${imgGroupEl.innerHTML}`;
+  imgGroupEl.innerHTML = imgGroupHtml;
+
+  // 延迟
+}
+
+// 加载动画
 const loadingTween = gsap.to(".loading .wrapper", {
   y: 50,
   repeat: -1,
@@ -72,7 +92,7 @@ window.onload = () => {
         trigger: "#headerScroll",
         start: "top top",
         end: "8000px",
-        scrub: 1,
+        scrub: 0, // PC为1，
       },
     })
     .fromTo(".sky", { y: 0 }, { y: -200 }, 0)
@@ -84,46 +104,47 @@ window.onload = () => {
     .fromTo(".mountFg", { y: -50 }, { y: -600 }, 0);
   tl.to(".header", { opacity: 0, duration: 1 });
   tl.set(".header", { display: "none" });
-  tl.set(".imgBox", {
-    z: -5000,
-  });
   tl.fromTo(
     "#txt1",
     { scale: 0.6, transformOrigin: "50%" },
-    { duration: 1, scale: 1, ease: "power1.in" }
-  )
-    .to("#txt1 path", {
-      duration: 2,
-      opacity: 0,
-      stagger: 0.05,
-      ease: "power1.out",
-    })
+    { scale: 1, ease: "power1.in" }
+  ).to("#txt1 path", {
+    duration: 0.3,
+    opacity: 0,
+    stagger: 0.05,
+    ease: "power1.out",
+  });
 
-    // 图片元素
-    // 从-5000 z轴移动到350的位置
-    .to(".imgBox", {
+  // 图片元素
+  // 从-5000 z轴移动到350的位置
+  tl.fromTo(
+    ".imgBox",
+    {
+      z: -5000,
+    },
+    {
       z: 350,
-      stagger: -1.2,
+      stagger: -0.6,
       ease: "none",
-      duration: 5,
-    })
+    }
+  )
     //   // 放大3倍 -> 1.15过渡
     .fromTo(
       ".imgBox img",
       { scale: 3 },
-      { duration: 3, scale: 0.7, stagger: -1, ease: "none" },
-      3
+      { duration: 0.3, scale: 1.15, stagger: -0.6, ease: "none" },
+      1
     )
     // 从透明开始，且开始具有开始动画
     .from(
-      ".imgBox",
+      ".imgBox img",
       {
         duration: 0.3,
         opacity: 0,
-        stagger: -1,
+        stagger: -0.6,
         ease: "power1.inOut",
       },
-      5
+      3
     )
     // 到透明结束，结束时具有透明度动画
     .to(
@@ -131,10 +152,10 @@ window.onload = () => {
       {
         duration: 0.3,
         opacity: 0,
-        stagger: -1,
+        stagger: -0.6,
         ease: "expo.inOut",
       },
-      12
+      4.2
     )
 
     // 结束
@@ -163,11 +184,9 @@ window.onload = () => {
   );
   tl.set(".main", {
     display: "none",
-    duration: 0,
   });
   tl.set(".info", {
     display: "block",
-    duration: 0,
   });
 
   /**

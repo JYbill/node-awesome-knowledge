@@ -55,7 +55,7 @@
 
   #headlines {
     max-width: 800px;
-    min-width: 450px;
+    min-width: 350px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
