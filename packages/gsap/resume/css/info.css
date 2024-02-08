@@ -14,56 +14,61 @@
   height: 100%;
   background-color: rgba(22, 22, 29, 1);
   color: #fff;
+}
 
-  .bg {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    background-image: linear-gradient(90deg, #7fffd4, #9370db);
-    animation-name: bg-rotate;
-    animation-duration: 7s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    z-index: -1;
-    filter: blur(200px);
+#app .info .bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-image: linear-gradient(90deg, #7fffd4, #9370db);
+  animation-name: bg-rotate;
+  animation-duration: 7s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  z-index: -1;
+  filter: blur(200px);
+}
+@media screen and (max-width: 1000px) {
+  #app .info .bg {
+    animation: none;
   }
+}
 
-  .author {
-    font-size: 40px;
-    margin: 25px 0;
-  }
+#app .info .author {
+  font-size: 40px;
+  margin: 25px 0;
+}
 
-  .intro {
-    font-size: 20px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0 30px;
-    margin: 0 auto 30px;
-    line-height: 35px;
-  }
+#app .info .intro {
+  font-size: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 30px;
+  margin: 0 auto 30px;
+  line-height: 35px;
+}
 
-  .contact {
-    width: 300px;
-    height: 300px;
-    box-sizing: border-box;
-    padding: 10px 30px;
-    font-size: 16px;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
+#app .info .contact {
+  width: 300px;
+  height: 300px;
+  box-sizing: border-box;
+  padding: 10px 30px;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
 
-    .item {
-      min-height: 40px;
-      display: flex;
-      align-items: center;
+#app .info .contact .item {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
 
-      svg.icon {
-        margin-right: 10px;
-        font-size: 30px;
-      }
-      a {
-        color: #fff;
-      }
-    }
-  }
+#app .info .contact .item svg.icon {
+  margin-right: 10px;
+  font-size: 30px;
+}
+#app .info .contact .item a {
+  color: #fff;
 }

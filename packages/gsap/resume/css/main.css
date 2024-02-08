@@ -2,63 +2,62 @@
   opacity: 0;
   height: auto;
   background: radial-gradient(circle, rgb(1, 1, 1), rgb(40, 40, 40));
+}
+#app .main .imgBox {
+  min-width: 200px;
+  min-height: 200px;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto !important;
+  user-select: none;
+  will-change: transform, opacity;
+}
+#app .main img {
+  display: block;
+  user-select: none;
+}
 
-  .imgBox {
-    min-width: 200px;
-    min-height: 200px;
-    width: 100%;
-    height: 100%;
-    pointer-events: auto !important;
-    user-select: none;
-    will-change: transform, opacity;
-  }
-  img {
-    display: block;
-    user-select: none;
-  }
+#app .main #detail {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  top: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
 
-  #detail {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #111;
-    top: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-  }
+#app .main #detailImg {
+  width: 85%;
+  height: 85%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
-  #detailImg {
-    width: 85%;
-    height: 85%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
+#app .main #detailTxt {
+  color: #ccc;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
 
-  #detailTxt {
-    color: #ccc;
-    font-size: 20px;
-    letter-spacing: 1px;
-  }
+#app .main svg {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#app .main svg #cursorCircle {
+  mix-blend-mode: difference;
+}
 
-  svg {
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    #cursorCircle {
-      mix-blend-mode: difference;
-    }
-  }
-
-  #headlines {
-    max-width: 800px;
-    min-width: 350px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-  }
+#app .main #headlines {
+  max-width: 800px;
+  min-width: 350px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }

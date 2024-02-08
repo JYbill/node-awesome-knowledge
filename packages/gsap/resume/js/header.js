@@ -5,7 +5,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 const mobileReg =
   /(iphone|ipod|ipad|android|blackberry|nokia|webos|bada|symbian|palm|windows\s+ce|windows\s+phone|mobile|tablet)/i;
 const isMobile = Boolean(navigator.userAgent.match(mobileReg));
-const scrubTime = 0;
+let scrubTime = 0;
 if (!isMobile) {
   // PC端增加数据
   const imgGroupEl = document.querySelector("#imgGroup");
@@ -16,7 +16,9 @@ if (!isMobile) {
   imgGroupEl.innerHTML = imgGroupHtml;
 
   // 延迟
+  scrubTime = 1;
 }
+console.log("scrubTime", scrubTime);
 
 // 加载动画
 const loadingTween = gsap.to(".loading .wrapper", {
@@ -92,7 +94,7 @@ window.onload = () => {
         trigger: "#headerScroll",
         start: "top top",
         end: "8000px",
-        scrub: 0, // PC为1，
+        scrub: scrubTime,
       },
     })
     .fromTo(".sky", { y: 0 }, { y: -200 }, 0)
