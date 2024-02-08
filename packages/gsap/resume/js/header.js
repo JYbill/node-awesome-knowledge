@@ -12,7 +12,12 @@ if (!isMobile) {
   const imgGroupHtml = `<img draggable="false" src="./images/react.png" data-x="300" data-y="0" alt="React">
   <img draggable="false" src="./images/java.png" data-x="-100" data-y="-150" alt="Java">
   <img draggable="false" src="./images/apple.png" data-x="-500" data-y="50" alt="Apple">
-  <img draggable="false" src="./images/element.png" data-x="200" data-y="250" alt="Element">${imgGroupEl.innerHTML}`;
+  <img draggable="false" src="./images/element.png" data-x="200" data-y="250" alt="Element">
+  <img draggable="false" src="./images/passport.png" data-x="-60" data-y="-10" alt="Passport.js">
+  <img draggable="false" src="./images/prisma.png" data-x="400" data-y="-100" alt="Prisma">
+  <img draggable="false" src="./images/docker.png" data-x="-300" data-y="50" alt="Docker">
+  <img draggable="false" src="./images/midway.png" data-x="-200" data-y="-200" alt="Midway.js">
+  <img draggable="false" src="./images/webpack.png" data-x="100" data-y="-150" alt="Webpack">${imgGroupEl.innerHTML}`;
   imgGroupEl.innerHTML = imgGroupHtml;
 
   // 延迟

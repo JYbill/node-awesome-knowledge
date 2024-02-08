@@ -10,7 +10,6 @@
   height: 100%;
   pointer-events: auto !important;
   user-select: none;
-  will-change: transform, opacity;
 }
 #app .main img {
   display: block;
