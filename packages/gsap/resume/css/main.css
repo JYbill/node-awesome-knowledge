@@ -15,6 +15,7 @@
 #app .main img {
   display: block;
   user-select: none;
+  background-color: rgba(150, 150, 150, 0.2);
 }
 
 #app .main #detail {

@@ -18,7 +18,6 @@ if (!isMobile) {
   // 延迟
   scrubTime = 1;
 }
-console.log("scrubTime", scrubTime);
 
 // 加载动画
 const loadingTween = gsap.to(".loading .wrapper", {
@@ -134,7 +133,7 @@ window.onload = () => {
     .fromTo(
       ".imgBox img",
       { scale: 3 },
-      { duration: 0.3, scale: 1.15, stagger: -0.6, ease: "none" },
+      { duration: 0.6, scale: 1.15, stagger: -0.6, ease: "none" },
       1
     )
     // 从透明开始，且开始具有开始动画
@@ -264,6 +263,7 @@ window.onload = () => {
     });
 
     window.onmousemove = (e) => {
+      console.log("moving");
       gsap.to(".imgBox", {
         // imgBox偏移效果
         xPercent: (-e.clientX / innerWidth) * 100,
