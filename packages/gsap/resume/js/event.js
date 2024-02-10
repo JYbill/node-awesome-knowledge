@@ -16,7 +16,7 @@ $("#arrowBtn").on("mouseleave", (e) => {
 });
 $("#arrowBtn").on("click", (e) => {
   gsap.to(window, {
-    scrollTo: 200,
+    scrollTo: 1000,
     duration: 1.5,
     ease: "power1.inOut",
   });

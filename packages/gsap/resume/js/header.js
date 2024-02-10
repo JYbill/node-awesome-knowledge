@@ -1,31 +1,27 @@
 // 注册插件
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+// 全局变量
+const totalHeight = 12000; // html总高度
+let scrubTime = 1; // 滚动延迟
+const stagger = -0.6; // item延迟
+const startTranslateTime = 2.3; // translateZ动画开始时间
+
 // 不同设备做处理
 const mobileReg =
   /(iphone|ipod|ipad|android|blackberry|nokia|webos|bada|symbian|palm|windows\s+ce|windows\s+phone|mobile|tablet)/i;
 const isMobile = Boolean(navigator.userAgent.match(mobileReg));
-let scrubTime = 0;
 if (!isMobile) {
   // PC端增加数据
   const imgGroupEl = document.querySelector("#imgGroup");
-  const imgGroupHtml = `
-  <img draggable="false" src="./images/vue.png" data-x="-50" data-y="-200" alt="Vue">
-  <img draggable="false" src="./images/ts.png" data-x="-120" data-y="60" alt="TypesScript">
-  <img draggable="false" src="./images/react.png" data-x="300" data-y="0" alt="React">
-  <img draggable="false" src="./images/java.png" data-x="-100" data-y="-150" alt="Java">
-  <img draggable="false" src="./images/apple.png" data-x="-500" data-y="50" alt="Apple">
-  <img draggable="false" src="./images/element.png" data-x="200" data-y="250" alt="Element">
+  const imgGroupHtml = `<img draggable="false" src="./images/forg1.png" data-x="-200" data-y="200" alt="xiaoqinvar一位全栈开发员">
   <img draggable="false" src="./images/passport.png" data-x="-60" data-y="-10" alt="Passport.js">
-  <img draggable="false" src="./images/prisma.png" data-x="400" data-y="-100" alt="Prisma">
-  <img draggable="false" src="./images/docker.png" data-x="-300" data-y="50" alt="Docker">
-  <img draggable="false" src="./images/midway.png" data-x="-200" data-y="-200" alt="Midway.js">
-  <img draggable="false" src="./images/webpack.png" data-x="100" data-y="-150" alt="Webpack">${imgGroupEl.innerHTML}
-  <img draggable="false" src="./images/fullstack.png" data-x="300" data-y="-120" alt="Full Stack Developer">`;
+  <img draggable="false" src="./images/apple.png" data-x="-500" data-y="50" alt="Apple">
+  ${imgGroupEl.innerHTML}<img draggable="false" src="./images/fullstack.png" data-x="300" data-y="-120" alt="Full Stack Developer">`;
   imgGroupEl.innerHTML = imgGroupHtml;
 
-  // 延迟
-  scrubTime = 1;
+  // detail事件
+  document.getElementById("detail").onclick = closeDetail;
 }
 
 // 加载动画
@@ -53,9 +49,10 @@ window.onload = () => {
       },
     });
   });
+
   gsap.set("#headerScroll", {
     width: "100%",
-    height: "10000px",
+    height: totalHeight,
     backgroundColor: "#000",
     zIndex: -2,
   });
@@ -90,22 +87,21 @@ window.onload = () => {
       },
     },
   });
-  const tl = gsap
-    .timeline({
-      defaults: { duration: 1 },
-      onUpdate: () => {
-        if (gsap.getProperty("#cursorClose", "opacity") == 1) {
-          closeDetail();
-        }
-      },
-      scrollTrigger: {
-        trigger: "#headerScroll",
-        start: "top top",
-        end: "8000px",
-        scrub: scrubTime,
-      },
-    })
-    .fromTo(".sky", { y: 0 }, { y: -200 }, 0)
+  const tl = gsap.timeline({
+    defaults: { duration: 1 },
+    onUpdate: () => {
+      if (gsap.getProperty("#cursorClose", "opacity") == 1) {
+        closeDetail();
+      }
+    },
+    scrollTrigger: {
+      trigger: "#headerScroll",
+      start: "top top",
+      end: totalHeight - 1000,
+      scrub: scrubTime,
+    },
+  });
+  tl.fromTo(".sky", { y: 0 }, { y: -200 }, 0)
     .fromTo(".cloud1", { y: 100 }, { y: -800 }, 0)
     .fromTo(".cloud2", { y: -150 }, { y: -500 }, 0)
     .fromTo(".cloud3", { y: -50 }, { y: -650 }, 0)
@@ -117,33 +113,35 @@ window.onload = () => {
   tl.fromTo(
     "#txt1",
     { scale: 0.6, transformOrigin: "50%" },
-    { scale: 1, ease: "power1.in" }
-  ).to("#txt1 path", {
-    duration: 0.3,
-    opacity: 0,
-    stagger: 0.05,
-    ease: "power1.out",
-  });
-
-  // 图片元素
-  // 从-5000 z轴移动到350的位置
-  tl.fromTo(
-    ".imgBox",
-    {
-      z: -5000,
-    },
-    {
-      z: 350,
-      stagger: -0.6,
-      ease: "none",
-    }
+    { duration: 0.3, scale: 1, ease: "power1.in" }
   )
+    .to("#txt1 path", {
+      duration: 0.3,
+      opacity: 0,
+      stagger: 0.05,
+      ease: "power1.out",
+    })
+
+    // 图片元素
+    // 从-5000 z轴移动到350的位置
+    .fromTo(
+      ".imgBox",
+      {
+        z: -5000,
+      },
+      {
+        z: 350,
+        stagger,
+        ease: "none",
+      },
+      startTranslateTime
+    )
     //   // 放大3倍 -> 1.15过渡
     .fromTo(
       ".imgBox img",
       { scale: 3 },
-      { duration: 0.6, scale: 1.15, stagger: -0.6, ease: "none" },
-      1
+      { scale: 1.15, stagger, ease: "none" },
+      startTranslateTime
     )
     // 从透明开始，且开始具有开始动画
     .from(
@@ -151,41 +149,40 @@ window.onload = () => {
       {
         duration: 0.3,
         opacity: 0,
-        stagger: -0.6,
+        stagger,
         ease: "power1.inOut",
       },
-      3
+      startTranslateTime
     )
     // 到透明结束，结束时具有透明度动画
     .to(
       ".imgBox img",
       {
-        duration: 0.3,
+        duration: 0.1,
         opacity: 0,
-        stagger: -0.6,
+        stagger,
         ease: "expo.inOut",
       },
-      4.2
+      startTranslateTime + 0.9
     )
 
     // 结束
     .add("end")
     .fromTo(
       "#txt2",
-      { scale: 0.01, transformOrigin: "50%" },
-      { scale: 1, ease: "power3", duration: 1 },
-      "end-=0.2"
+      { scale: 0.1, transformOrigin: "50%" },
+      { scale: 1, ease: "power3", duration: 0.3 },
+      "end-=0.5"
     )
     .from(
       "#txt2 path",
       {
-        duration: 0.4,
+        duration: 0.3,
         opacity: 0,
         ease: "sine.inOut",
         stagger: 0.15,
-        duration: 1,
       },
-      "end-=0.2"
+      "end-=0.5"
     );
   tl.set(".info", { zIndex: 1 }).fromTo(
     ".info",
@@ -235,7 +232,6 @@ window.onload = () => {
       cursorY(e.clientY);
     };
   }
-  document.getElementById("detail").onclick = closeDetail;
 };
 
 /**
@@ -266,8 +262,6 @@ function initImg(i, t) {
     perspective: 500,
   });
 
-  if (isMobile) return;
-
   // 鼠标在图片上时，鼠标上跟随的圆圈放大动画
   t.onmouseover = () => {
     gsap.to("#cursorCircle", {
@@ -294,7 +288,9 @@ function initImg(i, t) {
     });
 
   // 点击图片事件：
-  t.onclick = () => showDetail(t);
+  if (!isMobile) {
+    t.onclick = () => showDetail(t);
+  }
 }
 
 /**

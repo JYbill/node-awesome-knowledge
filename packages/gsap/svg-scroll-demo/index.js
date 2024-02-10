@@ -1,6 +1,8 @@
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 window.onload = () => {
+  console.log("height", gsap.getProperty("#app", "height"));
+  const stagger = -0.6;
   gsap.set("#scrollDist", {
     width: "100%",
     height: gsap.getProperty("#app", "height"),
@@ -14,6 +16,36 @@ window.onload = () => {
         left: 0,
         perspective: 300,
       });
+
+      gsap.set("#headerScroll", {
+        width: "100%",
+        height: 11200,
+        backgroundColor: "#000",
+        zIndex: -2,
+      });
+      gsap.set(".header", {
+        position: "fixed",
+        background: "#fff",
+        width: "100%",
+        maxWidth: "1200px",
+        height: "100%",
+        zIndex: 1, // debug
+        top: 0,
+        left: "50%",
+        x: "-50%",
+      });
+
+      // 初始化imageGroup
+      gsap.set("#app .main, #imgGroup, #app .info", {
+        opacity: 1,
+        position: "fixed",
+        width: "100%",
+        height: "100%",
+        top: 0,
+        left: 0,
+        perspective: 300,
+      });
+
       gsap.set("#app img", {
         position: "absolute",
         attr: {
@@ -25,52 +57,40 @@ window.onload = () => {
         },
       });
 
-      gsap
-        .timeline({
-          defaults: { duration: 1 },
-          onUpdate: () => {
-            if (gsap.getProperty("#cursorClose", "opacity") == 1) closeDetail();
-          }, //close detail view on scroll
-          scrollTrigger: {
-            trigger: "#scrollDist",
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 1,
-          },
-        })
+      const tl = gsap.timeline({
+        defaults: { duration: 1 },
+        onUpdate: () => {
+          if (gsap.getProperty("#cursorClose", "opacity") == 1) closeDetail();
+        }, //close detail view on scroll
+        scrollTrigger: {
+          trigger: "#scrollDist",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1,
+        },
+      });
 
-        // 开头文本放大 + 透明
-        .fromTo(
-          "#txt1",
-          { scale: 0.6, transformOrigin: "50%" },
-          { scale: 2, ease: "power1.in" },
-          0
-        )
-        .to(
-          "#txt1 path",
-          { duration: 0.3, opacity: 0, stagger: 0.05, ease: "power1.in" },
-          0
-        )
+      // 开头文本放大 + 透明
+      tl.fromTo(
+        "#txt1",
+        { scale: 0.6, transformOrigin: "50%" },
+        { scale: 2, ease: "power1.in" }
+      ).to("#txt1 path", {
+        duration: 0.3,
+        opacity: 0,
+        stagger: 0.05,
+        ease: "power1.in",
+      });
 
-        // 图片元素
-        // 从-5000 z轴移动到350的位置
-        .fromTo(
-          ".imgBox",
-          { z: -5000 },
-          { z: 350, stagger: -0.3, ease: "none" },
-          0.3
-        )
+      // 图片元素
+      // 从-5000 z轴移动到350的位置
+      tl.fromTo(".imgBox", { z: -5000 }, { z: 350, stagger, ease: "none" }, 0.3)
         // 放大3倍 -> 1.15过渡
         .fromTo(
           ".imgBox img",
           { scale: 3 },
-          { scale: 1.15, stagger: -0.3, ease: "none" },
+          { scale: 1.15, stagger, ease: "none" },
           0.3
-        )
-        .to(
-          ".imgBox",
-          { duration: 0, pointerEvents: "auto", stagger: -0.3 },
-          0.5
         )
         // 从透明开始，且开始具有开始动画
         .from(
@@ -78,7 +98,7 @@ window.onload = () => {
           {
             duration: 0.3,
             opacity: 0,
-            stagger: -0.3,
+            stagger,
             ease: "power1.inOut",
           },
           0.3
@@ -86,13 +106,8 @@ window.onload = () => {
         // 到透明结束，结束时具有透明度动画
         .to(
           ".imgBox img",
-          { duration: 0.1, opacity: 0, stagger: -0.3, ease: "expo.inOut" },
+          { duration: 0.1, opacity: 0, stagger, ease: "expo.inOut" },
           1.2
-        )
-        .to(
-          ".imgBox",
-          { duration: 0, pointerEvents: "none", stagger: -0.3 },
-          1.27
         )
 
         // 结束文本从透明0.1倍 -> 不透明且0.6倍

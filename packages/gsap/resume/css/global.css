@@ -13,10 +13,8 @@ html,
   font-family: "Montserrat", sans-serif;
   font-size: 99px;
   text-align: center;
-  overscroll-behavior-y: none;
-  -webkit-overflow-scrolling: auto;
 }
-#app::-webkit-scrollbar {
+body::-webkit-scrollbar {
   display: none;
 }
 
