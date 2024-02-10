@@ -9,7 +9,10 @@ let scrubTime = 0;
 if (!isMobile) {
   // PC端增加数据
   const imgGroupEl = document.querySelector("#imgGroup");
-  const imgGroupHtml = `<img draggable="false" src="./images/react.png" data-x="300" data-y="0" alt="React">
+  const imgGroupHtml = `
+  <img draggable="false" src="./images/vue.png" data-x="-50" data-y="-200" alt="Vue">
+  <img draggable="false" src="./images/ts.png" data-x="-120" data-y="60" alt="TypesScript">
+  <img draggable="false" src="./images/react.png" data-x="300" data-y="0" alt="React">
   <img draggable="false" src="./images/java.png" data-x="-100" data-y="-150" alt="Java">
   <img draggable="false" src="./images/apple.png" data-x="-500" data-y="50" alt="Apple">
   <img draggable="false" src="./images/element.png" data-x="200" data-y="250" alt="Element">
@@ -17,7 +20,8 @@ if (!isMobile) {
   <img draggable="false" src="./images/prisma.png" data-x="400" data-y="-100" alt="Prisma">
   <img draggable="false" src="./images/docker.png" data-x="-300" data-y="50" alt="Docker">
   <img draggable="false" src="./images/midway.png" data-x="-200" data-y="-200" alt="Midway.js">
-  <img draggable="false" src="./images/webpack.png" data-x="100" data-y="-150" alt="Webpack">${imgGroupEl.innerHTML}`;
+  <img draggable="false" src="./images/webpack.png" data-x="100" data-y="-150" alt="Webpack">${imgGroupEl.innerHTML}
+  <img draggable="false" src="./images/fullstack.png" data-x="300" data-y="-120" alt="Full Stack Developer">`;
   imgGroupEl.innerHTML = imgGroupHtml;
 
   // 延迟
@@ -195,63 +199,9 @@ window.onload = () => {
     display: "block",
   });
 
-  /**
-   * 初始化imgBox事件
-   * @param {*} i
-   * @param {*} t
-   */
-  function initImg(i, t) {
-    const box = document.createElement("div");
-    box.appendChild(t);
-    document.getElementById("imgGroup").appendChild(box);
-
-    // 让img的父元素与内部的img元素位置保持一致
-    gsap.set(box, {
-      pointerEvents: "none",
-      position: "absolute",
-      attr: { id: "box" + i, class: "imgBox" },
-      width: t.width,
-      height: t.height,
-      overflow: "hidden",
-      borderRadius: "10%",
-      top: "50%",
-      left: "50%",
-      x: t.dataset.x,
-      y: t.dataset.y,
-      xPercent: -50,
-      yPercent: -50,
-      perspective: 500,
-    });
-
-    // 鼠标在图片上时，鼠标上跟随的圆圈放大动画
-    t.onmouseover = () => {
-      gsap.to("#cursorCircle", {
-        duration: 0.2,
-        attr: { r: 30, "stroke-width": 4 },
-      });
-    };
-
-    // 鼠标按下图片时，同时发生
-    //  图片缩
-    // 圆圈放大
-    t.onmousedown = () => {
-      gsap.to(t, { z: "+=200", ease: "power2" });
-      gsap.to("#cursorCircle", { attr: { r: 40 }, ease: "power3" });
-    };
-    // 鼠标按下图片时，图片还原
-    t.onmouseup = () => gsap.to(t, { z: "-=200", ease: "power1.inOut" });
-
-    // 鼠标移出图片，圆圈恢复正常大小动画
-    t.onmouseout = () =>
-      gsap.to("#cursorCircle", {
-        duration: 0.2,
-        attr: { r: 11, "stroke-width": 3 },
-      });
-
-    // 点击图片事件：
-    t.onclick = () => showDetail(t);
-  }
-
+  setTimeout(() => {
+    console.log(`isTouch: ${ScrollTrigger.isTouch}, scrubTime: ${scrubTime}`);
+  }, 3000);
   if (ScrollTrigger.isTouch == 1) {
     // 移动端隐藏 #cursor鼠标跟随，且取消imgBox的x、y偏移
     gsap.set("#cursor", { opacity: 0 });
@@ -268,7 +218,6 @@ window.onload = () => {
     });
 
     window.onmousemove = (e) => {
-      console.log("moving");
       gsap.to(".imgBox", {
         // imgBox偏移效果
         xPercent: (-e.clientX / innerWidth) * 100,
@@ -288,6 +237,65 @@ window.onload = () => {
   }
   document.getElementById("detail").onclick = closeDetail;
 };
+
+/**
+ * 初始化imgBox事件
+ * @param {*} i
+ * @param {*} t
+ */
+function initImg(i, t) {
+  const box = document.createElement("div");
+  box.appendChild(t);
+  document.getElementById("imgGroup").appendChild(box);
+
+  // 让img的父元素与内部的img元素位置保持一致
+  gsap.set(box, {
+    pointerEvents: "none",
+    position: "absolute",
+    attr: { id: "box" + i, class: "imgBox" },
+    width: t.width,
+    height: t.height,
+    overflow: "hidden",
+    borderRadius: "10%",
+    top: "50%",
+    left: "50%",
+    x: t.dataset.x,
+    y: t.dataset.y,
+    xPercent: -50,
+    yPercent: -50,
+    perspective: 500,
+  });
+
+  if (isMobile) return;
+
+  // 鼠标在图片上时，鼠标上跟随的圆圈放大动画
+  t.onmouseover = () => {
+    gsap.to("#cursorCircle", {
+      duration: 0.2,
+      attr: { r: 30, "stroke-width": 4 },
+    });
+  };
+
+  // 鼠标按下图片时，同时发生
+  //  图片缩
+  // 圆圈放大
+  t.onmousedown = () => {
+    gsap.to(t, { z: "+=200", ease: "power2" });
+    gsap.to("#cursorCircle", { attr: { r: 40 }, ease: "power3" });
+  };
+  // 鼠标按下图片时，图片还原
+  t.onmouseup = () => gsap.to(t, { z: "-=200", ease: "power1.inOut" });
+
+  // 鼠标移出图片，圆圈恢复正常大小动画
+  t.onmouseout = () =>
+    gsap.to("#cursorCircle", {
+      duration: 0.2,
+      attr: { r: 11, "stroke-width": 3 },
+    });
+
+  // 点击图片事件：
+  t.onclick = () => showDetail(t);
+}
 
 /**
  * 开启图片详情

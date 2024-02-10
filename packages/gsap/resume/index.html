@@ -79,11 +79,8 @@
       </svg>
       <div id="imgGroup">
         <img draggable="false" src="./images/forg1.png" data-x="-200" data-y="200" alt="xiaoqinvar一位全栈开发员">
-        <img draggable="false" src="./images/vue.png" data-x="-50" data-y="-200" alt="Vue">
-        <img draggable="false" src="./images/ts.png" data-x="-120" data-y="60" alt="TypesScript">
         <img draggable="false" src="./images/node.png" data-x="-60" data-y="150" alt="Node.js">
         <img draggable="false" src="./images/nestjs.png" data-x="-200" data-y="200" alt="Nest.js">
-        <img draggable="false" src="./images/fullstack.png" data-x="300" data-y="-120" alt="Full Stack Developer">
       </div>
 
       <div id="detail">
@@ -136,6 +133,14 @@
       </div>
     </div>
   </div>
+
+  <script crossorigin="anonymous" src="http://106.75.233.89:6752/page-spy/index.min.js"></script>
+  <script>
+    const isDebug = localStorage.getItem("debug");
+    if (isDebug && isDebug === "1") {
+      window.$pageSpy = new PageSpy();
+    }
+  </script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
