@@ -1,7 +1,7 @@
 import ILinkedList from "../interface/linkedlist.interface";
 
 /**
- * @Description: 实现单向链表
+ * @Description: 实现单向链表(包含"头节点"和"尾节点")
  * @Author: 小钦var
  * @Date: 2023/2/5 11:57
  */
@@ -189,6 +189,11 @@ export class LinkedList<T = any> implements ILinkedList<T> {
     return this.length === 0;
   }
 
+  /**
+   * 根据索引获取对应node节点
+   * @param position index索引
+   * @private
+   */
   private getNode(position: number): [Node<T>, Node<T> | null] {
     if (position < 0 || position >= this.length) {
       throw Error(`getNode链表索引越界：${position}`);
@@ -202,6 +207,15 @@ export class LinkedList<T = any> implements ILinkedList<T> {
     }
     return [preNode!, currentNode];
   }
+
+  /**
+   * 是否是尾部节点 / 最后一个节点
+   * @param node
+   * @private
+   */
+  protected isTail(node: Node<T>) {
+    return node === this.footer;
+  }
 }
 
 function main() {
@@ -214,4 +228,4 @@ function main() {
   linkedList.traverse();
 }
 
-main();
+// main();

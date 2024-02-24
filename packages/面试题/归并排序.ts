@@ -4,6 +4,8 @@
  * @LastEditTime: 2024/01/30 11:21
  */
 function sortArray(list: number[]): number[] {
+  if (list.length <= 1) return list;
+
   return [];
 }
 
