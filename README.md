@@ -460,7 +460,7 @@ node --max-new-space-size=1024 test.js // 设置新生代内存空间的最大�
 
 * websocket 数据帧 <img src="./packages/nodejs深入浅出/images/websocket数据帧.png" />
 
-* TLS/SSL <img src="./packages/nodejs深入浅出/images/TLS:SSL.png" />
+* TLS/SSL <img src="./packages/nodejs深入浅出/images/TLS-SSL.png" />
 
 ## web 应用构建
 
