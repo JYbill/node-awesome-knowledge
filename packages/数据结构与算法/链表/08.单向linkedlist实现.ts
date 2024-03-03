@@ -1,14 +1,10 @@
 import ILinkedList from "../interface/linkedlist.interface";
-
+import { Node } from "./Node";
 /**
  * @Description: 实现单向链表
  * @Author: 小钦var
  * @Date: 2023/2/5 11:57
  */
-export class Node<T = any> {
-  constructor(public element: T, public next: Node<T> | null = null) {}
-}
-
 export class LinkedList<T = any> implements ILinkedList<T> {
   header: Node<T> | null = null;
   length: number = 0;

@@ -113,7 +113,7 @@ export class LinkedList<T = any> implements ILinkedList<T> {
       }
     }
     this.length--;
-    return (removeNode as Node<T>).element;
+    return removeNode!.element;
   }
 
   /**
@@ -175,6 +175,8 @@ export class LinkedList<T = any> implements ILinkedList<T> {
     do {
       if (currentNode?.element === element) {
         return index;
+      } else if (currentNode!.next === this.header) {
+        break;
       }
       currentNode = currentNode?.next ?? null;
       index++;
@@ -194,7 +196,7 @@ export class LinkedList<T = any> implements ILinkedList<T> {
    * @param position index索引
    * @private
    */
-  private getNode(position: number): [Node<T>, Node<T> | null] {
+  protected getNode(position: number): [Node<T>, Node<T> | null] {
     if (position < 0 || position >= this.length) {
       throw Error(`getNode链表索引越界：${position}`);
     }
@@ -223,7 +225,7 @@ function main() {
   linkedList.append("1");
   linkedList.append("2");
   linkedList.append("3");
-  // linkedList.removeAt(2); // 测试删除尾节点
+  linkedList.removeAt(2); // 测试删除尾节点
   // linkedList.removeBy("3"); // 测试删除尾节点
   linkedList.traverse();
 }
