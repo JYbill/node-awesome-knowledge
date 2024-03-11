@@ -1,11 +1,9 @@
 /**
  * @Author: 小钦var
  * @Date: 2023/3/30 19:16
- * @LastEditTime: 2024/02/26 10:36
+ * @LastEditTime: 2024/03/11 10:05
  */
 function sortArray(list: number[]): number[] {
-  if (list.length <= 1) return list;
-
   return [];
 }
 
