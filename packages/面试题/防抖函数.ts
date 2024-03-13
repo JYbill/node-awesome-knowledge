@@ -1,7 +1,12 @@
 type AnyFuncType = (...args: any[]) => any;
 
+/**
+ * 防抖函数：超过指定的间隔时间后，才能运行。场景：用户短时间内多次点击提交，只有第一次提交才有效
+ * @param callback
+ * @param timeout
+ */
 export function debounce<This = any>(callback: AnyFuncType, timeout: number) {
-  let timer: NodeJS.Timer | number | null;
+  let timer: number | null;
 
   return function (this: This, ...args: any[]) {
     if (timer) return;
