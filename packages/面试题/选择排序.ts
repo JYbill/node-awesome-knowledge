@@ -1,7 +1,7 @@
 /**
  * @Description: 选择排序
  * @Author: 小钦var
- * @Date: 2023/12/5 09:21
+ * @Date: 2024/03/13 09:33
  */
 function selectSort(list: number[]): number[] {
   for (let i = 0; i < list.length - 1; i++) {
