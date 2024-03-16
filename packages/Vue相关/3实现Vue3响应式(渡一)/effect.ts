@@ -6,7 +6,17 @@ export function trace(target: any, operation: Read, key: string) {
     console.log("trace", target);
     return;
   }
-  console.log("trace", "key", key, "value =", target[key]);
+  console.log(
+    "trace",
+    "target",
+    // target,
+    // "opera = ",
+    operation,
+    "key = ",
+    key,
+    ", value =",
+    target[key]
+  );
 }
 
 export function trigger(

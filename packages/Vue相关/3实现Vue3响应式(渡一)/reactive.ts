@@ -18,15 +18,44 @@ export function reactive<T extends object>(obj: T): T {
   return proxyObject;
 }
 
+type arrayInstrumentType = {
+  [funcName: string]: (...args: any[]) => boolean | number;
+};
+const ORIGIN = Symbol("origin");
+const arrayInstrument: arrayInstrumentType = {}; // 重写的Array查找方法
+["includes", "indexOf", "lastIndexOf"].forEach((funcName: string) => {
+  arrayInstrument[funcName] = function (this: any, ...args: any[]) {
+    let result = Array.prototype[funcName as any].apply(this, args); // this：Proxy对象
+    if ((result as number) <= -1 || !result) {
+      // 此时，Proxy对象肯定未查找到
+      result = Array.prototype[funcName as any].apply(this[ORIGIN], args);
+    }
+    return result;
+  };
+});
+
 /**
  * GET 读取属性的依赖收集
  * @param target
  * @param key
  * @param receiver
  */
-function get<T extends object>(target: T, key: string, receiver: any) {
+function get<T extends object>(target: T, key: string | symbol, receiver: any) {
+  // 提供arrayInstrument拿到原始对象
+  if (key === ORIGIN || typeof key === "symbol") {
+    return target;
+  }
+
   // 🚀依赖收集
   trace(target, Read.GET, key);
+
+  // ⚠️ 数组的查找方法，问题：查到对象元素时会返回proxy对象，如果是proxy对象则为代理的代理，所以永远不可能访问到
+  // 解决方案1：传入的对象转为proxy对象 且 reactive对于proxy对象直接返回
+  // 解决方案2：使用代理数组方法查找，如果找不到再使用原始数组对象查找（Vue3👍）
+  //  缺点：代理数组方法查找，会额外触发多余的依赖收集
+  if (arrayInstrument.hasOwnProperty(key)) {
+    return arrayInstrument[key].bind(receiver); // 传递this指向为proxy对象
+  }
 
   /*
    * 🚩这里为什么要传递一个receiver?

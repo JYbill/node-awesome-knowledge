@@ -10,22 +10,21 @@ type PersonType = {
   del?: boolean;
   unExit?: boolean;
 };
-let person = reactive<PersonType>({
+const person: PersonType = {
   name: "xiaoqinvar",
   age: 23,
   get username() {
     return this.name + this.age;
   },
-  set username(name) {
-    console.log(1);
-  },
   test: {
     hobbies: "爱好",
   },
   del: true,
-});
+};
+const obj = [1, person, 3, 4];
+let objProxy = reactive(obj);
 
 function running() {
-  console.log("running", (person.del = true));
+  console.log("查找数组对象", objProxy.includes(person));
 }
 running();
