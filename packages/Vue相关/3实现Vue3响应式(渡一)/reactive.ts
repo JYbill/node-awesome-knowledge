@@ -1,4 +1,4 @@
-import { trace, trigger } from "./effect";
+import { pauseTrigger, startTrigger, trace, trigger } from "./effect";
 import { Read, Write } from "./operation";
 import { hasChanged } from "./utils";
 
@@ -19,7 +19,7 @@ export function reactive<T extends object>(obj: T): T {
 }
 
 type arrayInstrumentType = {
-  [funcName: string]: (...args: any[]) => boolean | number;
+  [funcName: string]: (...args: any[]) => any;
 };
 const ORIGIN = Symbol("origin");
 const arrayInstrument: arrayInstrumentType = {}; // 重写的Array查找方法
@@ -31,6 +31,17 @@ const arrayInstrument: arrayInstrumentType = {}; // 重写的Array查找方法
       result = Array.prototype[funcName as any].apply(this[ORIGIN], args);
     }
     return result;
+  };
+});
+
+/**
+ * 重写数组实例的方法，调用方法时停止依赖收集，调用结束
+ */
+["push", "pop", "shift", "unshift"].forEach((funcName: string) => {
+  arrayInstrument[funcName] = function (this: any, ...args: any[]) {
+    pauseTrigger();
+    Array.prototype[funcName as any].apply(this, args);
+    startTrigger();
   };
 });
 
@@ -109,16 +120,41 @@ function set<T extends object>(
   // 🚀派发更新
   const exist = target.hasOwnProperty(key);
   const operation = exist ? Write.SET : Write.ADD; // 存在属性即更新，不存在即添加
-  // ⚠️ 这里不要用receiver避免多余的依赖收集
-  const oldValue = Reflect.get(target, key);
+  const oldValue = Reflect.get(target, key); // ⚠️ 这里不要用receiver避免多余的依赖收集
+  const oldArrayLen = Array.isArray(target) ? target.length : undefined;
+  const result = Reflect.set(target, key, newValue, receiver);
+  const newArrayLen = Array.isArray(target) ? target.length : undefined;
 
-  if (hasChanged(newValue, oldValue) || !exist) {
-    // 值有变化 || 值新增
+  if (result && (hasChanged(newValue, oldValue) || !exist)) {
+    // 设置成功 && (值有变化 || 值新增)
     trigger(target, operation, key, newValue);
   }
 
-  // trigger(target, operation, key, newValue);
-  return Reflect.set(target, key, newValue, receiver);
+  /*
+    1. 当设置对象是一个数组 且
+    2. 此时当设置导致了数组长度发生了变化
+      3.1. 不是设置length属性（设置length会正常触发）
+      原因3.1：根据ECMA官方描述，该方式底层会隐式通过Object.definePrototype(arr, 'length')设置length属性，而我们"set"函数无法监听到该方式
+      3.2. 设置的就是length属性，但比原来的长度要小，需要找到被删除的元素
+   * 如：
+   * ```ts
+   * const arr = [1, 2, 3]
+   * arr[100] = 100; // 该操作需要额外处理
+   * ```
+   * */
+  if (Array.isArray(target) && oldArrayLen !== newArrayLen) {
+    if (key !== "length") {
+      // 3.1
+      trigger(target, Write.SET, "length", newArrayLen);
+    } else {
+      // 3.2, 这里放心，如果设置length >= arr.length时，循环是进不去的
+      for (let i = newArrayLen as number; i < (oldArrayLen as number); i++) {
+        trigger(target, Write.DELETE, i.toString());
+      }
+    }
+  }
+
+  return result;
 }
 
 /**

@@ -25,6 +25,6 @@ const obj = [1, person, 3, 4];
 let objProxy = reactive(obj);
 
 function running() {
-  console.log("查找数组对象", objProxy.includes(person));
+  console.log("running", objProxy.unshift(123123), objProxy);
 }
 running();
