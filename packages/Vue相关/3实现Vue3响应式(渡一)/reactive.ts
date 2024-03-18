@@ -1,4 +1,4 @@
-import { pauseTrigger, startTrigger, trace, trigger } from "./effect";
+import { pauseTrigger, resumeTrigger, trace, trigger } from "./effect";
 import { Read, Write } from "./operation";
 import { hasChanged } from "./utils";
 
@@ -41,7 +41,7 @@ const arrayInstrument: arrayInstrumentType = {}; // 重写的Array查找方法
   arrayInstrument[funcName] = function (this: any, ...args: any[]) {
     pauseTrigger();
     Array.prototype[funcName as any].apply(this, args);
-    startTrigger();
+    resumeTrigger();
   };
 });
 
@@ -99,7 +99,7 @@ function has<T extends object>(target: T, key: string): boolean {
   const result = Reflect.has(target, key);
   if (!result) return result;
 
-  // 🚀派发更新
+  // 🚀依赖收集
   trace(target, Read.IN, key);
   return result;
 }

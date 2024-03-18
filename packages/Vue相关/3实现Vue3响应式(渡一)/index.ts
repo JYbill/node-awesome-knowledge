@@ -1,4 +1,5 @@
 import { reactive } from "./reactive";
+import { effect } from "./effect";
 
 type PersonType = {
   name: string;
@@ -21,10 +22,16 @@ const person: PersonType = {
   },
   del: true,
 };
-const obj = [1, person, 3, 4];
-let objProxy = reactive(obj);
+const p = reactive(person);
 
 function running() {
-  console.log("running", objProxy.unshift(123123), objProxy);
+  function fn() {
+    if (p.age >= 18) {
+      console.log(p.name);
+    } else {
+      console.log(p.del);
+    }
+  }
+  fn();
 }
-running();
+effect(running);
