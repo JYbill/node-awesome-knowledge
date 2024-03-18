@@ -1,10 +1,10 @@
 /**
  * @Author: 小钦var
  * @Date: 2023/3/30 19:16
- * @LastEditTime: 2024/03/11 10:05
+ * @LastEditTime: 2024/03/18 15:09
  */
 function sortArray(list: number[]): number[] {
-  return [];
+  return list;
 }
 
 function main() {
