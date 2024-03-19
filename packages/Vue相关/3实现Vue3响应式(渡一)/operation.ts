@@ -14,3 +14,12 @@ export enum Write {
   ADD = "add",
   DELETE = "delete",
 }
+
+/**
+ * 写入操作对应读取操作类型映射
+ */
+export const Write2Read = {
+  [Write.SET]: [Read.GET, Read.IN],
+  [Write.ADD]: [Read.GET, Read.IN, Read.ITERATE],
+  [Write.DELETE]: [Read.GET, Read.IN, Read.ITERATE],
+};

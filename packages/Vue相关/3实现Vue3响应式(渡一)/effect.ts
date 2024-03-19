@@ -1,11 +1,11 @@
-import { Read, Write } from "./operation";
+import { Read, Write, Write2Read } from "./operation";
 
 type ActiveEffectType = null | ((...args: any[]) => any);
 let activeEffect: ActiveEffectType = null;
 const targetMap = new WeakMap<WeakKey, Map<string | symbol, any>>();
 export function effect(fn: (...args: any[]) => any) {
   const effectWrapper = () => {
-    activeEffect = fn;
+    activeEffect = effectWrapper;
     fn();
     activeEffect = null;
   };
@@ -28,6 +28,13 @@ export function resumeTrigger() {
 }
 
 const ITERATOR_KEY = Symbol("iterator");
+
+/**
+ * 依赖收集
+ * @param target
+ * @param operation
+ * @param key
+ */
 export function trace(target: any, operation: Read, key: string) {
   if (!triggerStatus || !activeEffect) return; // 依赖收集状态为暂停 || 用户的副作用没有执行，都停止依赖收集直接返回
 
@@ -43,10 +50,11 @@ export function trace(target: any, operation: Read, key: string) {
   } else {
     typeKey = key;
   }
-  let typeMap: undefined | Map<string | symbol, Set<any>> = propsMap.get(typeKey); // 类型Map
+  let typeMap: undefined | Map<string | symbol, Set<any>> =
+    propsMap.get(typeKey); // 类型Map
   if (!typeMap) {
     const map = new Map();
-    propsMap.set(target, map)
+    propsMap.set(key, map);
     typeMap = map;
   }
   let deps = typeMap.get(operation); // 依赖收集的Set，内部全是effect函数
@@ -55,8 +63,7 @@ export function trace(target: any, operation: Read, key: string) {
     typeMap.set(operation, set);
     deps = set;
   }
-
-  console.log("debug", propsMap);
+  // console.log("debug", propsMap);
 }
 
 export function trigger(
@@ -65,9 +72,32 @@ export function trigger(
   key: string,
   value?: any
 ) {
-  if (operation === Write.DELETE) {
-    console.log(`trigger[${operation}]`, `key=${key}`);
-    return;
+  const effectFns = getEffectFns(target, operation, key);
+  for (const effectFn of effectFns) {
+    effectFn();
   }
-  console.log(`trigger[${operation}]`, `key=${key}`, "最新值:", target[key]);
+}
+
+/**
+ * 获取effect函数
+ * @param target
+ * @param operation
+ * @param key
+ */
+function getEffectFns(target: any, operation: Write, key: string) {
+  const effectFns = new Set<(...args: any[]) => any>([]);
+  const propsMap = targetMap.get(target);
+  if (!propsMap) return effectFns; // target不存在Map中
+
+  // console.log("effectFns", key, operation, propsMap);
+  const typeMap: Map<string | symbol, Set<any>> = propsMap.get(key);
+  const ReadOperation: Read[] = Write2Read[operation]; // 获取写操作对应执行的读操作类型
+  for (const readOpera of ReadOperation) {
+    const deps = typeMap.get(readOpera);
+    if (!deps) continue;
+    for (const fn of deps) {
+      effectFns.add(fn);
+    }
+  }
+  return effectFns;
 }

@@ -10,6 +10,7 @@ type PersonType = {
   };
   del?: boolean;
   unExit?: boolean;
+  arr: number[];
 };
 const person: PersonType = {
   name: "xiaoqinvar",
@@ -21,11 +22,13 @@ const person: PersonType = {
     hobbies: "爱好",
   },
   del: true,
+  arr: [1, 2, 3],
 };
 const p = reactive(person);
 
 function running() {
   function fn() {
+    console.log("running");
     if (p.age >= 18) {
       console.log(p.name);
     } else {
@@ -35,3 +38,5 @@ function running() {
   fn();
 }
 effect(running);
+p.age = 10;
+p.name = "dont"; // 期望不触发派发更新
