@@ -12,6 +12,29 @@ export function effect(fn: (...args: any[]) => any) {
   effectWrapper();
 }
 
+/**
+ * 清理effectFn的依赖引用，然后重新设置
+ * 原因：避免开发者的无效调用
+ * ```ts
+ * function running() {
+ *   function fn() {
+ *     console.log("running");
+ *     if (p.age >= 18) {
+ *       console.log(p.name);
+ *     } else {
+ *       console.log(p.del);
+ *     }
+ *   }
+ *   fn();
+ * }
+ * effect(running);
+ * p.age = 10;
+ * // 此时应该只有"age"、"del"才会重新触发effectFn函数
+ * p.name = "don't"; // expect: 不触发派发更新 ⚠️
+ * ```
+ */
+function cleanup() {}
+
 /*
  * 依赖收集的状态，为true进行收集，为false不收集
  * 不进行依赖收集的原因：对于"某些方法内部调用而产生多余的依赖收集", 我们是不需要的
