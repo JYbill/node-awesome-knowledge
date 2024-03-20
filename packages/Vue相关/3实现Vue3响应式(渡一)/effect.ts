@@ -1,7 +1,15 @@
 import { Read, Write, Write2Read } from "./operation";
 
 type ActiveEffectType = null | ((...args: any[]) => any);
-type EffectFnType = ((...args: any[]) => any) & { deps: any[] };
+type EffectFnType = ((...args: any[]) => any) & {
+  deps: any[];
+  options: EffectOptType;
+};
+type EffectOptType = {
+  lazy?: boolean;
+  scheduler?: (...args: any[]) => any;
+};
+
 const targetMap = new WeakMap<WeakKey, Map<string | symbol, any>>();
 let activeEffect: ActiveEffectType = null;
 
@@ -26,7 +34,8 @@ let activeEffect: ActiveEffectType = null;
  */
 const effectStack: ActiveEffectType[] = [];
 
-export function effect(fn: (...args: any[]) => any) {
+export function effect(fn: (...args: any[]) => any, options: EffectOptType) {
+  const { lazy = false } = options;
   const effectWrapper: EffectFnType = () => {
     activeEffect = effectWrapper; // 入栈的effectFn即为栈帧
     effectStack.push(activeEffect); // 入栈
@@ -36,7 +45,10 @@ export function effect(fn: (...args: any[]) => any) {
     activeEffect = effectStack.at(-1) || null; // 有effectFn函数即为栈帧，否则即为空
   };
   effectWrapper.deps = []; // 初始化依赖集合
-  effectWrapper();
+  effectWrapper.options = options;
+
+  if (!lazy) return effectWrapper(); // 懒加载
+  return effectWrapper;
 }
 
 /**
@@ -146,7 +158,12 @@ export function trigger(
 ) {
   const effectFns = getEffectFns(target, operation, key);
   for (const effectFn of effectFns) {
-    effectFn();
+    if (effectFn === activeEffect) continue; // 跳过正在做依赖收集的函数
+    if (effectFn.options.scheduler) {
+      effectFn.options.scheduler();
+    } else {
+      effectFn();
+    }
   }
 }
 
@@ -157,7 +174,7 @@ export function trigger(
  * @param key
  */
 function getEffectFns(target: any, operation: Write, key: string) {
-  const effectFns = new Set<(...args: any[]) => any>([]);
+  const effectFns = new Set<EffectFnType>([]);
   const propsMap = targetMap.get(target);
   if (!propsMap) return effectFns; // target不存在Map中
 

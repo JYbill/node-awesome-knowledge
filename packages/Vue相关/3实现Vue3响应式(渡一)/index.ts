@@ -29,15 +29,15 @@ const p = reactive(person);
 function running() {
   function fn() {
     console.log("running");
-    effect(() => {
-      console.log("inner");
-      p.name;
-    });
-    p.age;
+    p.age++;
   }
   fn();
 }
-effect(running);
-console.log(" --- ");
-// p.name = "test";
-p.age = 10;
+const effectLazy = effect(running, {
+  lazy: true,
+  scheduler: () => {
+    console.log("scheduler");
+  },
+});
+effectLazy();
+p.age++;
