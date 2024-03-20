@@ -46,6 +46,7 @@ export function effect(fn: (...args: any[]) => any) {
  * del  - GET - [fn]
  */
 function cleanup(fn: EffectFnType) {
+  // console.log("debug deps", fn.deps)
   if (fn.deps.length <= 0) return;
 
   // 清理effectFn依赖的所有集合
@@ -53,6 +54,7 @@ function cleanup(fn: EffectFnType) {
   for (const depSet of deps) {
     (depSet as Set<any>).delete(fn);
   }
+  fn.deps.length = 0;
 }
 
 /*
@@ -105,9 +107,10 @@ export function trace(target: any, operation: Read, key: string) {
     const set = new Set<ActiveEffectType>([activeEffect]);
     typeMap.set(operation, set);
     deps = set;
-    (activeEffect as EffectFnType).deps.push(deps); // 标记deps Set集合
   }
-  console.log("debug", propsMap);
+  deps.add(activeEffect);
+  (activeEffect as EffectFnType).deps.push(deps); // 标记deps Set集合
+  // console.log("propsMap", propsMap);
 }
 
 export function trigger(

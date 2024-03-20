@@ -34,10 +34,12 @@ function running() {
     } else {
       console.log(p.del);
     }
+    console.log("end...")
   }
   fn();
 }
 effect(running);
 p.age = 10;
-p.name = "dont"; // 期望不触发派发更新
-// p.del = false
+// p.name = "dont"; // 期望不触发派发更新
+p.del = false
+p.age = 8;
