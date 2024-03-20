@@ -1,6 +1,7 @@
 import { Read, Write, Write2Read } from "./operation";
 
 type ActiveEffectType = null | ((...args: any[]) => any);
+type EffectFnType = ((...args: any[]) => any) & { deps: any[] };
 const targetMap = new WeakMap<WeakKey, Map<string | symbol, any>>();
 let activeEffect: ActiveEffectType = null;
 
@@ -26,13 +27,15 @@ let activeEffect: ActiveEffectType = null;
 const effectStack: ActiveEffectType[] = [];
 
 export function effect(fn: (...args: any[]) => any) {
-  const effectWrapper = () => {
+  const effectWrapper: EffectFnType = () => {
     activeEffect = effectWrapper; // 入栈的effectFn即为栈帧
     effectStack.push(activeEffect); // 入栈
+    cleanup(effectWrapper);
     fn();
     effectStack.pop(); // 出栈
     activeEffect = effectStack.at(-1) || null; // 有effectFn函数即为栈帧，否则即为空
   };
+  effectWrapper.deps = []; // 初始化依赖集合
   effectWrapper();
 }
 
@@ -53,11 +56,31 @@ export function effect(fn: (...args: any[]) => any) {
  * }
  * effect(running);
  * p.age = 10;
- * // 此时应该只有"age"、"del"才会重新触发effectFn函数
+ * // 重新执行effectFn，且要重新初始化effectFn的依赖
+ * // 执行后，此时应该只有"age"、"del"才会重新触发effectFn函数
  * p.name = "don't"; // expect: 不触发派发更新 ⚠️
  * ```
+ *
+ * 第一次依赖收集
+ * age  - GET - [fn]
+ * name - GET - [fn]
+ * 第二次, age设置为10后依赖收集
+ * age  - GET - [fn]
+ * name - GET - [  ]
+ * del  - GET - [fn]
  */
-function cleanup() {}
+function cleanup(fn: EffectFnType) {
+  // console.log("debug deps", fn.deps)
+  if (fn.deps.length <= 0) return;
+
+  // 清理effectFn依赖的所有集合
+  const deps = fn.deps; // 这里拿到的是所有的集合、
+  // 将effectFn从deps全部移除
+  for (const depSet of deps) {
+    (depSet as Set<any>).delete(fn);
+  }
+  fn.deps.length = 0; // 且，初始化依赖数组
+}
 
 /*
  * 依赖收集的状态，为true进行收集，为false不收集
@@ -110,7 +133,9 @@ export function trace(target: any, operation: Read, key: string) {
     typeMap.set(operation, set);
     deps = set;
   }
-  // console.log("debug", propsMap);
+  deps.add(activeEffect);
+  (activeEffect as EffectFnType).deps.push(deps); // 标记deps Set集合
+  // console.log("propsMap", propsMap);
 }
 
 export function trigger(
