@@ -50,11 +50,12 @@ function cleanup(fn: EffectFnType) {
   if (fn.deps.length <= 0) return;
 
   // 清理effectFn依赖的所有集合
-  const deps = fn.deps; // 这里拿到的是所有的集合
+  const deps = fn.deps; // 这里拿到的是所有的集合、
+  // 将effectFn从deps全部移除
   for (const depSet of deps) {
     (depSet as Set<any>).delete(fn);
   }
-  fn.deps.length = 0;
+  fn.deps.length = 0; // 且，初始化依赖数组
 }
 
 /*
