@@ -40,3 +40,4 @@ function running() {
 effect(running);
 p.age = 10;
 p.name = "dont"; // 期望不触发派发更新
+// p.del = false
