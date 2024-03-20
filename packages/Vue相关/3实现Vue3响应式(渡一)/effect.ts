@@ -1,13 +1,37 @@
 import { Read, Write, Write2Read } from "./operation";
 
 type ActiveEffectType = null | ((...args: any[]) => any);
-let activeEffect: ActiveEffectType = null;
 const targetMap = new WeakMap<WeakKey, Map<string | symbol, any>>();
+let activeEffect: ActiveEffectType = null;
+
+/**
+ * 解决嵌套effectFn()的依赖收集问题
+ * 通过栈结构对应函数的执行顺序，入栈、出栈、指定栈帧
+ * ```ts
+ * function running() {
+ *   function fn() {
+ *     console.log("running");
+ *     effect(() => {
+ *       console.log("inner");
+ *       p.name;
+ *     });
+ *     p.age;
+ *   }
+ *   fn();
+ * }
+ * effect(running);
+ * p.age = 10; // 正常这里应该触发整个running()、内部函数
+ * ```
+ */
+const effectStack: ActiveEffectType[] = [];
+
 export function effect(fn: (...args: any[]) => any) {
   const effectWrapper = () => {
-    activeEffect = effectWrapper;
+    activeEffect = effectWrapper; // 入栈的effectFn即为栈帧
+    effectStack.push(activeEffect); // 入栈
     fn();
-    activeEffect = null;
+    effectStack.pop(); // 出栈
+    activeEffect = effectStack.at(-1) || null; // 有effectFn函数即为栈帧，否则即为空
   };
   effectWrapper();
 }
@@ -114,6 +138,8 @@ function getEffectFns(target: any, operation: Write, key: string) {
 
   // console.log("effectFns", key, operation, propsMap);
   const typeMap: Map<string | symbol, Set<any>> = propsMap.get(key);
+  if (!typeMap) return effectFns;
+
   const ReadOperation: Read[] = Write2Read[operation]; // 获取写操作对应执行的读操作类型
   for (const readOpera of ReadOperation) {
     const deps = typeMap.get(readOpera);

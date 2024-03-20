@@ -29,14 +29,15 @@ const p = reactive(person);
 function running() {
   function fn() {
     console.log("running");
-    if (p.age >= 18) {
-      console.log(p.name);
-    } else {
-      console.log(p.del);
-    }
+    effect(() => {
+      console.log("inner");
+      p.name;
+    });
+    p.age;
   }
   fn();
 }
 effect(running);
+console.log(" --- ");
+// p.name = "test";
 p.age = 10;
-p.name = "dont"; // 期望不触发派发更新
