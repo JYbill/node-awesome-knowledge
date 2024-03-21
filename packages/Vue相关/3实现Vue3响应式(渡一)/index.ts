@@ -32,14 +32,8 @@ const fullName = computed(() => {
   console.log("computed");
   return p.name + p.age;
 })
-console.log("res", fullName.value);
-console.log("res", fullName.value);
-console.log("res", fullName.value);
-console.log("res", fullName.value);
+effect(() => {
+  console.log("render", fullName.value);
+}, {});
 p.age++;
-p.age++;
-p.age++;
-console.log("-------")
-console.log("res", fullName.value);
-console.log("res", fullName.value);
 
