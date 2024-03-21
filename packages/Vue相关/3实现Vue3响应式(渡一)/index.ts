@@ -1,5 +1,7 @@
 import { reactive } from "./reactive";
 import { effect } from "./effect";
+import {ref} from "./ref";
+import {computed} from "./computed";
 
 type PersonType = {
   name: string;
@@ -25,19 +27,19 @@ const person: PersonType = {
   arr: [1, 2, 3],
 };
 const p = reactive(person);
-
-function running() {
-  function fn() {
-    console.log("running");
-    p.age++;
-  }
-  fn();
-}
-const effectLazy = effect(running, {
-  lazy: true,
-  scheduler: () => {
-    console.log("scheduler");
-  },
-});
-effectLazy();
+const num = ref(0);
+const fullName = computed(() => {
+  console.log("computed");
+  return p.name + p.age;
+})
+console.log("res", fullName.value);
+console.log("res", fullName.value);
+console.log("res", fullName.value);
+console.log("res", fullName.value);
 p.age++;
+p.age++;
+p.age++;
+console.log("-------")
+console.log("res", fullName.value);
+console.log("res", fullName.value);
+

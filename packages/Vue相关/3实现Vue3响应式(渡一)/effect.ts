@@ -40,9 +40,10 @@ export function effect(fn: (...args: any[]) => any, options: EffectOptType) {
     activeEffect = effectWrapper; // 入栈的effectFn即为栈帧
     effectStack.push(activeEffect); // 入栈
     cleanup(effectWrapper);
-    fn();
+    const result = fn();
     effectStack.pop(); // 出栈
     activeEffect = effectStack.at(-1) || null; // 有effectFn函数即为栈帧，否则即为空
+    return result;
   };
   effectWrapper.deps = []; // 初始化依赖集合
   effectWrapper.options = options;
