@@ -11,6 +11,7 @@ export function debounce<This = any>(callback: AnyFuncType, timeout: number) {
   return function (this: This, ...args: any[]) {
     if (timer) return;
     callback.apply(this, args);
+    // @ts-ignore
     timer = setTimeout(() => {
       clearTimeout(timer as number);
       timer = null;

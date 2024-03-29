@@ -17,6 +17,7 @@ export function throttle(callback: (...args: any[]) => void, ms: number) {
   return function (this: any, ...args: any[]) {
     const context = this;
     if (timer) return; // 说明在延时时间范围内
+    // @ts-ignore
     timer = setTimeout(() => {
       callback.call(context, args);
       timer = null;
