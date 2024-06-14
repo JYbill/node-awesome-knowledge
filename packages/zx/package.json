@@ -1,0 +1,15 @@
+{
+  "name": "zx-study",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "zx 01.hello.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "zx": "^8.1.2"
+  }
+}
