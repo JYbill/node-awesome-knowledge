@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "zx 01.hello.mjs"
+    "test": "zx --verbose 01.hello.mjs"
   },
   "keywords": [],
   "author": "",
