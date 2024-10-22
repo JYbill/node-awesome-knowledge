@@ -1,7 +1,7 @@
 /**
  * @Author: 小钦var
  * @Date: 2023/3/30 20:14
- * @LastEditTime: 2024-07-10 10:40:30
+ * @LastEditTime: 2024-10-22 10:20:00
  */
 function quickSort(list: number[]): number[] {
   return list;
