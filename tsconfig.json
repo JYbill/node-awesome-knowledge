@@ -9,9 +9,9 @@
     // 导入文件采用大小写一致
     "forceConsistentCasingInFileNames": true,
     // 严格模式
-    "strict": true,
+    "strict": false,
     // class成员属性严格初始化
-    "strictPropertyInitialization": true,
+    "strictPropertyInitialization": false,
     // 跳过第三方库检查
     "skipLibCheck": true,
     // 不允许模糊的this
