@@ -48,7 +48,7 @@ class Test {
  * - 如果可以转为class如Number、String构造函数，则返回转换之后的结果（基本数据类型）
  * - 如果无法转为class如"hello" -> URL，则直接返回原始值""（基本数据类型）
  */
-/*const str = plainToClass(URL, "hello");
+/*const str = plainToClass(Map, "hello");
 console.log(str, typeof str);*/
 
 export {}
