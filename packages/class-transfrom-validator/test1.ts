@@ -11,6 +11,11 @@ import {IsBoolean, IsNumber, IsString} from 'class-validator';
 function logType(target: any, key: string) {
 }
 
+class Empty {
+  name: string;
+  age: number;
+}
+
 class Test {
 
   // @IsBoolean()
@@ -26,9 +31,15 @@ class Test {
   @logType
   name: number;
 }
-const res = plainToClass(Test, {name: "500"}, { enableImplicitConversion: true });
-console.log(res)
+// const res = plainToClass(Test, {name: "500"}, { enableImplicitConversion: true });
+// console.log(res)
 
 // console.log(plainToClass(Boolean, "100"));
+
+/**
+ * class-transformer如果无法转换时，直接返回原始值
+ */
+// const url = plainToClass(Empty, 1);
+// console.log(url, typeof url);
 
 export {}
