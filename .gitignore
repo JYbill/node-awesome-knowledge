@@ -14,3 +14,11 @@ build
 
 .env*
 pnpm-lock.yaml
+packages/typescript/**/*.js
+packages/EcmaScript-Study/**/*.js
+packages/thirdly-part/rxjs/*.js
+packages/数据结构与算法/**/*.js
+packages/leet-code/*.js
+packages/Vue相关/**/*.js
+packages/面试题/**/*.js
+**/*/*.js.map

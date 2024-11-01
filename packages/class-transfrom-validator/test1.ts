@@ -2,6 +2,11 @@ import "reflect-metadata";
 import {Expose, plainToClass, Transform, Type} from "class-transformer";
 import {IsBoolean, IsNumber, IsString} from 'class-validator';
 
+/**
+ * @Description: 测试class-transformer、class-validator转换规则
+ * @Author: 小钦var
+ * @Date: 2024/11/1 09:22
+ */
 class Test {
 
   // @IsBoolean()
@@ -14,7 +19,9 @@ class Test {
   @Expose({ name: 'aka' })
   name: number;
 }
-const res = plainToClass(Test, {age: 0, name: "false"}, { enableImplicitConversion: true });
-console.log(res)
+// const res = plainToClass(Test, {age: 0, name: "false"}, { enableImplicitConversion: true });
+// console.log(res)
+
+console.log(plainToClass(Boolean, "100"));
 
 export {}
