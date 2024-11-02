@@ -47,8 +47,9 @@ class Test {
  * 结论：
  * - 如果可以转为class如Number、String构造函数，则返回转换之后的结果（基本数据类型）
  * - 如果无法转为class如"hello" -> URL，则直接返回原始值""（基本数据类型）
+ * - ❌ 基本数据类型无视`enableImplicitConversion`属性，一定会转
  */
-/*const str = plainToClass(Map, "hello");
-console.log(str, typeof str);*/
+const str = plainToClass(Boolean, "hello", { enableImplicitConversion: false });
+console.log(str, typeof str);
 
 export {}
