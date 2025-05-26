@@ -12,7 +12,8 @@ node_modules
 dist
 build
 
-.env*
+.env
+.*.env
 pnpm-lock.yaml
 packages/typescript/**/*.js
 packages/EcmaScript-Study/**/*.js

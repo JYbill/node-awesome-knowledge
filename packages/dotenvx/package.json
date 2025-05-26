@@ -1,0 +1,19 @@
+{
+  "name": "dotenvx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "dotenvx run --overload --debug -f env/.env env/.development.env -- node 01.basic.js",
+    "encrypt": "dotenvx encrypt -f env/.env env/.development.env env/.production.env",
+    "ignore": "dotenvx ext gitignore --pattern .env.keys",
+    "test:shell": "dotenvx run -f env/.env -- echo PORT: $PORT"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.11.0",
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.44.1"
+  }
+}
